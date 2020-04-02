@@ -95,6 +95,8 @@ site.check_enableusersite()
 
 lexer = PythonLexer()
 formatter = TerminalTrueColorFormatter()
+
+
 # }}}
 
 
@@ -183,6 +185,7 @@ def initialize_excepthook(func, **kwargs):
 
 def get_height():
     return shutil.get_terminal_size()
+
 
 def get_width():
     return shutil.get_terminal_size()[1]

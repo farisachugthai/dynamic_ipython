@@ -9,49 +9,38 @@ TODO: currently initialize a titlebar, an exit button and a few
 other things that aren't utilized at all.
 
 """
-import asyncio
-import functools
-import time
+import sys
 import textwrap
+import time
 from datetime import date
 from pathlib import Path
 from shutil import get_terminal_size
-from traceback import print_exc
-
-from IPython.core.interactiveshell import InteractiveShell
+from typing import Dict, List, Any, AnyStr
 
 import prompt_toolkit
+from IPython.core.getipython import get_ipython
+from IPython.core.interactiveshell import InteractiveShell
 from prompt_toolkit.enums import EditingMode
 from prompt_toolkit.formatted_text import (
     PygmentsTokens,
     to_formatted_text,
-    FormattedText,
 )
-from prompt_toolkit.layout.controls import FormattedTextControl
-from prompt_toolkit.layout.containers import Window, Float
-
 from prompt_toolkit.shortcuts.utils import print_container
-from prompt_toolkit.styles import default_pygments_style
-from prompt_toolkit.styles import Style, merge_styles, style
-from prompt_toolkit.styles.pygments import style_from_pygments_cls
-from prompt_toolkit.widgets import Frame, TextArea, Button
-from prompt_toolkit.widgets.toolbars import FormattedTextToolbar
-
-import pygments
-from pygments.token import Token
-from pygments.lexers.python import PythonLexer
+from prompt_toolkit.styles import default_pygments_style, style_from_pygments_cls
+from prompt_toolkit.styles import merge_styles
+from prompt_toolkit.widgets import Frame, TextArea
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
-from IPython.core.getipython import get_ipython
-from IPython.terminal.ptutils import IPythonPTLexer
+from pygments.lexers.python import PythonLexer
+from pygments.token import Token
 
 try:
     from gruvbox import GruvboxStyle
 except ImportError:
     # actually we can't do this. he requires that styles have an invalidationhash
 
-    # from pygments.styles.inkpot import InkPotStyle
-    pygments_style = default_pygments_style()
-    # pygments_style = InkPotStyle
+    from pygments.styles.inkpot import InkPotStyle
+    # pygments_style = default_pygments_style()
+    pygments_style = InkPotStyle
 else:
     pygments_style = GruvboxStyle
 
@@ -68,10 +57,11 @@ def exit_clicked():
 
 
 def init_style():
-    return merge_styles([pygments_style, default_pygments_style()])
+    """Merges the styles from default_pygments_style and the previously imported `pygments_style`."""
+    return merge_styles([style_from_pygments_cls(pygments_style), default_pygments_style()])
 
 
-def show_header(header_text=None):
+def show_header(header_text: AnyStr = None) -> prompt_toolkit.widgets.Frame:
     if header_text is None:
         header_text = textwrap.dedent(
             "Press Control-Y to paste from the system clipboard.\n"
@@ -99,7 +89,7 @@ class LineCounter:
 
     def display(self):
         self.count += 1
-        ret = [Token.String.Subheading, f"< In[{self.count:3d}]:", [(Token.Literal), (f"Time:{self.time}")]]
+        ret = [Token.String.Subheading, f"< In[{self.count:3d}]:", [Token.Literal, f"Time:{self.time}"]]
         return ret
 
     def __call__(self):
@@ -138,7 +128,7 @@ class BottomToolbar:
 
     # are you allowed to doctest fstrings
 
-    def __init__(self, _style=None, *args, **kwargs):
+    def __init__(self, _style: prompt_toolkit.styles.Style = None, *args: List, **kwargs: Dict) -> Any:
         """Require an 'app' for initialization.
 
         This will eliminate all IPython code out of this class and make things

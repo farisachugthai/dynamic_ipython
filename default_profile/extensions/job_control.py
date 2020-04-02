@@ -34,13 +34,7 @@ import threading
 import time
 from subprocess import PIPE, Popen, STDOUT
 
-import ipython_genutils
-
-# import IPython.ipapi
-from IPython import get_ipython
-
-
-# from IPython.lib.editor
+from IPython.core.getipython import get_ipython
 
 
 class IpyPopen(subprocess.Popen):
@@ -106,9 +100,13 @@ class AsyncJobQ(threading.Thread):
             print(item)
 
 
-def jobqueue_f(self, line):
+def jobqueue_f(line, ip=None):
     """Create a jobqueue."""
     global _jobq
+    if ip is None:
+        ip = get_ipython()
+    if ip is None:
+        return
     if not _jobq:
         print("Starting jobqueue - do '&some_long_lasting_system_command' to enqueue")
         _jobq = AsyncJobQ()
@@ -125,29 +123,17 @@ def jobqueue_f(self, line):
         return
 
 
-def jobctrl_prefilter_f(self, line):
-    """Yeah we definitely gotta rewrite this one."""
-    if line.startswith("&"):
-        pre, fn, rest = self.split_user_input(line[1:])
-
-        line = ip.IP.expand_aliases(fn, rest)
-        if not _jobq:
-            # Idk if that method is in ipython_genutils
-            return "_ip.startjob(%s)" % ipython_genutils.make_quoted_expr(line)
-        return "_ip.jobq(%s)" % ipython_genutils.make_quoted_expr(line)
-
-    # raise IPython.ipapi.TryNext
-    # possibly is
-
-
-def jobq_output_hook(self):
+def jobq_output_hook(_jobq):
     if not _jobq:
         return
     _jobq.dumpoutput()
 
 
-def job_list(ip):
-    """IPython doesn't have a db attribute anymore."""
+def job_list(ip=None):
+    if ip is None:
+        ip = get_ipython()
+    if ip is None:
+        return
     keys = ip.db.keys("tasks/*")
     ents = [ip.db[k] for k in keys]
     return ents
@@ -264,7 +250,6 @@ def install():
     """Set up job control for the IPython instance."""
     # needed to make startjob visible as _ip.startjob('blah')
     ip.startjob = startjob
-    ip.set_hook("input_prefilter", jobctrl_prefilter_f)
     ip.set_hook("shell_hook", jobctrl_shellcmd)
     # ip.expose_magic('kill', magic_kill)
     # ip.expose_magic('tasks', magic_tasks)

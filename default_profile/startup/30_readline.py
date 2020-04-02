@@ -165,7 +165,6 @@ class ViExternalEditor:
         )
 
 
-
 # Completion
 
 

@@ -46,6 +46,7 @@ from sphinx.ext.autodoc import cut_lines
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
 from sphinx.util.logging import getLogger
 from sphinx.util.docfields import GroupedField
+from sphinx.util.tags import Tags
 from sphinx.util.template import ReSTRenderer
 
 if TYPE_CHECKING:

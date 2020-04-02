@@ -114,22 +114,28 @@ form of rst docs and :abbr:`ipynb` notebooks.
 Table of Contents
 ==================
 
-{% if single_doc and single_doc.endswith('.rst') -%}
-.. toctree::
-    :maxdepth: 3
-    :titlesonly:
+{{ if single_doc and single_doc.endswith('.rst') -}}
 
-    {{ single_doc[:-4] }}
+.. toctree::
+   :maxdepth: 3
+   :titlesonly:
+
+   {{ single_doc[:-4] }}
+
 {% elif single_doc %}
+
 .. autosummary::
     :toctree: reference/api/
 
     {{ single_doc }}
+
 {% else -%}
+
 .. toctree::
-    :maxdepth: 3
-    :hidden:
-    :titlesonly:
+   :maxdepth: 3
+   :hidden:
+   :titlesonly:
+
 {% endif %}
 
 

@@ -30,7 +30,6 @@ except (ImportError, ModuleNotFoundError):
 else:
     NO_NOSE = None
 
-
 with suppress(ImportError):
     from default_profile.startup import aliases_mod
 
@@ -42,12 +41,11 @@ def setup_module():
         unittest.skip("Not in IPython")
 
 
-
 def test_alias_lifecycle(_ip):
     name = "test_alias1"
     cmd = 'echo "Hello"'
     am = setup_module()
-    if am  is None:
+    if am is None:
         unittest.skip("How the fuck are these lines still executing.")
         return
     am.clear_aliases()
@@ -120,7 +118,6 @@ def test_alias_args_commented_nargs(_ip):
 #     _ip.run_line_magic("fzf-tmux", "")
 
 if __name__ == '__main__':
-
     unittest.skipIf(NO_NOSE, 'Nose not installed.')
     # otherwise...
     unittest.main()

@@ -169,6 +169,7 @@ class Alias(UserDict):
         if other.items() == self.items():
             return True
 
+
 class CommonAliases(UserDict):
     r"""Aliases that are usable on any major platform.
 
@@ -284,7 +285,7 @@ class CommonAliases(UserDict):
         return copy.copy(self.dict_aliases)
 
     def __contains__(self, other):
-        if type(other)  == Alias:
+        if type(other) == Alias:
             for i in self.dict.aliases:
                 if other == i:
                     return True
@@ -296,7 +297,7 @@ class CommonAliases(UserDict):
     def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
         if hasattr(other, "dict_aliases"):
-            self.update(other.dict_aliases,)
+            self.update(other.dict_aliases, )
         if name is None and cmd is None:
             if len(args) == 2:
                 name, cmd = args

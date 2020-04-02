@@ -8,8 +8,9 @@ import sys
 import unittest
 import warnings
 from doctest import testmod, testfile
-from unittest.suite import TestSuite
 from unittest.loader import TestLoader, defaultTestLoader, findTestCases
+from unittest.runner import TextTestRunner
+from unittest.suite import TestSuite
 
 import IPython
 
@@ -160,16 +161,16 @@ def import_module(name, deprecated=False, *, required_on=()):
 
 
 def run():
+    # Believe it or not this is in fact necessary if you want to run
+    # the tests inside of IPython.
+    old_sys_argv = sys.argv[:]
+    sys.argv = get_ipython_cmd(as_string=False)
     args = _parse()
     if args is None:
         # hm what should i do
         return
     test_logger = setup_test_logging()
     # doctests()
-    # Believe it or not this is in fact necessary if you want to run
-    # the tests inside of IPython.
-    old_sys_argv = sys.argv[:]
-    sys.argv = get_ipython_cmd(as_string=False)
     test_00_ipython = importlib.import_module("test_00_ipython", package=".")
     test_20_aliases = importlib.import_module("test_20_aliases", package=".")
 
@@ -184,7 +185,7 @@ def run():
             tests.append(test)
         suite.addTests(tests)
         successful = (
-            unittest.TextTestRunner(verbosity=v, failfast=options.exitfirst)
+            TextTestRunner(verbosity=v, failfast=options.exitfirst)
             .run(suite)
             .wasSuccessful()
         )

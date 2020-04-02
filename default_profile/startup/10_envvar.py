@@ -94,9 +94,9 @@ class DevNull(TextIOWrapper):
         return BufferedRWPair(self.reader, self.writer, DEFAULT_BUFFER_SIZE)
 
 
-@contextlib.contextmanager
-def stdout(self):
-    try:
-        self = sys.stdout
-    finally:
-        sys.stdout = original_stdout
+    @contextlib.contextmanager
+    def stdout(self):
+        try:
+            self = sys.stdout
+        finally:
+            sys.stdout = self.original_stdout

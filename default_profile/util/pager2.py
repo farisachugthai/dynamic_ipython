@@ -10,7 +10,7 @@ import sys
 import IPython
 from IPython.core.getipython import get_ipython
 from IPython.core.error import UsageError
-from IPython.core.magic import line_magic
+from IPython.core.magic import line_magic, magics_class, Magics
 from IPython.core.magics.namespace import NamespaceMagics
 from IPython.core.page import pager_page
 
@@ -22,10 +22,11 @@ class NotInIPythonError(RuntimeError):
         super().__init__(self, *args)
 
 
-class PyPager:
+@magics_class
+class PyPager(Magics):
     """A pager if you're outside of IPython."""
 
-    def __init__(self, *args, text=None, use_pager=True):
+    def __init__(self, use_pager=True, **kwargs):
         """Initializes the class.
 
         This occurs by binding an optional text to the instance and determining
@@ -38,7 +39,7 @@ class PyPager:
         use_pager : bool, optional
             Whether to print to the shell or pipe to a pager.
         """
-        self.text = text
+        super().__init__(**kwargs)
         self.use_pager = use_pager
         # self.call(*args)
 
@@ -48,11 +49,11 @@ class PyPager:
     def __str__(self):
         return "A pager for files you'd like to inspect. Or interactive variables."
 
-    def __call__(self):
-        return pydoc.tempfilepager(self.text, self.use_pager)
+    def __call__(self, text=None):
+        return pydoc.tempfilepager(text, self.use_pager)
 
-    def call(self, text, use_pager=True):
-        return self.__call__()
+    def call(self, text):
+        return self.__call__(text)
 
 
 def blocking_pager(text):

@@ -134,7 +134,7 @@ REQUIRED = [
     "jinja2",
     "jedi",
     "pyzmq",
-    "traitlets",
+    "traitlets", 'requests', 'docutils', 'py'
 ]
 
 if platform.platform().startswith("Win"):

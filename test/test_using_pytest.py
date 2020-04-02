@@ -58,6 +58,7 @@ COLORS = {
 }
 RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
 
+
 def test_myoutput(capsys):  # or use "capfd" for fd-level
     print("hello")
     sys.stderr.write("world\n")

@@ -15,14 +15,12 @@ from IPython.terminal.prompts import ClassicPrompts
 from traitlets.config.application import get_config, ApplicationError
 from traitlets.config.configurable import LoggingConfigurable, ConfigurableError
 
-
 log_datefmt = "%Y-%m-%d %H:%M:%S"
 default_log_format = (
     "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
 )
 
 logging.basicConfig(level=logging.INFO, format=default_log_format, datefmt=log_datefmt)
-
 
 try:
     import default_profile
@@ -389,6 +387,7 @@ c.TerminalInteractiveShell.confirm_exit = False
 #  documentation for more information.
 c.TerminalInteractiveShell.display_completions = "multicolumn"
 
+
 # Shortcut style to use at the prompt. 'vi' or 'emacs'.
 # Ah I forgot <C-a> on Tmux and Emacs clobber.
 
@@ -410,7 +409,6 @@ def conditional_editing_mode():
 
 
 c.TerminalInteractiveShell.editing_mode = "vi"
-
 
 ##########
 # Banner
@@ -669,7 +667,6 @@ else:
 
         def __repr__(self):
             return f"{self.__class__.__name__}"
-
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration

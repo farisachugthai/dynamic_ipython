@@ -9,7 +9,7 @@ from platform import platform
 from traitlets.config import get_config
 from IPython.core.getipython import get_ipython
 # even if we're not using them now we will
-from ipykernel.ipkernel import IPythonKernel, ZMQInteractiveShell   # noqa
+from ipykernel.ipkernel import IPythonKernel, ZMQInteractiveShell  # noqa
 from ipykernel.zmqshell import ZMQShellDisplayHook
 from zmq.backend.cython.context import Context
 
@@ -159,7 +159,6 @@ try:
     c.InteractiveShell.ast_node_interactivity = "last_expr_or_assign"
 except:
     c.InteractiveShell.ast_node_interactivity = "last_expr"
-
 
 # A list of ast.NodeTransformer subclass instances, which will be applied to
 # user input before code is run.

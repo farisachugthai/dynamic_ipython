@@ -18,7 +18,6 @@ except ImportError:
 
     TESTFN = NamedTemporaryFile().name
 
-
 logging.basicConfig()
 
 # Test result of triple loop (too big to inline)
@@ -51,6 +50,7 @@ TRIPLETS = [
     (2, 2, 1),
     (2, 2, 2),
 ]
+
 
 # Stolen directly from the stdlib regression test suite
 

@@ -51,7 +51,9 @@
 <li><a class="reference internal" href="#startup">Startup</a></li>
 <li><a class="reference internal" href="#module-default_profile.ipython_config">IPython Config API</a></li>
 <li><a class="reference internal" href="#startup-api-docs">Startup API Docs</a></li>
-<li><a class="reference internal" href="#sphinx-extensions">Sphinx Extensions</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ipython-specific-sphinx-extensions">IPython-specific Sphinx extensions.</a><ul>
 <li><a class="reference internal" href="#extensions">Extensions</a></li>
 <li><a class="reference internal" href="#utilities">Utilities</a></li>
 <li><a class="reference internal" href="#goals">Goals</a><ul>
@@ -73,7 +75,7 @@
 <h1>Welcome to Dynamic IPython’s documentation!<a class="headerlink" href="#welcome-to-dynamic-ipython-s-documentation" title="Permalink to this headline">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">date</dt>
-<dd class="field-odd"><p>March 28, 2020</p>
+<dd class="field-odd"><p>April 02, 2020</p>
 </dd>
 </dl>
 <div class="section" id="startup-scripts">
@@ -255,9 +257,17 @@ module. If that doesn’t seem to be working namedtuples are similar.</p>
 </ul>
 </div>
 </div>
-<div class="section" id="sphinx-extensions">
-<span id="sphinxext-package"></span><h3>Sphinx Extensions<a class="headerlink" href="#sphinx-extensions" title="Permalink to this headline">¶</a></h3>
-<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">default_profile.sphinxext</span></code> package.</p>
+</div>
+<div class="section" id="ipython-specific-sphinx-extensions">
+<span id="sphinxext-package"></span><h2>IPython-specific Sphinx extensions.<a class="headerlink" href="#ipython-specific-sphinx-extensions" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="xref py py-obj docutils literal notranslate"><span class="pre">default_profile.sphinxext</span></code> package.
+Imports the modules found in the current directory and utilizes
+<a class="reference external" href="https://docs.python.org/3/library/pkgutil.html#module-pkgutil" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pkgutil</span></code></a> and <a class="reference external" href="https://docs.python.org/3/library/pkgutil.html#pkgutil.extend_path" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">pkgutil.extend_path()</span></code></a>
+to extend the packages <code class="docutils literal notranslate"><span class="pre">__path__</span></code> parameter.</p>
+<p>It only imports the modules below if this repository has been installed.</p>
+<p>If this weren’t true, then starting IPython without this package installed
+would emit <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ImportError" title="(in Python v3.8)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> on startup, which would be frustrating for
+users.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">sphinx</span></p>
 <ul>
@@ -267,7 +277,6 @@ module. If that doesn’t seem to be working namedtuples are similar.</p>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext/magics.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">magics</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="sphinxext/make.html">Make — Automated Documentation Builder</a></li>
 </ul>
-</div>
 </div>
 <div class="section" id="extensions">
 <h3>Extensions<a class="headerlink" href="#extensions" title="Permalink to this headline">¶</a></h3>
@@ -346,7 +355,7 @@ with a pre-determined template string like so:</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Mar 28, 2020.
+      Last updated on Apr 02, 2020.
     </div>
   </body>
 </html>

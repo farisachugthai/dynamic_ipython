@@ -5,6 +5,7 @@ import codecs
 import locale
 import os
 import pathlib
+import pprint
 import shutil
 import subprocess
 import sys
@@ -102,7 +103,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         default=False,
         dest="open_browser",
         help="Toggle opening the docs in the default"
-        " browser after a successful build.",
+             " browser after a successful build.",
     )
 
     parser.add_argument(
@@ -262,12 +263,12 @@ def generate_autosummary(**kwar):
     generate_autosummary_docs(**kwar)
 
 
-def generate_sphinx_app(root, namespace):
+def generate_sphinx_app(root: Path, namespace: argparse.Namespace = None):
     """Generate the primary Sphinx application object that drives the project.
 
     Parameters
     ----------
-    root : str
+    root : str or pathlib.Path
         The root of the repositories docs
     namespace : arparse.NameSpace
         User provided arments.
@@ -278,7 +279,7 @@ def generate_sphinx_app(root, namespace):
         :class:`sphinx.application.Sphinx` instance.
 
     """
-    srcdir = confdir = root.joinpath("source")
+    srcdir = confdir = Path(root).joinpath("source")
     doctreedir = "build/.doctrees"
     outdir = "build/html"
     if hasattr(namespace, "verbosity"):
@@ -310,6 +311,7 @@ def generate_sphinx_app(root, namespace):
         raise
     except (Exception, KeyboardInterrupt) as exc:
         # handle_exception(app, namespace, exc)
+        pprint.pprint(exc)
         return 2
 
 
@@ -381,7 +383,7 @@ def get_git_root():
         almost = codecs.decode(
             subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), "utf-8"
         )
-        return almost.rstrip()
+        return Path(almost.rstrip())
     except subprocess.CalledProcessError as e:
         print(e)
         return os.getcwd()
