@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+"""base16-prompt-toolkit
 
-# base16-prompt-toolkit (https://github.com/memeplex/base16-prompt-toolkit)
-# Base16 Prompt Toolkit template by Carlos Pita (carlosjosepita@gmail.com
-# Gruvbox dark, hard scheme by Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+:URL: (https://github.com/memeplex/base16-prompt-toolkit)
 
+Base16 Prompt Toolkit template by Carlos Pita (carlosjosepita@gmail.com)
+Gruvbox dark, hard scheme by Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+"""
 # noinspection PyProtectedMember,PyProtectedMember
 from prompt_toolkit.output.vt100 import _256_colors
 from pygments.style import Style

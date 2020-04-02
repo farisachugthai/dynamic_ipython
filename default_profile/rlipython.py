@@ -113,7 +113,7 @@ class ReadlineNoRecord:
                 self.orig_length, self.readline_tail = 999999, []
         self._nested_level += 1
 
-    def __exit__(self):
+    def __exit__(self, *exc_info):
         self._nested_level -= 1
         if not self._nested_level:
             # Try clipping the end if it's got longer
@@ -135,12 +135,6 @@ class ReadlineNoRecord:
         return False
 
     def current_length(self):
-        """
-
-        Returns
-        -------
-
-        """
         return self.shell.readline.get_current_history_length()
 
     def get_readline_tail(self, n=10):
@@ -237,7 +231,7 @@ class ReadlineInteractiveShell(InteractiveShell):
     # Overrides of init stages
     # -------------------------------------------------------------------------
 
-    def __init__(self, shell, **kwargs):
+    def __init__(self, shell=None, **kwargs):
         self.shell = shell if shell is not None else get_ipython()
         super(ReadlineInteractiveShell, self).__init__(self.shell, **kwargs)
 
@@ -279,75 +273,66 @@ class ReadlineInteractiveShell(InteractiveShell):
     def init_readline(self):
         """Command history completion/saving/reloading."""
 
-        if not self.readline_use:
-            self.readline = None
-            # Set a number of methods that depend on readline to be no-op
-            self.readline_no_record = NoOpContext()
-            self.set_readline_completer = no_op
-            self.set_custom_completer = no_op
-            if self.readline_use:
-                warn("Readline services not available or not loaded.")
+        self.has_readline = True
+        self.readline = readline
+        sys.modules["readline"] = readline
+
+        # Platform-specific configuration
+        if os.name == "nt":
+            # FIXME - check with Frederick to see if we can harmonize
+            # naming conventions with pyreadline to avoid this
+            # platform-dependent check
+            self.readline_startup_hook = readline.set_pre_input_hook
         else:
-            self.has_readline = True
-            self.readline = readline
-            sys.modules["readline"] = readline
+            self.readline_startup_hook = readline.set_startup_hook
 
-            # Platform-specific configuration
-            if os.name == "nt":
-                # FIXME - check with Frederick to see if we can harmonize
-                # naming conventions with pyreadline to avoid this
-                # platform-dependent check
-                self.readline_startup_hook = readline.set_pre_input_hook
-            else:
-                self.readline_startup_hook = readline.set_startup_hook
+        # Readline config order:
+        # - IPython config (default value)
+        # - custom inputrc
+        # - IPython config (user customized)
 
-            # Readline config order:
-            # - IPython config (default value)
-            # - custom inputrc
-            # - IPython config (user customized)
+        # load IPython config before inputrc if default
+        # skip if libedit because parse_and_bind syntax is different
 
-            # load IPython config before inputrc if default
-            # skip if libedit because parse_and_bind syntax is different
+        if not self._custom_readline_config:
+            for rlcommand in self.readline_parse_and_bind:
+                readline.parse_and_bind(rlcommand)
 
-            if not self._custom_readline_config:
-                for rlcommand in self.readline_parse_and_bind:
-                    readline.parse_and_bind(rlcommand)
+        # Load user's initrc file (readline config)
+        # Or if libedit is used, load editrc.
+        inputrc_name = os.environ.get("INPUTRC")
+        if inputrc_name is None:
+            inputrc_name = os.path.join(self.home_dir, inputrc_name)
 
-            # Load user's initrc file (readline config)
-            # Or if libedit is used, load editrc.
-            inputrc_name = os.environ.get("INPUTRC")
-            if inputrc_name is None:
-                inputrc_name = os.path.join(self.home_dir, inputrc_name)
+        if os.path.isfile(inputrc_name):
+            try:
+                readline.read_init_file(inputrc_name)
+            except:
+                warn(
+                    "Problems reading readline initialization file <%s>"
+                    % inputrc_name
+                )
 
-            if os.path.isfile(inputrc_name):
-                try:
-                    readline.read_init_file(inputrc_name)
-                except:
-                    warn(
-                        "Problems reading readline initialization file <%s>"
-                        % inputrc_name
-                    )
+        # load IPython config after inputrc if user has customized
+        if self._custom_readline_config:
+            for rlcommand in self.readline_parse_and_bind:
+                readline.parse_and_bind(rlcommand)
 
-            # load IPython config after inputrc if user has customized
-            if self._custom_readline_config:
-                for rlcommand in self.readline_parse_and_bind:
-                    readline.parse_and_bind(rlcommand)
+        # Remove some chars from the delimiters list.  If we encounter
+        # unicode chars, discard them.
+        delims = readline.get_completer_delims()
+        for d in self.readline_remove_delims:
+            delims = delims.replace(d, "")
+        delims = delims.replace(ESC_MAGIC, "")
+        readline.set_completer_delims(delims)
+        # Store these so we can restore them if something like rpy2 modifies
+        # them.
+        self.readline_delims = delims
+        # otherwise we end up with a monster history after a while:
+        readline.set_history_length(self.history_length)
 
-            # Remove some chars from the delimiters list.  If we encounter
-            # unicode chars, discard them.
-            delims = readline.get_completer_delims()
-            for d in self.readline_remove_delims:
-                delims = delims.replace(d, "")
-            delims = delims.replace(ESC_MAGIC, "")
-            readline.set_completer_delims(delims)
-            # Store these so we can restore them if something like rpy2 modifies
-            # them.
-            self.readline_delims = delims
-            # otherwise we end up with a monster history after a while:
-            readline.set_history_length(self.history_length)
-
-            self.refill_readline_hist()
-            self.readline_no_record = ReadlineNoRecord(self)
+        self.refill_readline_hist()
+        self.readline_no_record = ReadlineNoRecord(self)
 
         # Configure auto-indent for all platforms
         self.set_autoindent(self.autoindent)

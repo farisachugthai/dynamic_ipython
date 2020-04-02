@@ -27,8 +27,11 @@ try:
     import nose
 except (ImportError, ModuleNotFoundError):
     NO_NOSE = True
+    from _pytest.outcomes import skip
+    skip(allow_module_level=True)
 else:
     NO_NOSE = None
+
 
 
 with suppress(ImportError):
@@ -36,6 +39,8 @@ with suppress(ImportError):
 
 
 def setup_module():
+    if NO_NOSE:
+        unittest.skip("No Nose")
     if get_ipython() is not None:
         return get_ipython().alias_manager
     else:
