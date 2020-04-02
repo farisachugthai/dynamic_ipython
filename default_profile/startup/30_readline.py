@@ -61,7 +61,8 @@ class ViExternalEditor:
 
     .. code-block:: py3tb
 
-    >>> def cd(arg)
+        >>> def cd(arg):
+        >>>     pass
 
     Readline internal error
     Traceback (most recent call last):

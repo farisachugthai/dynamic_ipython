@@ -27,6 +27,8 @@ try:
     import nose
 except (ImportError, ModuleNotFoundError):
     NO_NOSE = True
+    from _pytest.outcomes import skip
+    skip(allow_module_level=True)
 else:
     NO_NOSE = None
 
@@ -35,6 +37,8 @@ with suppress(ImportError):
 
 
 def setup_module():
+    if NO_NOSE:
+        unittest.skip("No Nose")
     if get_ipython() is not None:
         return get_ipython().alias_manager
     else:
@@ -83,18 +87,6 @@ def test_alias_args_error(_ip):
     nt.assert_equal(cap.stderr.split(":")[0], "UsageError")
 
 
-# def test_alias_args_commented(_ip):
-#     """Check that alias correctly ignores 'commented out' args"""
-#     _ip.alias_manager.define_alias(
-#         "alias", "commetarg echo this is %%s a commented out arg"
-#     )
-
-#     with capture_output() as cap:
-#         _ip.run_cell("commetarg")
-
-#     nt.assert_equal(cap.stdout, "this is %s a commented out arg")
-
-
 def test_alias_args_commented_nargs(_ip):
     """Check that alias correctly counts args, excluding those commented out"""
     am = _ip.alias_manager
@@ -107,15 +99,6 @@ def test_alias_args_commented_nargs(_ip):
     thealias = am.get_alias(alias_name)
     nt.assert_equal(thealias.nargs, 1)
 
-
-# TODO: well i suppose it should be obvious that you shouldn't do something like
-# this because nobody wants interactive tests.
-# @pytest.mark.xfail
-# def test_that_hyphens_cant_be_aliases(_ip):
-#     """This is a simple reminder that this won't behave as expected/desired."""
-#     am = _ip.alias_manager
-#     am.define_alias("fzf-tmux", "fzf-tmux -d 50")
-#     _ip.run_line_magic("fzf-tmux", "")
 
 if __name__ == '__main__':
     unittest.skipIf(NO_NOSE, 'Nose not installed.')

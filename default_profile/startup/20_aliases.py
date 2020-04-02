@@ -197,8 +197,11 @@ class CommonAliases(UserDict):
             self.user_aliases = default_aliases()
         else:
             self.user_aliases = user_aliases
+        if hasattr(user_aliases, 'update'):  # did we get a dict?
+            self.dict_aliases = self.user_aliases
+        elif hasattr(user_aliases, 'append'):  # did we get a list of tuples?
+            self.dict_aliases = self.tuple_to_dict(self.user_aliases)
         self.git()
-        self.dict_aliases = self.tuple_to_dict(self.user_aliases)
         self.python_exes()
         # if kwargs is not None:
         # surprisingly that doesnt work
@@ -384,7 +387,7 @@ class CommonAliases(UserDict):
             from shutil import chown
 
     def git(self):
-        self.user_aliases += [
+        self.dict_aliases.update(self.tuple_to_dict([
             ("g", "git diff --staged --stat %l"),
             ("ga", "git add -v %l"),
             ("gaa", "git add --all %l"),
@@ -494,7 +497,7 @@ class CommonAliases(UserDict):
             ("xx", "quit"),  # this is a sweet one
             ("..", "cd .."),
             ("...", "cd ../.."),
-        ]
+        ]))
 
     def ls_patch(self, shell):
         shoddy_hack_for_aliases = [
@@ -523,25 +526,25 @@ class CommonAliases(UserDict):
 class LinuxAliases(CommonAliases):
     """Add Linux specific aliases."""
 
-    def __init__(self, user_aliases=None, *args, **kwargs):
+    def __init__(self, dict_aliases=None, *args, **kwargs):
+        self.dict_aliases = dict_aliases if dict_aliases is not None else args
         super().__init__(**kwargs)
-        self.user_aliases = user_aliases if user_aliases is not None else args
         self.busybox()
         self.thirdparty()
 
     def __repr__(self):
-        return "Linux Aliases: {!r}".format(len(self.user_aliases))
+        return "Linux Aliases: {!r}".format(len(self.dict_aliases))
 
     def busybox(self):
         """Commands that are available on any Unix-ish system.
 
         Returns
         -------
-        user_aliases : list of ('alias', 'system command') tuples
+        dict_aliases : list of ('alias', 'system command') tuples
             User aliases to add the user's namespace.
 
         """
-        self.user_aliases += [
+        self.dict_aliases.update([
             ("cs", "cd %s && ls -F --color=always %s"),
             ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
             ("df", "df -ah --total"),
@@ -585,7 +588,7 @@ class LinuxAliases(CommonAliases):
             ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
             ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
             ("tail", "tail -n 30 %l"),
-        ]
+        ])
 
     def thirdparty(self):
         """Contrasted to busybox, these require external installation.
@@ -593,13 +596,13 @@ class LinuxAliases(CommonAliases):
         As a result it'll be of value to check that they're even in
         the namespace.
         """
-        self.user_aliases += [
+        self.dict_aliases.update([
             ("ag", "ag --hidden --color --no-column %l"),
             ("cat", "bat %l"),
             ("nvim", "nvim %l"),
             ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
             ("tre", "tree -DAshFC --prune -I .git %l"),
-        ]
+        ])
 
 
 class WindowsAliases(CommonAliases):
@@ -615,13 +618,13 @@ class WindowsAliases(CommonAliases):
 
     """
 
-    def __init__(self, user_aliases=None, *args, **kwargs):
+    def __init__(self, dict_aliases=None, *args, **kwargs):
         super().__init__(**kwargs)
-        self.user_aliases = user_aliases if user_aliases is not None else args
+        self.dict_aliases = dict_aliases if dict_aliases is not None else args
         self.cmd_aliases()
 
     def __repr__(self):
-        return "Windows Aliases: {!r}".format(len(self.user_aliases))
+        return "Windows Aliases: {!r}".format(len(self.dict_aliases))
 
     def cmd_aliases(self):
         r"""Aliases for the :command:`cmd` shell.
@@ -637,12 +640,12 @@ class WindowsAliases(CommonAliases):
             However it'll also take some consideration to figure
             out how to handle env vars like :envvar:`COPYCMD`. Should we
             build them into the aliases we have here because
-            that'll affect :data:`_ip.user_aliases.mv`?
+            that'll affect :data:`_ip.dict_aliases.mv`?
 
         Also note :envvar:`DIRCMD` for :command:`dir`.
 
         """
-        self.user_aliases += [
+        self.dict_aliases.update([
             ("assoc", "assoc %l"),
             ("cd", "cd %l"),
             ("chdir", "chdir %l"),
@@ -701,7 +704,7 @@ class WindowsAliases(CommonAliases):
             ("xcopy", "xcopy %l"),
             ("where", "where %l"),
             ("wmic", "wmic %l"),
-        ]
+        ])
 
     def powershell_aliases(self):
         r"""Aliases for Windows OSes using :command:`powershell`.
@@ -715,7 +718,7 @@ class WindowsAliases(CommonAliases):
         that this section is still under development and frequently changes.
 
         """
-        self.user_aliases += [
+        self.dict_aliases.update([
             ("ac", "Add-Content %l"),
             ("asnp", "Add-PSSnapin %l"),
             ("cat", "Get-Content %l"),
@@ -774,7 +777,7 @@ class WindowsAliases(CommonAliases):
             ("where", "Where-Object %l"),
             ("wjb", "Wait-Job %l"),
             ("write", "Write-Output %l"),
-        ]
+        ])
 
 
 def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
@@ -805,9 +808,9 @@ def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
     machine = platform.platform()
 
     if machine.startswith("Linux"):
-        aliases = LinuxAliases(user_aliases=_ip.alias_manager.user_aliases)
+        aliases = LinuxAliases(dict_aliases=_ip.alias_manager.user_aliases)
     elif machine.startswith("Win"):
-        aliases = WindowsAliases(user_aliases=_ip.alias_manager.user_aliases)
+        aliases = WindowsAliases(dict_aliases=_ip.alias_manager.user_aliases)
     else:
         raise AliasError
     aliases.ls_patch(_ip)

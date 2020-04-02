@@ -246,7 +246,7 @@ def jobctrl_shellcmd(ip, cmd):
     p.communicate()
 
 
-def install():
+def install(ip):
     """Set up job control for the IPython instance."""
     # needed to make startjob visible as _ip.startjob('blah')
     ip.startjob = startjob
@@ -271,4 +271,4 @@ if __name__ == "__main__":
     _jobq = None
     ip = get_ipython()
 
-    install()
+    install(ip)
