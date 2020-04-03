@@ -48,6 +48,16 @@ class ReprProfileDir(ProfileDir):
         """I'll admit this is unnecessary. Oh well."""
         return "{}: {}".format(self.__class__.__name__, self.location)
 
+    def _mkdir(self, path, mode=0o755):
+        """Override the superclasses mkdir."""
+        try:
+            Path(path).mkdir()
+        except OSError as e:
+            if e.errno == errno.EEXIST:
+                return False
+            else:
+                raise
+
     @observe("location")
     def _location_changed(self, change):
         """This is so odd to me. What is change when does it get called?
@@ -67,21 +77,6 @@ class ReprProfileDir(ProfileDir):
         # what is static?
         for i in ["security", "log", "startup", "pid", "static"]:
             self.ensure_dir_exists()
-
-    def ensure_dir_exists(self, folder):
-        """Check that the dir at 'folder' exists."""
-        if not hasattr(folder, "exists"):
-            folder = Path(folder)
-        if not folder.exists():
-            try:
-                folder.mkdir()
-            except PermissionError:
-                return errno.EPERM
-            except FileExistsError:
-                raise
-            # except IsADirectoryError:
-            # Do we need to catch this?
-
 
 class DirectoryChecker:
     """Let's redo profiledir with pathlib.
@@ -117,8 +112,7 @@ class DirectoryChecker:
             # Avoid output (banner, prints)
             ipapp.interact = False
 
-    @staticmethod
-    def ensure_dir_exists(path, mode=0o755):
+    def ensure_dir_exists(self, path, mode=0o755):
         """Ensure that a directory exists.
 
         If it doesn't exist, try to create it and protect against a race
@@ -143,14 +137,17 @@ class DirectoryChecker:
         OSError, IOError
 
         """
-        if not os.path.exists(path):
+        if not hasattr(folder, "exists"):
+            folder = self.fs(folder)
+        if not folder.exists():
             try:
-                os.makedirs(path, mode=mode)
-            except OSError as e:
-                if e.errno != errno.EEXIST:
-                    raise
-        elif not os.path.isdir(path):
-            raise IsADirectoryError("%r exists but is not a directory" % path)
+                folder.mkdir()
+            except PermissionError:
+                return errno.EPERM
+            except FileExistsError:
+                raise
+            except IsADirectoryError:
+                raise
 
     def initialize_profile(self):
         """Initialize the profile but sidestep the IPython.core.ProfileDir().

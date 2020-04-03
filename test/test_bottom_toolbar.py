@@ -39,11 +39,12 @@ def pt_app():
 class TestBottomToolbar(TestCase):
     # ugh this is proving entirely too difficult
 
-    def setUp(self):
-        self.logpoint()
+    @classmethod
+    def setUpClass(cls):
+        cls.logpoint()
         if bt_mod.BottomToolbar() is None:
             if _ip is not None:
-                bt_mod.add_toolbar(self.toolbar)
+                bt_mod.add_toolbar(cls.toolbar)
 
     def test_toolbar_existence(self, _ip):
         self.logpoint()

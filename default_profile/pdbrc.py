@@ -10,22 +10,19 @@ prompt_toolkit, jedi and pygments are all dependencies of IPython, so a simple
 
 In addition, readline is assumed to be present on the system. On systems that don't have readline installed by default, ``pyreadline`` can work as a drop-in replacement.
 """
+import __main__
 import argparse
 import atexit
-from bdb import BdbQuit, Breakpoint
 import cmd
 import cgitb
-from contextlib import suppress, contextmanager
 import faulthandler
 import gc
 import inspect
 import keyword
-from logging import getLogger, StreamHandler, BufferingFormatter, Filter
 import os
-from pathlib import Path
 import pdb
+
 # noinspection PyProtectedMember
-from pdb import Restart, Pdb
 import pydoc
 
 try:
@@ -37,6 +34,13 @@ import sys
 from textwrap import dedent
 import time
 import traceback
+
+from bdb import BdbQuit, Breakpoint
+from contextlib import suppress, contextmanager
+from logging import getLogger, StreamHandler, BufferingFormatter, Filter
+from pathlib import Path
+from pdb import Restart, Pdb
+
 
 try:
     from pdbrc import MyPdb
@@ -62,12 +66,19 @@ try:
 except ImportError:
     from pygments.styles.inkpot import InkPotStyle
 
-    pdb_style = InkPotStyle
+    pdb_style = InkPotStyle()
 else:
     pdb_style = GruvboxStyle()
 
 if sys.version_info < (3, 7):
     from default_profile import ModuleNotFoundError
+
+try:
+    from default_profile.startup import readline_mod
+except (ImportError, ModuleNotFoundError):  # noqa
+    pass
+else:
+    readline.parse_and_bind("Tab:menu-complete")
 
 print(f".pdbrc.py started {time.ctime()}")
 
@@ -108,14 +119,6 @@ def save_history(hist_path=None):
         hist_path = hist_path.__fspath__()
 
 
-try:
-    from default_profile.startup import readline_mod
-except (ImportError, ModuleNotFoundError):  # noqa
-    pass
-else:
-    readline.parse_and_bind("Tab:menu-complete")
-
-
 def get_parser():
     """Factored out of main. Well sweet this now rasies an error."""
     parser = argparse.ArgumentParser(
@@ -132,6 +135,7 @@ def get_parser():
         "--file",
         action="store",
         dest="mainpyfile",
+        type=argparse.FileType("r"),
         help="File to run under the debugger.",
     )
 
@@ -244,7 +248,7 @@ class MyPdb(pdb.Pdb):
     doc_header = "Whew!"
 
     lexer = PythonLexer()
-    formatter = TerminalTrueColorFormatter(style=pdb_style)
+    formatter = TerminalTrueColorFormatter(style=pdb_style.styles.items())
 
     def __init__(
         self, completekey="tab", skip="traitlets", shell=None, *args, **kwargs,
@@ -311,17 +315,18 @@ class MyPdb(pdb.Pdb):
         # noinspection PyProtectedMember
         mod_name, mod_spec, code = runpy._get_module_details(module_name)
         self.mainpyfile = self.canonic(code.co_filename)
-        import __main__
 
         __main__.__dict__.clear()
-        __main__.__dict__.update({
-            "__name__": "__main__",
-            "__file__": self.mainpyfile,
-            "__package__": mod_spec.parent,
-            "__loader__": mod_spec.loader,
-            "__spec__": mod_spec,
-            "__builtins__": __builtins__,
-        }, )
+        __main__.__dict__.update(
+            {
+                "__name__": "__main__",
+                "__file__": self.mainpyfile,
+                "__package__": mod_spec.parent,
+                "__loader__": mod_spec.loader,
+                "__spec__": mod_spec,
+                "__builtins__": __builtins__,
+            },
+        )
         self.run(code)
 
     def _debug_post_mortem(self):
@@ -527,5 +532,6 @@ def main():
     if mainpyfile is not None:
         sys.path.insert(0, os.path.dirname(mainpyfile))
         debug_script(mainpyfile)
+
 
 main()

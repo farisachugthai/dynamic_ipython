@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """Create a single entry point for the test suite."""
 import argparse
 import doctest
@@ -8,6 +10,7 @@ import sys
 import unittest
 import warnings
 from doctest import testmod, testfile
+from types import ModuleType
 from unittest.loader import TestLoader, defaultTestLoader, findTestCases
 from unittest.runner import TextTestRunner
 from unittest.suite import TestSuite
@@ -31,16 +34,27 @@ except ImportError:
     pytest = None
 
 import default_profile
+from default_profile.__about__ import __version__
 
 
 def _parse():
-    parser = argparse.ArgumentParser(description="doctest runner")
+    parser = argparse.ArgumentParser(description="Unittest/doctest runner.")
+
     parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
         default=False,
         help="print very verbose output for all tests",
+    )
+
+    parser.add_argument(
+        "-ll",
+        "--log_level",
+        dest="log_level",
+        metavar="log_level",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+        help="Set the logging level",
     )
     parser.add_argument(
         "-o",
@@ -54,6 +68,9 @@ def _parse():
             " than once to apply multiple options"
         ),
     )
+
+    parser.add_argument("-m", "--module", type=ModuleType, help=("Module to run"))
+
     parser.add_argument(
         "-f",
         "--fail-fast",
@@ -64,7 +81,17 @@ def _parse():
             " in addition to any other -o options)"
         ),
     )
-    parser.add_argument("file", nargs="+", help="file containing the tests to run")
+    parser.add_argument(
+        "-c",
+        "--file",
+        nargs="+",
+        type=argparse.FileType("r"),
+        help="file containing the tests to run",
+    )
+
+    parser.add_argument(
+        "-V", "--version", action="version", version="%(prog)s" + __version__
+    )
 
     if len(sys.argv[:]) == 0:
         parser.print_help()
@@ -151,7 +178,7 @@ def import_module(name, deprecated=False, *, required_on=()):
     others, set required_on to an iterable of platform prefixes which will be
     compared against sys.platform.
     """
-    with _ignore_deprecated_imports(deprecated):
+    with warnings.catch_warnings(DeprecationWarning):
         try:
             return importlib.import_module(name)
         except ImportError as msg:
@@ -169,7 +196,14 @@ def run():
     if args is None:
         # hm what should i do
         return
-    test_logger = setup_test_logging()
+
+    try:
+        log_level = args.log_level
+    except AttributeError:  # IndexError?
+        test_logger = setup_test_logging()
+    else:
+        logging.basicConfig(level=log_level)
+
     # doctests()
     test_00_ipython = importlib.import_module("test_00_ipython", package=".")
     test_20_aliases = importlib.import_module("test_20_aliases", package=".")
