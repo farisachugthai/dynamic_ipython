@@ -46,6 +46,8 @@ try:
     d.parse_command_line()
 except DistutilsArgError:
     print("No args provided.")
+except TypeError:  # path was supposed to be path not NoneType
+    print("No args.")
 
 try:
     from pkg_resources import find_distributions

@@ -28,17 +28,17 @@ class ReprProfileDir(ProfileDir):
     should be used by any code that wants to handle profiles.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, **kwargs):
         """Create an init and then make it way shorter."""
         super().__init__(**kwargs)
         self.ensure_dir_exists = DirectoryChecker
-        startup_dir = Unicode("startup")
-        log_dir = Unicode("log")
+        # startup_dir = Unicode("startup")
+        # log_dir = Unicode("log")
         location = Unicode(
             help="""Set the profile location directly. This overrides the logic used by the
             `profile` option.""",
             allow_none=True,
-        ).tag(config=True)
+        ).tag(config=True)   # noqa
 
     # don't set the location more than once no matter how many profiles
     # are instantiated so yes a class attr
@@ -69,6 +69,7 @@ class ReprProfileDir(ProfileDir):
             self.ensure_dir_exists()
 
     def ensure_dir_exists(self, folder):
+        """Check that the dir at 'folder' exists."""
         if not hasattr(folder, "exists"):
             folder = Path(folder)
         if not folder.exists():
@@ -92,6 +93,7 @@ class DirectoryChecker:
     def __init__(self):
         """Initialize our own version of ipython."""
         self.fs = Path
+        self.initialize()
 
     @property
     def shell(self):
@@ -156,7 +158,7 @@ class DirectoryChecker:
         The class searches for directories named default_profile and if found
         uses that as a profile which I dislike.
         """
-        profile_to_load = Path("~/.ipython/default_profile")
+        profile_to_load = self.fs("~/.ipython/default_profile").expanduser()
 
         try:
             self.ensure_dir_exists(profile_to_load)

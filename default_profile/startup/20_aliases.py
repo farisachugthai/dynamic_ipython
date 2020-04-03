@@ -39,15 +39,7 @@ from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
 from traitlets.config.application import ApplicationError
 
-from default_profile.startup import UsageError
-
-
-class AliasError(Exception):
-    pass
-
-
-class InvalidAliasError(AliasError):
-    pass
+from default_profile.ipython_config import UsageError, AliasError, InvalidAliasError
 
 
 def validate_alias(alias) -> Optional[Any]:
@@ -61,17 +53,17 @@ def validate_alias(alias) -> Optional[Any]:
         caller = shell.magics_manager.magics["line"][alias.name]
     except KeyError:
         pass
-    else:
-        if not isinstance(caller, Alias):
-            raise InvalidAliasError(
-                "The name %s can't be aliased "
-                "because it is another magic command." % shell.name
-            )
+    # else:
+        # if not isinstance(caller, Alias):
+        #     raise InvalidAliasError(
+        #         "The name %s can't be aliased "
+        #         "because it is another magic command." % shell.name
+        #     )
 
-    if not (isinstance(shell.cmd, str)):
-        raise InvalidAliasError(
-            "An alias command must be a string, " "got: %r" % self.cmd
-        )
+    # if not (isinstance(shell.cmd, str)):
+    #     raise InvalidAliasError(
+    #         "An alias command must be a string, " "got: %r" % self.cmd
+    #     )
 
     nargs = alias.cmd.count("%s") - alias.cmd.count("%%s")
     if (nargs > 0) and (alias.cmd.find("%l") >= 0):
@@ -201,6 +193,8 @@ class CommonAliases(UserDict):
             self.dict_aliases = self.user_aliases
         elif hasattr(user_aliases, 'append'):  # did we get a list of tuples?
             self.dict_aliases = self.tuple_to_dict(self.user_aliases)
+        else:
+            self.dict_aliases = {}
         self.git()
         self.python_exes()
         # if kwargs is not None:
@@ -314,6 +308,14 @@ class CommonAliases(UserDict):
     def __len__(self):
         return len(self.dict_aliases)
 
+    def __index__(self, other):
+        # I think the difference is ``__getitem__`` ==> ReprAlias['ls']
+        # and ``__index__`` ==> ReprAlias[0].
+        return index(self.keys(), other)
+
+    def keys(self):
+        # Well of course the above doesn't work i never defined keys
+        return self.aliases_dict.keys()
     def __next__(self):
         max = len(self)
         if max >= self.idx:
@@ -324,7 +326,10 @@ class CommonAliases(UserDict):
         return self.dict_aliases[self.idx]
 
     def __getitem__(self, index):
-        return operator.getitem(self.kb.bindings, index)
+        try:
+            return operator.getitem(self.kb.bindings, index)
+        except TypeError:
+            raise
 
     def len(self):
         return self.__len__()
@@ -499,15 +504,15 @@ class CommonAliases(UserDict):
             ("...", "cd ../.."),
         ]))
 
-    def ls_patch(self, shell):
+    def ls_patch(self):
         shoddy_hack_for_aliases = [
-            ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
-            ("la", "ls -AF --hide=NTUSER.* --color=always %l"),
-            ("ldir", "ls -Apo --hide=NTUSER.*  --color=always %l | grep /$"),
+            ("l", "ls -CF '--hide=NTUSER.*' --color=always %l"),
+            ("la", "ls -AF '--hide=NTUSER.*' --color=always %l"),
+            ("ldir", "ls -Apo '--hide=NTUSER.*'  --color=always %l | grep /$"),
             # ('lf' ,     'ls -Fo --color=always | grep ^-'),
             # ('ll' ,          'ls -AFho --color=always %l'),
-            ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
-            ("lr", "ls -AgFhtr --hide=NTUSER.*  --color=always %l"),
+            ("ls", "ls -F '--hide=NTUSER.*' --color=always %l"),
+            ("lr", "ls -AgFhtr '--hide=NTUSER.*'  --color=always %l"),
             ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
             ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
             # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
@@ -518,7 +523,7 @@ class CommonAliases(UserDict):
         ]
         for i in shoddy_hack_for_aliases:
             try:
-                shell.alias_manager.define_alias(*i)
+                self.add(*i)
             except InvalidAliasError:
                 raise
 
@@ -544,7 +549,7 @@ class LinuxAliases(CommonAliases):
             User aliases to add the user's namespace.
 
         """
-        self.dict_aliases.update([
+        self.dict_aliases.update(self.tuple_to_dict([
             ("cs", "cd %s && ls -F --color=always %s"),
             ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
             ("df", "df -ah --total"),
@@ -588,7 +593,7 @@ class LinuxAliases(CommonAliases):
             ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
             ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
             ("tail", "tail -n 30 %l"),
-        ])
+            ]))
 
     def thirdparty(self):
         """Contrasted to busybox, these require external installation.
@@ -596,13 +601,13 @@ class LinuxAliases(CommonAliases):
         As a result it'll be of value to check that they're even in
         the namespace.
         """
-        self.dict_aliases.update([
+        self.dict_aliases.update(self.tuple_to_dict([
             ("ag", "ag --hidden --color --no-column %l"),
             ("cat", "bat %l"),
             ("nvim", "nvim %l"),
             ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
             ("tre", "tree -DAshFC --prune -I .git %l"),
-        ])
+        ]))
 
 
 class WindowsAliases(CommonAliases):
@@ -619,8 +624,11 @@ class WindowsAliases(CommonAliases):
     """
 
     def __init__(self, dict_aliases=None, *args, **kwargs):
-        super().__init__(**kwargs)
-        self.dict_aliases = dict_aliases if dict_aliases is not None else args
+        super().__init__(*args)
+        # if you don't give **kwargs to dict_aliases, then by giving *args as
+        # it's definition it ends up becoming a list which will immediately
+        # screw everything up.
+        self.dict_aliases = dict_aliases if dict_aliases is not None else kwargs
         self.cmd_aliases()
 
     def __repr__(self):
@@ -645,7 +653,7 @@ class WindowsAliases(CommonAliases):
         Also note :envvar:`DIRCMD` for :command:`dir`.
 
         """
-        self.dict_aliases.update([
+        self.dict_aliases.update(self.tuple_to_dict([
             ("assoc", "assoc %l"),
             ("cd", "cd %l"),
             ("chdir", "chdir %l"),
@@ -704,7 +712,7 @@ class WindowsAliases(CommonAliases):
             ("xcopy", "xcopy %l"),
             ("where", "where %l"),
             ("wmic", "wmic %l"),
-        ])
+        ]))
 
     def powershell_aliases(self):
         r"""Aliases for Windows OSes using :command:`powershell`.
@@ -806,14 +814,17 @@ def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
     else:
         return
     machine = platform.platform()
-
+    # TODO: Fuck we have to change teh user_aliases to dicts too
     if machine.startswith("Linux"):
-        aliases = LinuxAliases(dict_aliases=_ip.alias_manager.user_aliases)
+        # aliases = LinuxAliases(dict_aliases=_ip.alias_manager.user_aliases)
+        aliases = LinuxAliases()
     elif machine.startswith("Win"):
-        aliases = WindowsAliases(dict_aliases=_ip.alias_manager.user_aliases)
+        # aliases = WindowsAliases(dict_aliases=_ip.alias_manager.user_aliases)
+        aliases = WindowsAliases()
     else:
         raise AliasError
-    aliases.ls_patch(_ip)
+    # isn't working
+    # aliases.ls_patch()
 
     return aliases
 

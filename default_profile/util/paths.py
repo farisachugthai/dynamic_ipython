@@ -9,7 +9,7 @@ from pathlib import Path
 # A) I wanna see if relative imports are working
 # B) This would probably make more sense here
 
-from .machine import Platform
+from default_profile.util.machine import Platform
 
 logging.BASIC_FORMAT = "%(created)f  %(module)s  %(levelname)s  %(message)s"
 
@@ -35,8 +35,12 @@ def _path_build(root, suffix):
         Path object with suffix joined onto root.
 
     """
-    if isinstance(root, str):
-        root = Path(root)
+    try:
+        root = Path(root) if Path(root).exists() else None
+    except OSError:
+        return
+    if root is None:
+        return
 
     # TODO: Should probably add one in for bytes
     if root.joinpath(suffix).exists():
@@ -47,7 +51,7 @@ def _path_build(root, suffix):
 
 
 class PathValidator:
-    """A simpler and easier way to view the :envvar:`PATH` env var on Windows.
+    r"""A simpler and easier way to view the :envvar:`PATH` env var on Windows.
 
     Work with Unix as well.
 
@@ -59,7 +63,6 @@ class PathValidator:
     """
 
     def __init__(self):
-        """Initialize with parameters. Which parameters though?"""
         self.env = dict(os.environ.copy())
 
     def __repr__(self):
@@ -88,3 +91,6 @@ class PathValidator:
             return self.env["PATH"].replace("\\", "/").split(";")
         else:
             return self.env["PATH"].split(":")
+
+    def __call__(self):
+        return self.path

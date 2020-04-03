@@ -50,6 +50,36 @@ home = get_home()
 
 c = get_config()
 
+
+class UsageError(Exception):
+    """Base exception class."""
+    def __init__(self, err=None, *args, **kwargs):
+        self.err = err
+        super().__init__(self, *args)
+
+    def __repr__(self):
+        return "{}\t \t{}".format(self.__class__.__name__, self.err)
+
+    def __call__(self, err):
+        return self.__repr__()
+
+
+
+class NotInIPythonError(UsageError):
+    """Error raised when a magic is invoked outside of IPython."""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args)
+
+
+class AliasError(Exception):
+    pass
+
+
+class InvalidAliasError(AliasError):
+    pass
+
+
 # ----------------------------------------------------------------------------
 # InteractiveShellApp(Configurable) configuration
 # ----------------------------------------------------------------------------

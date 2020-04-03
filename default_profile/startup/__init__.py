@@ -48,18 +48,6 @@ STARTUP_LOGGER.setLevel(logging.WARNING)
 # imp = functools.partial(importlib.util.module_from_spec importlib.util.module_from_spec(_find_spec_from_path))
 
 
-class UsageError(Exception):
-    def __init__(self, err=None, *args, **kwargs):
-        self.err = err
-        super().__init__(self, *args)
-
-    def __repr__(self):
-        return "{}\t \t{}".format(self.__class__.__name__, self.err)
-
-    def __call__(self, err):
-        return self.__repr__()
-
-
 def module_from_path(path):
     # XXX: This is gonna get really ugly really fast
     spec = _find_spec_from_path(path)

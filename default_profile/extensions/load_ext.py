@@ -11,8 +11,9 @@ import logging
 import sys
 
 from IPython import get_ipython
-from IPython.core.error import UsageError
 from IPython.core.magic import line_magic
+
+from default_profile.ipython_config import UsageError
 
 logging.basicConfig(level=logging.WARNING, format=logging.BASIC_FORMAT)
 

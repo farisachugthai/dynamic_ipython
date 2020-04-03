@@ -171,7 +171,7 @@ class MergedCompleter(Completer):
                     yield item
 
     def __repr__(self):
-        return f"{self.__class__.__name__}"
+        return f"{self.__class__.__name__}: {self.completers}"
 
     def __call__(self, document, complete_event):
         return self.get_completions_async(document, complete_event)
@@ -197,6 +197,9 @@ class FuzzyCallable(FuzzyCompleter):
 
     def __call__(self, document, complete_event):
         return self.get_completions(document, complete_event)
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}>:"
 
 
 def create_jedi_script():

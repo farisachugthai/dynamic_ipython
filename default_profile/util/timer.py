@@ -88,7 +88,7 @@ def debug(func):
 
 
 def exc_timer(statement, setup=None):
-    """A non-decorator implementation that uses `timeit.`"""
+    """A non-decorator implementation that uses `timeit`."""
     t = Timer(stmt=statement, setup=setup)  # outside the try/except
     try:
         return t.timeit()
@@ -114,6 +114,7 @@ class ArgReparser:
 
 
 def time_dir(directory=None):
+    """How long does it take to exec(compile(file)) every file in the startup dir?"""
     if directory is None:
         directory = get_ipython().startup_dir
     result = []
@@ -139,15 +140,18 @@ class LineWatcher:
     """
 
     def __init__(self):
+        """Define the classes start_time parameter."""
         self.start_time = self.start()
 
     def start(self):
+        """Return `time.time`."""
         return time.time()
 
     def __repr__(self):
         return f"{self.__class__.__name__} {self.start_time}"
 
     def stop(self):
+        """Determine the difference between start time and end time."""
         stop_time = time.time()
 
         diff = abs(stop_time - self.start_time)
@@ -156,6 +160,7 @@ class LineWatcher:
 
 
 def load_ipython_extension(ip=None, line_watcher=None):
+    """Initialize a `LineWatcher` and register start and stop with IPython."""
     if ip is None:
         ip = get_ipython()
     if ip is None:
@@ -177,10 +182,3 @@ def unload_ipython_extension(ip=None, line_watcher=None):
         line_watcher = LineWatcher()
     ip.events.unregister("pre_run_cell", line_watcher.start)
     ip.events.unregister("post_run_cell", line_watcher.stop)
-
-
-if __name__ == "__main__":
-    watcher = LineWatcher()
-    # todo run this automatically only if we dont already have a prerun cell
-    # otherwise unload!
-    # load_ipython_extension(get_ipython(), watcher)

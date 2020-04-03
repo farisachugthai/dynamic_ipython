@@ -225,7 +225,7 @@ def format_callable(value):
 
     if inspect.isfunction(value):
         parts = reprstr.split(" ")
-        parts[1] += inspect.formatargspec(*getargspec(value))
+        parts[1] += getargspec(*getargspec(value))
         reprstr = " ".join(parts)
     elif inspect.ismethod(value):
         parts = reprstr[:-1].split(" ")

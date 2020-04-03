@@ -9,17 +9,11 @@ import sys
 
 import IPython
 from IPython.core.getipython import get_ipython
-from IPython.core.error import UsageError
 from IPython.core.magic import line_magic, magics_class, Magics
 from IPython.core.magics.namespace import NamespaceMagics
 from IPython.core.page import pager_page
 
-
-class NotInIPythonError(RuntimeError):
-    """Error raised when a magic is invoked outside of IPython."""
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(self, *args)
+from default_profile.ipython_config import UsageError, NotInIPythonError
 
 
 @magics_class

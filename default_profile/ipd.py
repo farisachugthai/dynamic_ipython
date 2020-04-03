@@ -32,10 +32,8 @@ from prompt_toolkit.shortcuts.prompt import PromptSession
 
 from pygments.token import Token
 
-from IPython import get_ipython
+from IPython.core.getipython import get_ipython
 
-# from IPython.core.completer import IPCompleter
-from IPython.core.error import UsageError
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.terminal.ptutils import IPythonPTCompleter
