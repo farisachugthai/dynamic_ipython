@@ -19,7 +19,7 @@ import jinja2
 from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
-from jinja2.ext import autoescape, do, with_, debug
+from jinja2.ext import autoescape, do, with_, ExtensionRegistry
 from jinja2.loaders import ChoiceLoader, ModuleLoader, FileSystemLoader
 from jinja2.lexer import get_lexer
 
@@ -138,14 +138,16 @@ def create_jinja_env():
         trim_blocks=TRIM_BLOCKS,
         lstrip_blocks=LSTRIP_BLOCKS,
         autoescape=jinja2.select_autoescape(
-            disabled_extensions=("txt",), default_for_string=True, default=True
+            enabled_extensions=('html', 'xml'),
+            disabled_extensions=("txt",),
+            default_for_string=True,
+            default=True,
         ),
         extensions=[
             "jinja2.ext.i18n",
             autoescape,
             do,
             with_,
-            debug,
             "jinja2.ext.loopcontrols",
             "jinja2.ext.do",
         ],

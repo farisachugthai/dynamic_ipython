@@ -79,15 +79,7 @@
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">ApplicationError</span>
 
-<span class="kn">from</span> <span class="nn">default_profile.startup</span> <span class="kn">import</span> <span class="n">UsageError</span>
-
-
-<div class="viewcode-block" id="AliasError"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.AliasError">[docs]</a><span class="k">class</span> <span class="nc">AliasError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">pass</span></div>
-
-
-<div class="viewcode-block" id="InvalidAliasError"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.InvalidAliasError">[docs]</a><span class="k">class</span> <span class="nc">InvalidAliasError</span><span class="p">(</span><span class="n">AliasError</span><span class="p">):</span>
-    <span class="k">pass</span></div>
+<span class="kn">from</span> <span class="nn">default_profile.ipython_config</span> <span class="kn">import</span> <span class="n">UsageError</span><span class="p">,</span> <span class="n">AliasError</span><span class="p">,</span> <span class="n">InvalidAliasError</span>
 
 
 <div class="viewcode-block" id="validate_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.validate_alias">[docs]</a><span class="k">def</span> <span class="nf">validate_alias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
@@ -101,17 +93,17 @@
         <span class="n">caller</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">magics</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">][</span><span class="n">alias</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">pass</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">caller</span><span class="p">,</span> <span class="n">Alias</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
-                <span class="s2">&quot;The name </span><span class="si">%s</span><span class="s2"> can&#39;t be aliased &quot;</span>
-                <span class="s2">&quot;because it is another magic command.&quot;</span> <span class="o">%</span> <span class="n">shell</span><span class="o">.</span><span class="n">name</span>
-            <span class="p">)</span>
+    <span class="c1"># else:</span>
+        <span class="c1"># if not isinstance(caller, Alias):</span>
+        <span class="c1">#     raise InvalidAliasError(</span>
+        <span class="c1">#         &quot;The name %s can&#39;t be aliased &quot;</span>
+        <span class="c1">#         &quot;because it is another magic command.&quot; % shell.name</span>
+        <span class="c1">#     )</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
-        <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
-            <span class="s2">&quot;An alias command must be a string, &quot;</span> <span class="s2">&quot;got: </span><span class="si">%r</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">cmd</span>
-        <span class="p">)</span>
+    <span class="c1"># if not (isinstance(shell.cmd, str)):</span>
+    <span class="c1">#     raise InvalidAliasError(</span>
+    <span class="c1">#         &quot;An alias command must be a string, &quot; &quot;got: %r&quot; % self.cmd</span>
+    <span class="c1">#     )</span>
 
     <span class="n">nargs</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">s&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;%l&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
@@ -149,7 +141,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span><span class="p">:</span>
             <span class="c1"># Wait can we note that we didn&#39;t checkout the keyword list though.</span>
             <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{self.name}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nargs</span> <span class="o">=</span> <span class="n">validate_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
@@ -170,7 +162,7 @@
         <span class="k">return</span> <span class="n">blacklist</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="si">!r}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{self.name!r}</span><span class="s2"> for </span><span class="si">{self.cmd!r}</span><span class="s2">&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rest</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;If an Alias is called, run it with the shell&#39;s system function.</span>
@@ -241,6 +233,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span>
         <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">user_aliases</span><span class="p">,</span> <span class="s1">&#39;append&#39;</span><span class="p">):</span>  <span class="c1"># did we get a list of tuples?</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tuple_to_dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">git</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">python_exes</span><span class="p">()</span>
         <span class="c1"># if kwargs is not None:</span>
@@ -354,6 +348,14 @@
     <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="fm">__index__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="c1"># I think the difference is ``__getitem__`` ==&gt; ReprAlias[&#39;ls&#39;]</span>
+        <span class="c1"># and ``__index__`` ==&gt; ReprAlias[0].</span>
+        <span class="k">return</span> <span class="n">index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">other</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CommonAliases.keys"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.keys">[docs]</a>    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Well of course the above doesn&#39;t work i never defined keys</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
     <span class="k">def</span> <span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">max</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">max</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">:</span>
@@ -364,7 +366,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">operator</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">operator</span><span class="o">.</span><span class="n">getitem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span>
 
 <div class="viewcode-block" id="CommonAliases.len"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.len">[docs]</a>    <span class="k">def</span> <span class="nf">len</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__len__</span><span class="p">()</span></div>
@@ -539,15 +544,15 @@
             <span class="p">(</span><span class="s2">&quot;...&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ../..&quot;</span><span class="p">),</span>
         <span class="p">]))</span></div>
 
-<div class="viewcode-block" id="CommonAliases.ls_patch"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.ls_patch">[docs]</a>    <span class="k">def</span> <span class="nf">ls_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="p">):</span>
+<div class="viewcode-block" id="CommonAliases.ls_patch"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.CommonAliases.ls_patch">[docs]</a>    <span class="k">def</span> <span class="nf">ls_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">shoddy_hack_for_aliases</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo --hide=NTUSER.*  --color=always %l | grep /$&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo &#39;--hide=NTUSER.*&#39;  --color=always %l | grep /$&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;lf&#39; ,     &#39;ls -Fo --color=always | grep ^-&#39;),</span>
             <span class="c1"># (&#39;ll&#39; ,          &#39;ls -AFho --color=always %l&#39;),</span>
-            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr --hide=NTUSER.*  --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr &#39;--hide=NTUSER.*&#39;  --color=always %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --hide=NTUSER.* --color=always | grep ^-..x&quot;</span><span class="p">),</span>
             <span class="c1"># (&#39;ldir&#39; ,               &#39;ls -Fhpo | grep /$ %l&#39;),</span>
@@ -558,7 +563,7 @@
         <span class="p">]</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">shoddy_hack_for_aliases</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">shell</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">define_alias</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="o">*</span><span class="n">i</span><span class="p">)</span>
             <span class="k">except</span> <span class="n">InvalidAliasError</span><span class="p">:</span>
                 <span class="k">raise</span></div></div>
 
@@ -584,7 +589,7 @@
 <span class="sd">            User aliases to add the user&#39;s namespace.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">([</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple_to_dict</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;cs&quot;</span><span class="p">,</span> <span class="s2">&quot;cd </span><span class="si">%s</span><span class="s2"> &amp;&amp; ls -F --color=always </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;cp&quot;</span><span class="p">,</span> <span class="s2">&quot;cp -v %l&quot;</span><span class="p">),</span>  <span class="c1"># cp mv mkdir and rmdir are all overridden</span>
             <span class="p">(</span><span class="s2">&quot;df&quot;</span><span class="p">,</span> <span class="s2">&quot;df -ah --total&quot;</span><span class="p">),</span>
@@ -628,7 +633,7 @@
             <span class="p">(</span><span class="s2">&quot;default_profile&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">,</span> <span class="s2">&quot;cd ~/projects/dotfiles/unix/.ipython/default_profile/startup&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;tail&quot;</span><span class="p">,</span> <span class="s2">&quot;tail -n 30 %l&quot;</span><span class="p">),</span>
-        <span class="p">])</span></div>
+            <span class="p">]))</span></div>
 
 <div class="viewcode-block" id="LinuxAliases.thirdparty"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.LinuxAliases.thirdparty">[docs]</a>    <span class="k">def</span> <span class="nf">thirdparty</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Contrasted to busybox, these require external installation.</span>
@@ -636,13 +641,13 @@
 <span class="sd">        As a result it&#39;ll be of value to check that they&#39;re even in</span>
 <span class="sd">        the namespace.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">([</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple_to_dict</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;ag&quot;</span><span class="p">,</span> <span class="s2">&quot;ag --hidden --color --no-column %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;cat&quot;</span><span class="p">,</span> <span class="s2">&quot;bat %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;nvim&quot;</span><span class="p">,</span> <span class="s2">&quot;nvim %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;nman&quot;</span><span class="p">,</span> <span class="s1">&#39;nvim -c &quot;Man %l&quot; -c&quot;wincmd T&quot;&#39;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;tre&quot;</span><span class="p">,</span> <span class="s2">&quot;tree -DAshFC --prune -I .git %l&quot;</span><span class="p">),</span>
-        <span class="p">])</span></div></div>
+        <span class="p">]))</span></div></div>
 
 
 <div class="viewcode-block" id="WindowsAliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases">[docs]</a><span class="k">class</span> <span class="nc">WindowsAliases</span><span class="p">(</span><span class="n">CommonAliases</span><span class="p">):</span>
@@ -659,8 +664,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="WindowsAliases.__init__"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_aliases</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span> <span class="o">=</span> <span class="n">dict_aliases</span> <span class="k">if</span> <span class="n">dict_aliases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">args</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="c1"># if you don&#39;t give **kwargs to dict_aliases, then by giving *args as</span>
+        <span class="c1"># it&#39;s definition it ends up becoming a list which will immediately</span>
+        <span class="c1"># screw everything up.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span> <span class="o">=</span> <span class="n">dict_aliases</span> <span class="k">if</span> <span class="n">dict_aliases</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">kwargs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cmd_aliases</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -685,7 +693,7 @@
 <span class="sd">        Also note :envvar:`DIRCMD` for :command:`dir`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">([</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tuple_to_dict</span><span class="p">([</span>
             <span class="p">(</span><span class="s2">&quot;assoc&quot;</span><span class="p">,</span> <span class="s2">&quot;assoc %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;cd&quot;</span><span class="p">,</span> <span class="s2">&quot;cd %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;chdir&quot;</span><span class="p">,</span> <span class="s2">&quot;chdir %l&quot;</span><span class="p">),</span>
@@ -744,7 +752,7 @@
             <span class="p">(</span><span class="s2">&quot;xcopy&quot;</span><span class="p">,</span> <span class="s2">&quot;xcopy %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;where&quot;</span><span class="p">,</span> <span class="s2">&quot;where %l&quot;</span><span class="p">),</span>
             <span class="p">(</span><span class="s2">&quot;wmic&quot;</span><span class="p">,</span> <span class="s2">&quot;wmic %l&quot;</span><span class="p">),</span>
-        <span class="p">])</span></div>
+        <span class="p">]))</span></div>
 
 <div class="viewcode-block" id="WindowsAliases.powershell_aliases"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.WindowsAliases.powershell_aliases">[docs]</a>    <span class="k">def</span> <span class="nf">powershell_aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Aliases for Windows OSes using :command:`powershell`.</span>
@@ -846,14 +854,17 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="n">machine</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span>
-
+    <span class="c1"># TODO: Fuck we have to change teh user_aliases to dicts too</span>
     <span class="k">if</span> <span class="n">machine</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Linux&quot;</span><span class="p">):</span>
-        <span class="n">aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">(</span><span class="n">dict_aliases</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span>
+        <span class="c1"># aliases = LinuxAliases(dict_aliases=_ip.alias_manager.user_aliases)</span>
+        <span class="n">aliases</span> <span class="o">=</span> <span class="n">LinuxAliases</span><span class="p">()</span>
     <span class="k">elif</span> <span class="n">machine</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Win&quot;</span><span class="p">):</span>
-        <span class="n">aliases</span> <span class="o">=</span> <span class="n">WindowsAliases</span><span class="p">(</span><span class="n">dict_aliases</span><span class="o">=</span><span class="n">_ip</span><span class="o">.</span><span class="n">alias_manager</span><span class="o">.</span><span class="n">user_aliases</span><span class="p">)</span>
+        <span class="c1"># aliases = WindowsAliases(dict_aliases=_ip.alias_manager.user_aliases)</span>
+        <span class="n">aliases</span> <span class="o">=</span> <span class="n">WindowsAliases</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">AliasError</span>
-    <span class="n">aliases</span><span class="o">.</span><span class="n">ls_patch</span><span class="p">(</span><span class="n">_ip</span><span class="p">)</span>
+    <span class="c1"># isn&#39;t working</span>
+    <span class="c1"># aliases.ls_patch()</span>
 
     <span class="k">return</span> <span class="n">aliases</span></div>
 
@@ -881,7 +892,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 02, 2020.
+      Last updated on Apr 03, 2020.
     </div>
   </body>
 </html>

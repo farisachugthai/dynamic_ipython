@@ -68,17 +68,17 @@
 <span class="sd">    should be used by any code that wants to handle profiles.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ReprProfileDir.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ReprProfileDir.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create an init and then make it way shorter.&quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span> <span class="o">=</span> <span class="n">DirectoryChecker</span>
-        <span class="n">startup_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s2">&quot;startup&quot;</span><span class="p">)</span>
-        <span class="n">log_dir</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+        <span class="c1"># startup_dir = Unicode(&quot;startup&quot;)</span>
+        <span class="c1"># log_dir = Unicode(&quot;log&quot;)</span>
         <span class="n">location</span> <span class="o">=</span> <span class="n">Unicode</span><span class="p">(</span>
             <span class="n">help</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;Set the profile location directly. This overrides the logic used by the</span>
 <span class="s2">            `profile` option.&quot;&quot;&quot;</span><span class="p">,</span>
             <span class="n">allow_none</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="p">)</span><span class="o">.</span><span class="n">tag</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>   <span class="c1"># noqa</span></div>
 
     <span class="c1"># don&#39;t set the location more than once no matter how many profiles</span>
     <span class="c1"># are instantiated so yes a class attr</span>
@@ -109,6 +109,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ReprProfileDir.ensure_dir_exists"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.ReprProfileDir.ensure_dir_exists">[docs]</a>    <span class="k">def</span> <span class="nf">ensure_dir_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check that the dir at &#39;folder&#39; exists.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;exists&quot;</span><span class="p">):</span>
             <span class="n">folder</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">folder</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -131,7 +132,8 @@
 
 <div class="viewcode-block" id="DirectoryChecker.__init__"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize our own version of ipython.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">Path</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fs</span> <span class="o">=</span> <span class="n">Path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="DirectoryChecker.shell"><a class="viewcode-back" href="../../../util/profile_override.html#default_profile.util.profile_override.DirectoryChecker.shell">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">shell</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -196,7 +198,7 @@
 <span class="sd">        The class searches for directories named default_profile and if found</span>
 <span class="sd">        uses that as a profile which I dislike.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">profile_to_load</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span>
+        <span class="n">profile_to_load</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fs</span><span class="p">(</span><span class="s2">&quot;~/.ipython/default_profile&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">expanduser</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ensure_dir_exists</span><span class="p">(</span><span class="n">profile_to_load</span><span class="p">)</span>
@@ -211,7 +213,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 02, 2020.
+      Last updated on Apr 03, 2020.
     </div>
   </body>
 </html>

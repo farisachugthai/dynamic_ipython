@@ -49,7 +49,7 @@
 <span class="c1"># A) I wanna see if relative imports are working</span>
 <span class="c1"># B) This would probably make more sense here</span>
 
-<span class="kn">from</span> <span class="nn">.machine</span> <span class="kn">import</span> <span class="n">Platform</span>
+<span class="kn">from</span> <span class="nn">default_profile.util.machine</span> <span class="kn">import</span> <span class="n">Platform</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">BASIC_FORMAT</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%(created)f</span><span class="s2">  </span><span class="si">%(module)s</span><span class="s2">  </span><span class="si">%(levelname)s</span><span class="s2">  </span><span class="si">%(message)s</span><span class="s2">&quot;</span>
 
@@ -75,8 +75,12 @@
 <span class="sd">        Path object with suffix joined onto root.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span> <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">root</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">root</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
 
     <span class="c1"># TODO: Should probably add one in for bytes</span>
     <span class="k">if</span> <span class="n">root</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -87,7 +91,7 @@
 
 
 <div class="viewcode-block" id="PathValidator"><a class="viewcode-back" href="../../../util/paths.html#default_profile.util.paths.PathValidator">[docs]</a><span class="k">class</span> <span class="nc">PathValidator</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A simpler and easier way to view the :envvar:`PATH` env var on Windows.</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;A simpler and easier way to view the :envvar:`PATH` env var on Windows.</span>
 
 <span class="sd">    Work with Unix as well.</span>
 
@@ -99,7 +103,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="PathValidator.__init__"><a class="viewcode-back" href="../../../util/paths.html#default_profile.util.paths.PathValidator.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize with parameters. Which parameters though?&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -127,7 +130,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_win</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;/&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span></div></div>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="p">[</span><span class="s2">&quot;PATH&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span></div>
 </pre></div>
 
         </div>
@@ -135,7 +141,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 02, 2020.
+      Last updated on Apr 03, 2020.
     </div>
   </body>
 </html>
