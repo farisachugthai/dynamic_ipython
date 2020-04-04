@@ -9,18 +9,17 @@ import os
 import sys
 import unittest
 import warnings
+
 from doctest import testmod, testfile
 from types import ModuleType
-from unittest.loader import TestLoader, defaultTestLoader, findTestCases
+# from unittest.loader import TestLoader, defaultTestLoader
+# from unittest.loader import  findTestCases  # fuck why is this coming up as unresolved
 from unittest.runner import TextTestRunner
 from unittest.suite import TestSuite
-
-import IPython
 
 # don't forget about this as it may come in handy
 # from IPython.lib.deepreload import reload
 from IPython.testing.tools import get_ipython_cmd
-from IPython import get_ipython
 
 try:
     import nose  # noqa F401
@@ -33,17 +32,22 @@ except ImportError:
     warnings.warn("No Pytest. Using unittest.")
     pytest = None
 
-import default_profile
 from default_profile.__about__ import __version__
 
 
+# Global:
+logging.captureWarnings(True)
+
+
 def _parse():
+    """Use argparse to get user arguments."""
     parser = argparse.ArgumentParser(description="Unittest/doctest runner.")
 
     parser.add_argument(
         "-v",
         "--verbose",
         action="store_true",
+        dest="verbosity",
         default=False,
         help="print very verbose output for all tests",
     )
@@ -69,7 +73,7 @@ def _parse():
         ),
     )
 
-    parser.add_argument("-m", "--module", type=ModuleType, help=("Module to run"))
+    parser.add_argument("-m", "--module", type=ModuleType, help="Module to run")
 
     parser.add_argument(
         "-f",
@@ -112,6 +116,11 @@ def flatten_test_suite(suite):
     return flatten
 
 
+def generate_doctest_suite():
+    """Default doctest_suite to generate. Can be overridden on the command line."""
+    return doctest.DocTestSuite(module="default_profile", globs="*")
+
+
 def doctests(args):
     testfiles = args.file
     # Verbose used to be handled by the "inspect argv" magic in DocTestRunner,
@@ -123,18 +132,15 @@ def doctests(args):
     if args.fail_fast:
         options |= doctest.FAIL_FAST
 
-    doctest_suite = doctest.DocTestSuite(module="default_profile")
     sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-    doctest_finder = doctest.DocTestFinder()
-    found_test_cases = findTestCases("*")
-    doctest.DocTestSuite("__main__", globs="*")
+    # where were these used?
+    # doctest_finder = doctest.DocTestFinder()
+    # found_test_cases = findTestCases("*")
+    # doctest.DocTestSuite("__main__", globs="*")
 
     for filename in testfiles:
         if filename.endswith(".py"):
-            # It is a module -- insert its dir into sys.path and try to
-            # import it. If it is part of a package, that possibly
-            # won't work because of package imports.
             dirname, filename = os.path.split(filename)
             sys.path.insert(0, dirname)
             m = importlib.import_module(filename[:-3])
@@ -150,7 +156,7 @@ def add_test(testcase, suite=None):
     if suite is not None:
         suite = flatten_test_suite(suite)
     else:
-        suite = unittest.TestCaseSuite()
+        suite = unittest.TestSuite()
     return suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(testcase))
 
 
@@ -169,16 +175,19 @@ def setup_test_logging():
 
 
 # Here's the unittest alternative to pytest.importorskip
-def import_module(name, deprecated=False, *, required_on=()):
-    """Import and return the module to be tested, raising SkipTest if
-    it is not available.
+def import_module(name, *, required_on=None):
+    """Import and return the module to be tested.
 
-    If deprecated is True, any module or package deprecation messages
-    will be suppressed. If a module is required on a platform but optional for
-    others, set required_on to an iterable of platform prefixes which will be
-    compared against sys.platform.
+    :raises SkipTest: When not installed
+
+    If 'deprecated' is True, any module or package deprecation messages
+    will be suppressed.
+
+    If a module is 'required_on' a platform but optional for
+    others, set 'required_on' to an iterable of platform prefixes which will be
+    compared against `sys.platform`.
     """
-    with warnings.catch_warnings(DeprecationWarning):
+    with warnings.catch_warnings():
         try:
             return importlib.import_module(name)
         except ImportError as msg:
@@ -190,7 +199,7 @@ def import_module(name, deprecated=False, *, required_on=()):
 def run():
     # Believe it or not this is in fact necessary if you want to run
     # the tests inside of IPython.
-    old_sys_argv = sys.argv[:]
+    _ = sys.argv[:]
     sys.argv = get_ipython_cmd(as_string=False)
     args = _parse()
     if args is None:
@@ -204,9 +213,19 @@ def run():
     else:
         logging.basicConfig(level=log_level)
 
+    try:
+        v = args.verbosity
+    except AttributeError:
+        v = False
+
+    try:
+        option = args.option
+    except AttributeError:
+        option = False
+
     # doctests()
-    test_00_ipython = importlib.import_module("test_00_ipython", package=".")
-    test_20_aliases = importlib.import_module("test_20_aliases", package=".")
+    # test_00_ipython = importlib.import_module("test_00_ipython", package=".")
+    # test_20_aliases = importlib.import_module("test_20_aliases", package=".")
 
     if pytest is None:
         suite = TestSuite()
@@ -219,14 +238,15 @@ def run():
             tests.append(test)
         suite.addTests(tests)
         successful = (
-            TextTestRunner(verbosity=v, failfast=options.exitfirst)
+            TextTestRunner(verbosity=v, failfast=option.exitfirst)
             .run(suite)
             .wasSuccessful()
         )
         return 0 if successful else 1
 
     else:
-        pytest.main()
+        # TODO: args can be be passed to this so add args for pytest in that parse func above
+        pytest.main(plugins=[])
 
 
 if __name__ == "__main__":

@@ -37,33 +37,20 @@ from typing import Any, Optional, Union
 
 from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
-from traitlets.config.application import ApplicationError
-
-from default_profile.ipython_config import UsageError, AliasError, InvalidAliasError
+from default_profile.ipython_config import UsageError, AliasError, InvalidAliasError, ApplicationError
 
 
 def validate_alias(alias) -> Optional[Any]:
-    shell = alias.shell
-
-    if shell is None:
+    # Remember that you moved that docstring to docs
+    if alias.shell is None:
         return
     if not hasattr(alias, "name"):
         raise InvalidAliasError("Alias does not have name attribute.")
     try:
-        caller = shell.magics_manager.magics["line"][alias.name]
+        # Jesus christ this is gonna be something else to untangle
+        caller = alias.shell.magics_manager.magics["line"][alias.name]
     except KeyError:
         pass
-    # else:
-        # if not isinstance(caller, Alias):
-        #     raise InvalidAliasError(
-        #         "The name %s can't be aliased "
-        #         "because it is another magic command." % shell.name
-        #     )
-
-    # if not (isinstance(shell.cmd, str)):
-    #     raise InvalidAliasError(
-    #         "An alias command must be a string, " "got: %r" % self.cmd
-    #     )
 
     nargs = alias.cmd.count("%s") - alias.cmd.count("%%s")
     if (nargs > 0) and (alias.cmd.find("%l") >= 0):

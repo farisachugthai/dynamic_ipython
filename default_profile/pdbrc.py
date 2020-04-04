@@ -10,10 +10,8 @@ prompt_toolkit, jedi and pygments are all dependencies of IPython, so a simple
 
 In addition, readline is assumed to be present on the system. On systems that don't have readline installed by default, ``pyreadline`` can work as a drop-in replacement.
 """
-import __main__
+
 import argparse
-import atexit
-import cmd
 import cgitb
 import faulthandler
 import gc
@@ -21,9 +19,10 @@ import inspect
 import keyword
 import os
 import pdb
-
 # noinspection PyProtectedMember
 import pydoc
+
+import __main__
 
 try:
     import readline
@@ -36,18 +35,14 @@ import time
 import traceback
 
 from bdb import BdbQuit, Breakpoint
-from contextlib import suppress, contextmanager
-from logging import getLogger, StreamHandler, BufferingFormatter, Filter
+from contextlib import contextmanager
+from logging import getLogger, StreamHandler, Filter, BufferingFormatter
 from pathlib import Path
 from pdb import Restart, Pdb
+from typing import Any, AnyStr, Union
 
+import ipdb
 
-try:
-    from pdbrc import MyPdb
-except:  # noqa
-    MyPdb = None
-
-from jedi.api import replstartup
 from IPython.core.getipython import get_ipython
 from IPython.terminal.prompts import Prompts
 from IPython.terminal.embed import InteractiveShellEmbed
@@ -80,6 +75,11 @@ except (ImportError, ModuleNotFoundError):  # noqa
 else:
     readline.parse_and_bind("Tab:menu-complete")
 
+try:
+    from pdbrc import MyPdb
+except (ImportError, ModuleNotFoundError):  # noqa
+    MyPdb = None
+
 print(f".pdbrc.py started {time.ctime()}")
 
 # GLOBALS:
@@ -102,6 +102,7 @@ shell = get_ipython()
 cgitb.enable(format="text")
 faulthandler.enable()
 
+
 # History: Set up separately
 
 
@@ -112,11 +113,11 @@ def save_history(hist_path=None):
         print("ERR: no append_history_file method in readline")
         return
     if not hist_path:
-        hist_path = Path("~/.pdb_history.py").resolve()
+        hist_path: Union[Path, str, Any] = Path("~/.pdb_history.py").resolve()
         if not hist_path.exists():
             logger.warning("Creating PDB history file at ~/.pdb_history.")
             hist_path.touch()
-        hist_path = hist_path.__fspath__()
+        return str(hist_path)
 
 
 def get_parser():
@@ -180,18 +181,40 @@ def get_parser():
 
 
 class DebuggerPrompt(Prompts):
-    def python_location(self):
+    """Create a customized prompt for the debugger."""
+
+    shell = get_ipython()
+
+    def _is_vi_mode(self):
+        """We don't have to make this but my god look at the original implementation."""
+        return getattr(self.shell.pt_app, 'editing_mode', None)
+
+    def vi_mode(self):
+        if self._is_vi_mode():
+            return self.shell.pt_app.app.vi_state.input_mode
+
+    @staticmethod
+    def python_location():
+        """The location of the python executable.
+
+        :return:
+        :rtype: Path
+        """
         env = os.environ.get("CONDA_DEFAULT_ENV")
         if env is None:
             return Path(sys.prefix)
         return Path(env)
 
     def in_prompt_tokens(self):
-        return [
+        prompt = [
             (Token.Comment, self.python_location()),
             (Token.Keyword, "<YourPDB> @"),
             (Token.Keyword, self.shell.execution_count),
         ]
+
+        if self.shell.prompt_includes_vi_mode:
+            prompt.insert(0, (Token.Literal.String, self.vi_mode()))
+        return prompt
 
     def __call__(self):
         return self.in_prompt_tokens()
@@ -251,7 +274,7 @@ class MyPdb(pdb.Pdb):
     formatter = TerminalTrueColorFormatter(style=pdb_style.styles.items())
 
     def __init__(
-        self, completekey="tab", skip="traitlets", shell=None, *args, **kwargs,
+        self, completekey="tab", skip="traitlets", _shell=None, *args, **kwargs,
     ):
         """
         To explain all the keyword arguments, pdb inherits from both
@@ -270,7 +293,7 @@ class MyPdb(pdb.Pdb):
         self.curframe = inspect.currentframe()
         super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
 
-        self.shell = get_ipython() if shell is None else shell
+        self.shell = get_ipython() if _shell is None else _shell
         self.prompt = (
             DebuggerPrompt(self.shell) if self.shell is not None else "YourPdb: "
         )
@@ -294,7 +317,7 @@ class MyPdb(pdb.Pdb):
     # def __call__(self, statement, *args, **kwargs):
     #     return self.run(statement)
 
-    def colorizer(self, code):
+    def colorizer(self, code: AnyStr) -> Any:
         """color from pygments."""
         if code is not None:
             return pygments.highlight(
@@ -378,8 +401,14 @@ def set_trace(frame=None, context=3):
         p.shell.restore_sys_module_state()
 
 
-def post_mortem(tb=None):
-    # wrap_sys_excepthook()
+def post_mortem(tb: traceback = None) -> None:
+    """Wrap `sys_excepthook`.
+
+    .. todo::
+        Are there situations where sys.exc_info[2] returns None but sys.last_traceback
+        doesn't?
+
+    """
     p = _init_pdb()
     p.reset()
     if tb is None:
@@ -394,38 +423,42 @@ def pm():
     post_mortem(sys.last_traceback)
 
 
-def _run(statement, globals=None, locals=None):
+def _run(statement, global_dict=None, local_dict=None):
     """Sorry but run overlaps with the magic `%run`!"""
-    _init_pdb().run(statement, globals, locals)
+    _init_pdb().run(statement, global_dict, local_dict)
 
 
 def runcall(*args, **kwargs):
     return _init_pdb().runcall(*args, **kwargs)
 
 
-def runeval(expression, globals=None, locals=None):
-    return _init_pdb().runeval(expression, globals, locals)
+def runeval(expression, global_dict=None, local_dict=None):
+    return _init_pdb().runeval(expression, global_dict, local_dict)
 
 
 @contextmanager
-def launch_ipdb_on_exception():
+def launch_ipdb_on_exception(*args, **kwargs):
+    """Context manager for running code with a debugger fallback.
+
+    Accepts any args and returns them as is to ensure that code can be left in place.
+    """
     try:
         yield
-    except Exception:
+    except Exception:  # noqa
         if hasattr(sys, "exc_info"):
             print(sys.exc_info()[2])
-        post_mortem(tb)
+        post_mortem(sys.last_traceback)
     finally:
-        pass
+        return args, kwargs
 
 
-def exception_hook(type=None, value=None, tb=None):
+def exception_hook(etype=None, value=None, tb=None):
     """Return to debugger after fatal exception (Python cookbook 14.5)."""
-    if type or value or tb is None:
-        type, value, tb = sys.exc_info()
+    if etype or value or tb is None:
+        etype, value, tb = sys.exc_info()
     if hasattr(sys, "ps1") or not sys.stderr.isatty():
-        sys.__excepthook__(type, value, tb)
-    traceback.print_exception(type, value, tb)
+        sys.__excepthook__(etype, value, tb)
+    traceback.print_exception(etype, value, tb)
     pdb.pm()
 
 
@@ -436,7 +469,7 @@ duration = end - start
 print(f".pdbrc.py finished.{time.ctime()}" + "\n" + f"duration was: {duration}.")
 
 
-def debug_script(script=None):
+def debug_script(namespace, script=None):
     if script is None:
         return
     # Note on saving/restoring sys.argv: it's a good idea when sys.argv was
@@ -464,7 +497,7 @@ def debug_script(script=None):
         # In most cases SystemExit does not warrant a post-mortem session.
         print("The program exited via sys.exit(). Exit status: ", end="")
         print(sys.exc_info()[1])
-    except:
+    except Exception:
         traceback.print_exc()
         print("Uncaught exception. Entering post mortem debugging")
         print("Running 'cont' or 'step' will restart the program")
@@ -531,7 +564,7 @@ def main():
     # Replace pdb's dir with script's dir in front of module search path.
     if mainpyfile is not None:
         sys.path.insert(0, os.path.dirname(mainpyfile))
-        debug_script(mainpyfile)
+        debug_script(namespace, mainpyfile)
 
 
 main()

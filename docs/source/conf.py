@@ -18,7 +18,7 @@ from IPython.lib.lexers import IPyLexer, IPython3Lexer, IPythonTracebackLexer
 import jinja2
 from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
-from jinja2.exceptions import TemplateError
+from jinja2.exceptions import TemplateError, TemplateSyntaxError
 from jinja2.ext import autoescape, do, with_, ExtensionRegistry
 from jinja2.loaders import ChoiceLoader, ModuleLoader, FileSystemLoader
 from jinja2.lexer import get_lexer
@@ -49,16 +49,7 @@ from sphinx.util.docfields import GroupedField
 from sphinx.util.tags import Tags
 from sphinx.util.template import ReSTRenderer
 
-if TYPE_CHECKING:
-    from jinja2.environment import TRIM_BLOCKS, LSTRIP_BLOCKS  # noqa
-    from sphinx.application import Sphinx  # noqa
-    from sphinx.domains.rst import ReSTDomain  # noqa
 # }}}
-
-import default_profile  # noqa
-
-# from default_profile import ask_for_import
-from default_profile.sphinxext.magics import CellMagicRole, LineMagicRole  # noqa
 
 try:
     from default_profile.__about__ import __version__
@@ -131,12 +122,12 @@ jinja_loader = instantiate_jinja_loader()
 
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
-    TRIM_BLOCKS = True
-    LSTRIP_BLOCKS = True
-    template_path = "_templates"
     env = Environment(
-        trim_blocks=TRIM_BLOCKS,
-        lstrip_blocks=LSTRIP_BLOCKS,
+        trim_blocks=True,
+        lstrip_blocks=True,
+        keep_trailing_newline=False,
+        # this ones a default
+        # auto_reload=True,
         autoescape=jinja2.select_autoescape(
             enabled_extensions=('html', 'xml'),
             disabled_extensions=("txt",),

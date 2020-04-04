@@ -34,20 +34,18 @@ That's pretty neat! I feel like I was trying to set something like that up
 with the sphinx build so it's cool to see it in this context.
 
 """
-import importlib
 import re
 import sys
-import unittest
 from typing import TYPE_CHECKING
 
-from IPython.core.getipython import get_ipython
-
 import pytest
+
+# FOUND IT! There was a dir a LONG while ago that I couldn't figure out the API for.
+# it was this one
+from _pytest.pytester import Testdir
+
 from _pytest.tmpdir import tmpdir
 
-if TYPE_CHECKING:
-    # noinspection PyProtectedMember
-    from py._path.local import LocalPath  # noqa:  it'st the tmpdir
 
 COLORS = {
     "red": "\x1b[31m",
@@ -57,6 +55,19 @@ COLORS = {
     "reset": "\x1b[0m",
 }
 RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
+
+
+def setup_module(tmpdir):
+    # Wait what is this one?
+    return tmpdir.chdir()
+
+
+@pytest.fixture
+def spawn_pytest():
+    # Like how wild is this?
+    that_this_is_real = Testdir()
+    assert that_this_is_real.spawn_pytest('pytest')
+
 
 
 def test_myoutput(capsys):  # or use "capfd" for fd-level

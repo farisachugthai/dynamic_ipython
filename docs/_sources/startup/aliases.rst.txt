@@ -154,19 +154,20 @@ result, would split the alias in the middle of the command.
 API Docs
 --------
 
-.. function:: validate_alias
+.. function:: validate_alias(alias)
    :noindex:
 
+   Ensure that the aliases are of the right form and correct type.
+
+   Ensures that :kbd:`%s` and :kbd:`%l` arguments aren't mixed.
    Check attributes and formatting of Alias string.
    Verifies alias through the name and cmd attributes.
 
-   :param alias : Alias
-       Alias to verify
-
-   :return nargs:
-
-   :raises `InvalidAliasError`:
-      On incorrect aliases
+   :param alias: alias to verify.
+   :type alias: Alias
+   :return nargs: the validated alias
+   :rtype nargs: Alias
+   :raises `InvalidAliasError`: On invalid aliases
 
 
 .. class:: Alias(alias)

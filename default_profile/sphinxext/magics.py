@@ -8,7 +8,7 @@ from sphinx import addnodes
 # from sphinx.domains.std import StandardDomain
 from sphinx.roles import XRefRole
 
-from default_profile.startup import UsageError
+from default_profile.ipython_config import UsageError
 
 logging.basicConfig(format="%(name)-12s: %(levelname)-8s %(message)s")
 name_re = re.compile(r"[\w_]+")

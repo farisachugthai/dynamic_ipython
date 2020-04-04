@@ -51,8 +51,10 @@ home = get_home()
 c = get_config()
 
 
-class UsageError(Exception):
+class ApplicationError(Exception):
     """Base exception class."""
+
+class UsageError(ApplicationError):
     def __init__(self, err=None, *args, **kwargs):
         self.err = err
         super().__init__(self, *args)
@@ -62,8 +64,6 @@ class UsageError(Exception):
 
     def __call__(self, err):
         return self.__repr__()
-
-
 
 class NotInIPythonError(UsageError):
     """Error raised when a magic is invoked outside of IPython."""

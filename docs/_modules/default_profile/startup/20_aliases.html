@@ -77,33 +77,20 @@
 
 <span class="kn">from</span> <span class="nn">IPython.core.alias</span> <span class="kn">import</span> <span class="n">default_aliases</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">ApplicationError</span>
-
-<span class="kn">from</span> <span class="nn">default_profile.ipython_config</span> <span class="kn">import</span> <span class="n">UsageError</span><span class="p">,</span> <span class="n">AliasError</span><span class="p">,</span> <span class="n">InvalidAliasError</span>
+<span class="kn">from</span> <span class="nn">default_profile.ipython_config</span> <span class="kn">import</span> <span class="n">UsageError</span><span class="p">,</span> <span class="n">AliasError</span><span class="p">,</span> <span class="n">InvalidAliasError</span><span class="p">,</span> <span class="n">ApplicationError</span>
 
 
 <div class="viewcode-block" id="validate_alias"><a class="viewcode-back" href="../../../startup/aliases.html#default_profile.startup.20_aliases.validate_alias">[docs]</a><span class="k">def</span> <span class="nf">validate_alias</span><span class="p">(</span><span class="n">alias</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">shell</span>
-
-    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Remember that you moved that docstring to docs</span>
+    <span class="k">if</span> <span class="n">alias</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">alias</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">):</span>
         <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span><span class="s2">&quot;Alias does not have name attribute.&quot;</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">caller</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">magics</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">][</span><span class="n">alias</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+        <span class="c1"># Jesus christ this is gonna be something else to untangle</span>
+        <span class="n">caller</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">magics_manager</span><span class="o">.</span><span class="n">magics</span><span class="p">[</span><span class="s2">&quot;line&quot;</span><span class="p">][</span><span class="n">alias</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">pass</span>
-    <span class="c1"># else:</span>
-        <span class="c1"># if not isinstance(caller, Alias):</span>
-        <span class="c1">#     raise InvalidAliasError(</span>
-        <span class="c1">#         &quot;The name %s can&#39;t be aliased &quot;</span>
-        <span class="c1">#         &quot;because it is another magic command.&quot; % shell.name</span>
-        <span class="c1">#     )</span>
-
-    <span class="c1"># if not (isinstance(shell.cmd, str)):</span>
-    <span class="c1">#     raise InvalidAliasError(</span>
-    <span class="c1">#         &quot;An alias command must be a string, &quot; &quot;got: %r&quot; % self.cmd</span>
-    <span class="c1">#     )</span>
 
     <span class="n">nargs</span> <span class="o">=</span> <span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%%</span><span class="s2">s&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">nargs</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">alias</span><span class="o">.</span><span class="n">cmd</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;%l&quot;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
@@ -141,7 +128,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span><span class="p">:</span>
             <span class="c1"># Wait can we note that we didn&#39;t checkout the keyword list though.</span>
             <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{self.name}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nargs</span> <span class="o">=</span> <span class="n">validate_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
@@ -162,7 +149,7 @@
         <span class="k">return</span> <span class="n">blacklist</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{self.name!r}</span><span class="s2"> for </span><span class="si">{self.cmd!r}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="si">!r}</span><span class="s2">&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rest</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;If an Alias is called, run it with the shell&#39;s system function.</span>
