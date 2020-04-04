@@ -1,8 +1,10 @@
-.. currentmodule:: default_profile.startup.20_aliases
-
 ==============
 System Aliases
 ==============
+
+.. highlight:: ipython
+
+.. currentmodule:: default_profile.startup.20_aliases
 
 To date there are well over 100 aliases manually added to the shell.
 

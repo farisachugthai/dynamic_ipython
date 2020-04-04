@@ -38,7 +38,9 @@ class ReprProfileDir(ProfileDir):
             help="""Set the profile location directly. This overrides the logic used by the
             `profile` option.""",
             allow_none=True,
-        ).tag(config=True)   # noqa
+        ).tag(
+            config=True
+        )  # noqa
 
     # don't set the location more than once no matter how many profiles
     # are instantiated so yes a class attr
@@ -77,6 +79,7 @@ class ReprProfileDir(ProfileDir):
         # what is static?
         for i in ["security", "log", "startup", "pid", "static"]:
             self.ensure_dir_exists()
+
 
 class DirectoryChecker:
     """Let's redo profiledir with pathlib.

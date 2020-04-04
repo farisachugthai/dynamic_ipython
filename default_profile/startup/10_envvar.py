@@ -93,7 +93,6 @@ class DevNull(TextIOWrapper):
     def _bufferedrw(self):
         return BufferedRWPair(self.reader, self.writer, DEFAULT_BUFFER_SIZE)
 
-
     @contextlib.contextmanager
     def stdout(self):
         try:

@@ -51,10 +51,12 @@ import sys
 import types
 from inspect import findsource, getmodule, getsource, getsourcefile
 from io import StringIO
+
 # noinspection PyProtectedMember
 # noinspection PyProtectedMember
 from linecache import cache
 from pathlib import Path
+
 # noinspection PyProtectedMember
 from pydoc import pager
 

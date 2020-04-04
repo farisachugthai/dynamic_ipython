@@ -66,8 +66,7 @@ def setup_module(tmpdir):
 def spawn_pytest():
     # Like how wild is this?
     that_this_is_real = Testdir()
-    assert that_this_is_real.spawn_pytest('pytest')
-
+    assert that_this_is_real.spawn_pytest("pytest")
 
 
 def test_myoutput(capsys):  # or use "capfd" for fd-level
@@ -76,6 +75,10 @@ def test_myoutput(capsys):  # or use "capfd" for fd-level
     captured = capsys.readouterr()
     assert captured.out == "hello\n"
     assert captured.err == "world\n"
+
+
+def test_readouterr(capsys):
+    # Break this diddly up a little
     print("next")
     captured = capsys.readouterr()
     assert captured.out == "next\n"

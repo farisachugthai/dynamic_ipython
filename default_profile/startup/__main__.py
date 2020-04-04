@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-"""Define the main startup for the IPython startup directory.
-
-.. todo::
-
-    So I think a good idea would be make this directory something that can be
-    executed with 1 command, combine that and export it here.
-    If something goes wrong in startup IPython doesn't finish executing the remaining files.
-    So make it easy to re-exec.
-
-"""
+"""Define the main startup for the IPython startup directory."""
 import asyncio
 import platform
 import sys
@@ -22,8 +13,8 @@ except ImportError:  # py3.8 only
 from asyncio import format_helpers
 from os import scandir
 from os.path import abspath
-
 from pathlib import Path
+from pprint import pprint as print
 
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor
@@ -32,12 +23,11 @@ except ImportError:
     # from asyncio import ProactorEventLoop, IocpProactor
     pass
 
-from prompt_toolkit.shortcuts import print_formatted_text as print
 from IPython.core.getipython import get_ipython
 
 
 def exec_startup():
-    """Be careful!!
+    """Runs `exec(compile(__file__))`.
 
     .. danger::
         All of the usual exec admonitions apply here.
@@ -53,6 +43,11 @@ def exec_dir(directory):
 
 
 def async_startup():
+    """An interactive console with asyncio.
+
+    Initializes an asyncio event loop and the standard libraries
+    AsyncIOInteractiveConsole.
+    """
     shell = get_ipython()
 
     if not shell:
@@ -97,11 +92,12 @@ def async_startup():
             if repl_future and not repl_future.done():
                 repl_future.cancel()
                 repl_future_interrupted = True
-            continue
+                print("Interrupted!")
         except EOFError:
             sys.exit()
+            # better than raise?
         except Exception as e:
-            format_helpers.extract_stack(e)
+            print(format_helpers.extract_stack(e))
 
 
 if "__name__" == "__main__":

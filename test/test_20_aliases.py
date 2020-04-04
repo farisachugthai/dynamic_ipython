@@ -28,6 +28,7 @@ try:
 except (ImportError, ModuleNotFoundError):
     NO_NOSE = True
     from _pytest.outcomes import skip
+
     skip(allow_module_level=True)
 else:
     NO_NOSE = None
@@ -100,7 +101,7 @@ def test_alias_args_commented_nargs(_ip):
     nt.assert_equal(thealias.nargs, 1)
 
 
-if __name__ == '__main__':
-    unittest.skipIf(NO_NOSE, 'Nose not installed.')
+if __name__ == "__main__":
+    unittest.skipIf(NO_NOSE, "Nose not installed.")
     # otherwise...
     unittest.main()

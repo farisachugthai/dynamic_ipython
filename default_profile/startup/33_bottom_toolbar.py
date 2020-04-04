@@ -39,6 +39,7 @@ except ImportError:
     # actually we can't do this. he requires that styles have an invalidationhash
 
     from pygments.styles.inkpot import InkPotStyle
+
     # pygments_style = default_pygments_style()
     pygments_style = InkPotStyle
 else:
@@ -58,7 +59,9 @@ def exit_clicked():
 
 def init_style():
     """Merges the styles from default_pygments_style and the previously imported `pygments_style`."""
-    return merge_styles([style_from_pygments_cls(pygments_style), default_pygments_style()])
+    return merge_styles(
+        [style_from_pygments_cls(pygments_style), default_pygments_style()]
+    )
 
 
 def show_header(header_text: AnyStr = None) -> prompt_toolkit.widgets.Frame:
@@ -89,7 +92,11 @@ class LineCounter:
 
     def display(self):
         self.count += 1
-        ret = [Token.String.Subheading, f"< In[{self.count:3d}]:", [Token.Literal, f"Time:{self.time}"]]
+        ret = [
+            Token.String.Subheading,
+            f"< In[{self.count:3d}]:",
+            [Token.Literal, f"Time:{self.time}"],
+        ]
         return ret
 
     def __call__(self):
@@ -128,7 +135,9 @@ class BottomToolbar:
 
     # are you allowed to doctest fstrings
 
-    def __init__(self, _style: prompt_toolkit.styles.Style = None, *args: List, **kwargs: Dict) -> Any:
+    def __init__(
+        self, _style: prompt_toolkit.styles.Style = None, *args: List, **kwargs: Dict
+    ) -> Any:
         """Require an 'app' for initialization.
 
         This will eliminate all IPython code out of this class and make things
@@ -203,9 +212,12 @@ class BottomToolbar:
 
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
-        _toolbar = [(Token.Keyword, f"[F4] {self.app.editing_mode!r}"), (Token.String.Heading, f"{current_vi_mode!r}"),
-                    (Token.Literal.String.Double, f"cwd: {Path.cwd().stem!r}"),
-                    (Token.Number.Integer, f"Clock: {time.ctime()!r}")]
+        _toolbar = [
+            (Token.Keyword, f"[F4] {self.app.editing_mode!r}"),
+            (Token.String.Heading, f"{current_vi_mode!r}"),
+            (Token.Literal.String.Double, f"cwd: {Path.cwd().stem!r}"),
+            (Token.Number.Integer, f"Clock: {time.ctime()!r}"),
+        ]
         # how do i fill all this dead space?
         # remaining_space = terminal_width() - len(self)
         # _toolbar.append((Token.Operator, remaining_space * " "))

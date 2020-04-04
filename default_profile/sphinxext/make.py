@@ -24,11 +24,16 @@ from jinja2.loaders import FileSystemLoader
 import sphinx
 from sphinx.application import Sphinx
 
-# from sphinx.cmd.build import build_main
-# from sphinx.cmd.build import handle_exception
+# So we have to make the Sphinx app first. Then we can make this
+# theme_factory = HTMLThemeFactory(self.app)
+# Then make this
+# from sphinx.builders.html import StandAloneHTMLBuilder
+# And we'll have repieced together sphinx
 from sphinx.cmd.make_mode import Make
 from sphinx.errors import ApplicationError
 
+# from sphinx.cmd.build import build_main
+# from sphinx.cmd.build import handle_exception
 # from sphinx.jinja2glue import SphinxFileSystemLoader
 # from sphinx.util.console import (  # type: ignore
 #   colorize, color_terminal
@@ -82,7 +87,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
-        "-d", "--destdir", default=None, help="Sourcedir to pass to Sphinx",
+        "-d", "--destdir", default=None, help="Destination to pass to Sphinx",
     )
 
     parser.add_argument(
@@ -103,7 +108,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         default=False,
         dest="open_browser",
         help="Toggle opening the docs in the default"
-             " browser after a successful build.",
+        " browser after a successful build.",
     )
 
     parser.add_argument(

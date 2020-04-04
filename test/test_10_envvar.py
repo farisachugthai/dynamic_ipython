@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Test environment related magics loaded on startup."""
-
 from pathlib import Path
 import platform
 import unittest
@@ -36,5 +35,5 @@ class TestPath(unittest.TestCase):
 #     assert False
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pytest.mark.skip()

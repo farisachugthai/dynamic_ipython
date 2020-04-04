@@ -136,7 +136,10 @@ REQUIRED = [
     "jinja2",
     "jedi",
     "pyzmq",
-    "traitlets", 'requests', 'docutils', 'py'
+    "traitlets",
+    "requests",
+    "docutils",
+    "py",
 ]
 
 if platform.platform().startswith("Win"):
@@ -145,7 +148,7 @@ if platform.platform().startswith("Win"):
 
 
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib", ],
+    "develop": ["pipenv", "pandas", "matplotlib",],
     "docs": [
         "sphinx>=2.2",
         "matplotlib>=3.0.0",
@@ -251,7 +254,7 @@ try:
             "Programming Language :: Python :: Implementation :: CPython",
         ],
         # $ setup.py publish support.
-        cmdclass={"upload": UploadCommand, },
+        cmdclass={"upload": UploadCommand,},
         # project home page, if any
         project_urls={
             "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",

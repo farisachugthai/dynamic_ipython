@@ -201,4 +201,4 @@ try:
     from . import startup
 except ImportError:
     importlib.invalidate_caches()
-    print('startup not imported')
+    print("startup not imported")

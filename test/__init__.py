@@ -12,6 +12,7 @@ except ImportError:
 
 try:
     from test import *  # noqa
+
     # so we can have their namespace too
 except ImportError:
     pass

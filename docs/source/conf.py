@@ -20,6 +20,7 @@ from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError, TemplateSyntaxError
 from jinja2.ext import autoescape, do, with_, ExtensionRegistry
+from jinja2.ext import DebugExtension
 from jinja2.loaders import ChoiceLoader, ModuleLoader, FileSystemLoader
 from jinja2.lexer import get_lexer
 
@@ -129,10 +130,7 @@ def create_jinja_env():
         # this ones a default
         # auto_reload=True,
         autoescape=jinja2.select_autoescape(
-            enabled_extensions=('html', 'xml'),
-            disabled_extensions=("txt",),
-            default_for_string=True,
-            default=True,
+            enabled_extensions=("html", "xml"), default_for_string=True, default=True,
         ),
         extensions=[
             "jinja2.ext.i18n",
@@ -140,7 +138,8 @@ def create_jinja_env():
             do,
             with_,
             "jinja2.ext.loopcontrols",
-            "jinja2.ext.do",
+            DebugExtension,
+            "jinja2.ext.debug",
         ],
         enable_async=True,
         bytecode_cache=jinja_templates,

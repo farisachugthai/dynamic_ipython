@@ -37,7 +37,12 @@ from typing import Any, Optional, Union
 
 from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
-from default_profile.ipython_config import UsageError, AliasError, InvalidAliasError, ApplicationError
+from default_profile.ipython_config import (
+    UsageError,
+    AliasError,
+    InvalidAliasError,
+    ApplicationError,
+)
 
 
 def validate_alias(alias) -> Optional[Any]:
@@ -176,9 +181,9 @@ class CommonAliases(UserDict):
             self.user_aliases = default_aliases()
         else:
             self.user_aliases = user_aliases
-        if hasattr(user_aliases, 'update'):  # did we get a dict?
+        if hasattr(user_aliases, "update"):  # did we get a dict?
             self.dict_aliases = self.user_aliases
-        elif hasattr(user_aliases, 'append'):  # did we get a list of tuples?
+        elif hasattr(user_aliases, "append"):  # did we get a list of tuples?
             self.dict_aliases = self.tuple_to_dict(self.user_aliases)
         else:
             self.dict_aliases = {}
@@ -281,7 +286,7 @@ class CommonAliases(UserDict):
     def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
         if hasattr(other, "dict_aliases"):
-            self.update(other.dict_aliases, )
+            self.update(other.dict_aliases,)
         if name is None and cmd is None:
             if len(args) == 2:
                 name, cmd = args
@@ -303,6 +308,7 @@ class CommonAliases(UserDict):
     def keys(self):
         # Well of course the above doesn't work i never defined keys
         return self.aliases_dict.keys()
+
     def __next__(self):
         max = len(self)
         if max >= self.idx:
@@ -379,117 +385,121 @@ class CommonAliases(UserDict):
             from shutil import chown
 
     def git(self):
-        self.dict_aliases.update(self.tuple_to_dict([
-            ("g", "git diff --staged --stat %l"),
-            ("ga", "git add -v %l"),
-            ("gaa", "git add --all %l"),
-            ("gai", "git add --interactive %l"),
-            ("gap", "git add --patch %l"),
-            ("gar", "git add --renormalize %l"),
-            ("gau", "git add --update %l"),
-            ("ga.", "git add ."),
-            ("gb", "git branch -avv %l"),
-            ("gbl", "git blame %l"),
-            ("gbr", "git branch %l"),
-            ("gbrd", "git branch -d %l"),
-            ("gbrD", "git branch -D %l"),
-            ("gbrrd", "git branch -rd %l"),
-            ("gbrrD", "git branch -rD %l"),
-            ("gbru", "git branch --set-upstream-to --verbose origin %l"),
-            ("gbrv", "git branch --all --verbose --remote %l"),
-            ("gci", "git commit %l"),
-            ("gcia", "git commit --amend %l"),
-            ("gciad", "git commit --amend --date=%l"),
-            ("gcid", "git commit --date=%l"),
-            ("gcim", "git commit --verbose --message %s"),
-            ("gcl", "git clone --progress %l"),
-            (
-                "gcls",
-                "git clone --progress --depth 1 --single-branch --branch master %s",
-            ),
-            ("gco", "git checkout %l"),
-            ("gcob", "git checkout -b %l"),
-            ("gd", "git diff %l"),
-            ("gds", "git diff --staged %l"),
-            ("gds2", "git diff --staged --stat %l"),
-            ("gdt", "git difftool %l"),
-            ("gdw", "git diff --word-diff %l"),
-            ("gf", "git fetch --all %l"),
-            ("gfe", "git fetch %l"),
-            ("ggc", "git gc %l"),
-            ("ggcp", "git gc --prune %l"),
-            ("git", "git %l"),
-            ("git_config_list", "git config --get --global %l"),
-            ("git_config_glob", "git config --get-regex --global %l.*"),
-            # If you're on a topic branch, shows commit msgs since split
-            ("git_fork", "git show-branch --current %l"),
-            (
-                "git_hist",
-                'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
-                "--branches --abbrev-commit --oneline %l",
-            ),
-            ("git_last_msg", "git log -1 HEAD -- ."),
-            ("git_last_patch", "git show --source"),
-            ("git_staged", "git diff --cached %l"),
-            ("git_rel", "git rev-parse --show-prefix %l"),
-            ("git_root", "git rev-parse --show-toplevel %l"),
-            ("git_unstage", "git reset HEAD %l"),
-            ("git_unstaged", "git diff %l"),
-            (
-                "gl",
-                'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l',
-            ),
-            #  gl with a message
-            (
-                "glg",
-                r'git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset%Cwhite %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --date=relative',
-            ),
-            ("glo", "git log %l"),
-            (
-                "glog",
-                'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches %l',
-            ),
-            ("gls", "git ls-tree master %l"),
-            ("git ls", "git ls-tree master %l"),
-            ("gm", "git merge --stat --progress %l"),
-            ("gma", "git merge --abort %l"),
-            ("gmc", "git merge --continue %l"),
-            ("gmm", "git merge --stat --progress master %l"),
-            ("gmt", "git mergetool %l"),
-            ("gp", "git pull --all %l"),
-            ("gpo", "git pull origin %l"),
-            ("gpom", "git pull origin master %l"),
-            ("gpu", "git push %l"),
-            ("gpuf", "git push --force $args"),
-            ("gpuo", "git push origin $args"),
-            ("gpuof", "git push origin --force $args"),
-            ("gr", "git remote -v %l"),
-            ("grb", "git rebase %l"),
-            ("grba", "git rebase --abort %l"),
-            ("grbc", "git rebase --continue %l"),
-            ("grbi", "git rebase --interactive %l"),
-            ("gre", "git remote %l"),
-            ("gs", "git status %l"),
-            ("gsb", "git status -sb %l"),
-            ("gsh", "git stash %l"),
-            ("gsha", "git stash apply %l"),
-            ("gshc", "git stash clear %l"),
-            ("gshd", "git stash drop %l"),
-            ("gshl", "git stash list %l"),
-            ("gshp", "git stash pop %l"),
-            ("gshs", "git stash show --stat %l"),
-            ("gshsp", "git stash show --patch %l"),
-            ("gss", "git status -sb %l"),
-            ("gst", "git diff --stat %l"),
-            ("gsw", "git switch --progress %l"),
-            ("gswm", "git switch --progress master %l"),
-            ("gt", "git tag --list %l"),
-            ("gtd", "git tag --delete %l"),
-            ("ssh-day", 'eval "$(ssh-agent -s)"; ssh-add %l'),
-            ("xx", "quit"),  # this is a sweet one
-            ("..", "cd .."),
-            ("...", "cd ../.."),
-        ]))
+        self.dict_aliases.update(
+            self.tuple_to_dict(
+                [
+                    ("g", "git diff --staged --stat %l"),
+                    ("ga", "git add -v %l"),
+                    ("gaa", "git add --all %l"),
+                    ("gai", "git add --interactive %l"),
+                    ("gap", "git add --patch %l"),
+                    ("gar", "git add --renormalize %l"),
+                    ("gau", "git add --update %l"),
+                    ("ga.", "git add ."),
+                    ("gb", "git branch -avv %l"),
+                    ("gbl", "git blame %l"),
+                    ("gbr", "git branch %l"),
+                    ("gbrd", "git branch -d %l"),
+                    ("gbrD", "git branch -D %l"),
+                    ("gbrrd", "git branch -rd %l"),
+                    ("gbrrD", "git branch -rD %l"),
+                    ("gbru", "git branch --set-upstream-to --verbose origin %l"),
+                    ("gbrv", "git branch --all --verbose --remote %l"),
+                    ("gci", "git commit %l"),
+                    ("gcia", "git commit --amend %l"),
+                    ("gciad", "git commit --amend --date=%l"),
+                    ("gcid", "git commit --date=%l"),
+                    ("gcim", "git commit --verbose --message %s"),
+                    ("gcl", "git clone --progress %l"),
+                    (
+                        "gcls",
+                        "git clone --progress --depth 1 --single-branch --branch master %s",
+                    ),
+                    ("gco", "git checkout %l"),
+                    ("gcob", "git checkout -b %l"),
+                    ("gd", "git diff %l"),
+                    ("gds", "git diff --staged %l"),
+                    ("gds2", "git diff --staged --stat %l"),
+                    ("gdt", "git difftool %l"),
+                    ("gdw", "git diff --word-diff %l"),
+                    ("gf", "git fetch --all %l"),
+                    ("gfe", "git fetch %l"),
+                    ("ggc", "git gc %l"),
+                    ("ggcp", "git gc --prune %l"),
+                    ("git", "git %l"),
+                    ("git_config_list", "git config --get --global %l"),
+                    ("git_config_glob", "git config --get-regex --global %l.*"),
+                    # If you're on a topic branch, shows commit msgs since split
+                    ("git_fork", "git show-branch --current %l"),
+                    (
+                        "git_hist",
+                        'git log --pretty="format:%h %ad | %d [%an]" --graph --date=short '
+                        "--branches --abbrev-commit --oneline %l",
+                    ),
+                    ("git_last_msg", "git log -1 HEAD -- ."),
+                    ("git_last_patch", "git show --source"),
+                    ("git_staged", "git diff --cached %l"),
+                    ("git_rel", "git rev-parse --show-prefix %l"),
+                    ("git_root", "git rev-parse --show-toplevel %l"),
+                    ("git_unstage", "git reset HEAD %l"),
+                    ("git_unstaged", "git diff %l"),
+                    (
+                        "gl",
+                        'git log --pretty=format:"%Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --abbrev=7 --date=relative --graph --decorate %l',
+                    ),
+                    #  gl with a message
+                    (
+                        "glg",
+                        r'git log --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset%Cwhite %Cgreen(%cr) %C(bold blue)<%an>%Creset" --all --abbrev-commit --date=relative',
+                    ),
+                    ("glo", "git log %l"),
+                    (
+                        "glog",
+                        'git log --pretty="format:%h %ad | %d [%an]" --graph --decorate --abbrev-commit --oneline --branches %l',
+                    ),
+                    ("gls", "git ls-tree master %l"),
+                    ("git ls", "git ls-tree master %l"),
+                    ("gm", "git merge --stat --progress %l"),
+                    ("gma", "git merge --abort %l"),
+                    ("gmc", "git merge --continue %l"),
+                    ("gmm", "git merge --stat --progress master %l"),
+                    ("gmt", "git mergetool %l"),
+                    ("gp", "git pull --all %l"),
+                    ("gpo", "git pull origin %l"),
+                    ("gpom", "git pull origin master %l"),
+                    ("gpu", "git push %l"),
+                    ("gpuf", "git push --force $args"),
+                    ("gpuo", "git push origin $args"),
+                    ("gpuof", "git push origin --force $args"),
+                    ("gr", "git remote -v %l"),
+                    ("grb", "git rebase %l"),
+                    ("grba", "git rebase --abort %l"),
+                    ("grbc", "git rebase --continue %l"),
+                    ("grbi", "git rebase --interactive %l"),
+                    ("gre", "git remote %l"),
+                    ("gs", "git status %l"),
+                    ("gsb", "git status -sb %l"),
+                    ("gsh", "git stash %l"),
+                    ("gsha", "git stash apply %l"),
+                    ("gshc", "git stash clear %l"),
+                    ("gshd", "git stash drop %l"),
+                    ("gshl", "git stash list %l"),
+                    ("gshp", "git stash pop %l"),
+                    ("gshs", "git stash show --stat %l"),
+                    ("gshsp", "git stash show --patch %l"),
+                    ("gss", "git status -sb %l"),
+                    ("gst", "git diff --stat %l"),
+                    ("gsw", "git switch --progress %l"),
+                    ("gswm", "git switch --progress master %l"),
+                    ("gt", "git tag --list %l"),
+                    ("gtd", "git tag --delete %l"),
+                    ("ssh-day", 'eval "$(ssh-agent -s)"; ssh-add %l'),
+                    ("xx", "quit"),  # this is a sweet one
+                    ("..", "cd .."),
+                    ("...", "cd ../.."),
+                ]
+            )
+        )
 
     def ls_patch(self):
         shoddy_hack_for_aliases = [
@@ -536,51 +546,61 @@ class LinuxAliases(CommonAliases):
             User aliases to add the user's namespace.
 
         """
-        self.dict_aliases.update(self.tuple_to_dict([
-            ("cs", "cd %s && ls -F --color=always %s"),
-            ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
-            ("df", "df -ah --total"),
-            ("dU", "du -d 1 -h --apparent-size --all | sort -h | tail -n 10"),
-            ("dus", "du -d 1 -ha %l"),
-            ("echo", "echo -e %l"),
-            ("free", "free -mt"),
-            (
-                "gpip",
-                "export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
-            ),
-            (
-                "gpip2",
-                "export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
-            ),
-            (
-                "gpip3",
-                "export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
-            ),
-            ("head", "head -n 30 %l"),
-            ("l", "ls -CF --color=always %l"),
-            ("la", "ls -AFh --color=always %l"),
-            ("ldir", "ls -Fhpo --color=always %l | grep /$"),
-            ("lf", "ls -Foh --color=always | grep ^-"),
-            ("ll", "ls -FAgh --color=always %l"),
-            ("ls", "ls -Fh --color=always %l"),
-            # alternatively -Altcr
-            ("lr", "ls -AgFhtr --color=always %l"),
-            # alternatively could do ls -Altc
-            ("lt", "ls -AgFht --color=always %l"),
-            ("lx", "ls -Fo --color=always | grep ^-..x"),
-            ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
-            ("mkdir", "mkdir -pv %l"),
-            ("mv", "mv -v %l"),
-            ("r", "fc -s"),
-            ("redo", "fc -s"),
-            # Less annoying than -i but more safe
-            # only prompts with more than 3 files or recursed dirs.
-            ("rm", "rm -Iv %l"),
-            ("rmdir", "rmdir -v %l"),
-            ("default_profile", "cd ~/projects/dotfiles/unix/.ipython/default_profile"),
-            ("startup", "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup"),
-            ("tail", "tail -n 30 %l"),
-            ]))
+        self.dict_aliases.update(
+            self.tuple_to_dict(
+                [
+                    ("cs", "cd %s && ls -F --color=always %s"),
+                    ("cp", "cp -v %l"),  # cp mv mkdir and rmdir are all overridden
+                    ("df", "df -ah --total"),
+                    ("dU", "du -d 1 -h --apparent-size --all | sort -h | tail -n 10"),
+                    ("dus", "du -d 1 -ha %l"),
+                    ("echo", "echo -e %l"),
+                    ("free", "free -mt"),
+                    (
+                        "gpip",
+                        "export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+                    ),
+                    (
+                        "gpip2",
+                        "export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+                    ),
+                    (
+                        "gpip3",
+                        "export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+                    ),
+                    ("head", "head -n 30 %l"),
+                    ("l", "ls -CF --color=always %l"),
+                    ("la", "ls -AFh --color=always %l"),
+                    ("ldir", "ls -Fhpo --color=always %l | grep /$"),
+                    ("lf", "ls -Foh --color=always | grep ^-"),
+                    ("ll", "ls -FAgh --color=always %l"),
+                    ("ls", "ls -Fh --color=always %l"),
+                    # alternatively -Altcr
+                    ("lr", "ls -AgFhtr --color=always %l"),
+                    # alternatively could do ls -Altc
+                    ("lt", "ls -AgFht --color=always %l"),
+                    ("lx", "ls -Fo --color=always | grep ^-..x"),
+                    ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
+                    ("mkdir", "mkdir -pv %l"),
+                    ("mv", "mv -v %l"),
+                    ("r", "fc -s"),
+                    ("redo", "fc -s"),
+                    # Less annoying than -i but more safe
+                    # only prompts with more than 3 files or recursed dirs.
+                    ("rm", "rm -Iv %l"),
+                    ("rmdir", "rmdir -v %l"),
+                    (
+                        "default_profile",
+                        "cd ~/projects/dotfiles/unix/.ipython/default_profile",
+                    ),
+                    (
+                        "startup",
+                        "cd ~/projects/dotfiles/unix/.ipython/default_profile/startup",
+                    ),
+                    ("tail", "tail -n 30 %l"),
+                ]
+            )
+        )
 
     def thirdparty(self):
         """Contrasted to busybox, these require external installation.
@@ -588,13 +608,17 @@ class LinuxAliases(CommonAliases):
         As a result it'll be of value to check that they're even in
         the namespace.
         """
-        self.dict_aliases.update(self.tuple_to_dict([
-            ("ag", "ag --hidden --color --no-column %l"),
-            ("cat", "bat %l"),
-            ("nvim", "nvim %l"),
-            ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
-            ("tre", "tree -DAshFC --prune -I .git %l"),
-        ]))
+        self.dict_aliases.update(
+            self.tuple_to_dict(
+                [
+                    ("ag", "ag --hidden --color --no-column %l"),
+                    ("cat", "bat %l"),
+                    ("nvim", "nvim %l"),
+                    ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
+                    ("tre", "tree -DAshFC --prune -I .git %l"),
+                ]
+            )
+        )
 
 
 class WindowsAliases(CommonAliases):
@@ -640,66 +664,70 @@ class WindowsAliases(CommonAliases):
         Also note :envvar:`DIRCMD` for :command:`dir`.
 
         """
-        self.dict_aliases.update(self.tuple_to_dict([
-            ("assoc", "assoc %l"),
-            ("cd", "cd %l"),
-            ("chdir", "chdir %l"),
-            ("cl", "cl %l"),
-            ("cmd", "cmd /U /E:ON /F:ON %l"),
-            ("control", "control %l"),
-            ("controlpanel", "control %l"),
-            ("copy", "copy /V /Y %s %s"),
-            # ("cp", "copy %s %s"),
-            ("cpanel", "control %l"),
-            ("cygpath", "cygpath %l"),
-            ("del", "del %l"),
-            ("dism", "dism"),
-            ("ddir", "dir /ad /on %l"),
-            ("echo", "echo %l"),
-            ("erase", "erase %l"),
-            ("find", "find %l"),
-            ("findstr", "findstr %l"),
-            ("finger", "finger"),
-            ("ldir", "dir /ad /on %l"),
-            ("ll", "dir /Q %l"),
-            # I know this really isn't the same but I need it
-            ("ln", "mklink %s %s"),
-            ("make", "make.bat %l"),  # Useful when we're building docs
-            ("md", "md %l"),
-            ("mk", "mkdir %s & cd %s"),
-            ("mkdir", "mkdir %l"),
-            ("mklink", "mklink %s %s"),
-            ("move", "move %s %s"),
-            ("msbuild", "msbuild %l"),
-            ("mv", "move %s %s"),
-            ("net", "net %l"),
-            ("path", "path %l"),
-            ("rd", "rd %l"),
-            ("ren", "ren %l"),
-            ("rename", "rename %l"),
-            ("rm", "del %l"),
-            ("rmdir", "rmdir %l"),
-            # i'll admit this is specific but I'm NEVER gonna remember it
-            ("rmdir -r", "rmdir /S %l"),
-            ("sc", "sc %l"),
-            (
-                "set",
-                "set %l",
-            ),  # but honestly might just work better as os.environ.putenv
-            ("sfc", "sfc %l"),
-            ("start", "start %l"),
-            ("tasklist", "tasklist %l"),
-            ("taskkill", "taskkill %l"),
-            ("title", "title %l"),
-            ("tree", "tree /A /F %l"),
-            ("type", "type"),
-            ("ver", "ver %l"),
-            ("verify", "verify %l"),
-            ("vol", "vol %l"),
-            ("xcopy", "xcopy %l"),
-            ("where", "where %l"),
-            ("wmic", "wmic %l"),
-        ]))
+        self.dict_aliases.update(
+            self.tuple_to_dict(
+                [
+                    ("assoc", "assoc %l"),
+                    ("cd", "cd %l"),
+                    ("chdir", "chdir %l"),
+                    ("cl", "cl %l"),
+                    ("cmd", "cmd /U /E:ON /F:ON %l"),
+                    ("control", "control %l"),
+                    ("controlpanel", "control %l"),
+                    ("copy", "copy /V /Y %s %s"),
+                    # ("cp", "copy %s %s"),
+                    ("cpanel", "control %l"),
+                    ("cygpath", "cygpath %l"),
+                    ("del", "del %l"),
+                    ("dism", "dism"),
+                    ("ddir", "dir /ad /on %l"),
+                    ("echo", "echo %l"),
+                    ("erase", "erase %l"),
+                    ("find", "find %l"),
+                    ("findstr", "findstr %l"),
+                    ("finger", "finger"),
+                    ("ldir", "dir /ad /on %l"),
+                    ("ll", "dir /Q %l"),
+                    # I know this really isn't the same but I need it
+                    ("ln", "mklink %s %s"),
+                    ("make", "make.bat %l"),  # Useful when we're building docs
+                    ("md", "md %l"),
+                    ("mk", "mkdir %s & cd %s"),
+                    ("mkdir", "mkdir %l"),
+                    ("mklink", "mklink %s %s"),
+                    ("move", "move %s %s"),
+                    ("msbuild", "msbuild %l"),
+                    ("mv", "move %s %s"),
+                    ("net", "net %l"),
+                    ("path", "path %l"),
+                    ("rd", "rd %l"),
+                    ("ren", "ren %l"),
+                    ("rename", "rename %l"),
+                    ("rm", "del %l"),
+                    ("rmdir", "rmdir %l"),
+                    # i'll admit this is specific but I'm NEVER gonna remember it
+                    ("rmdir -r", "rmdir /S %l"),
+                    ("sc", "sc %l"),
+                    (
+                        "set",
+                        "set %l",
+                    ),  # but honestly might just work better as os.environ.putenv
+                    ("sfc", "sfc %l"),
+                    ("start", "start %l"),
+                    ("tasklist", "tasklist %l"),
+                    ("taskkill", "taskkill %l"),
+                    ("title", "title %l"),
+                    ("tree", "tree /A /F %l"),
+                    ("type", "type"),
+                    ("ver", "ver %l"),
+                    ("verify", "verify %l"),
+                    ("vol", "vol %l"),
+                    ("xcopy", "xcopy %l"),
+                    ("where", "where %l"),
+                    ("wmic", "wmic %l"),
+                ]
+            )
+        )
 
     def powershell_aliases(self):
         r"""Aliases for Windows OSes using :command:`powershell`.
@@ -713,66 +741,68 @@ class WindowsAliases(CommonAliases):
         that this section is still under development and frequently changes.
 
         """
-        self.dict_aliases.update([
-            ("ac", "Add-Content %l"),
-            ("asnp", "Add-PSSnapin %l"),
-            ("cat", "Get-Content %l"),
-            # ('cd', 'Set-Location %l'),
-            ("clc", "Clear-Content %l"),
-            # ('clear', 'Clear-History %l'),
-            ("conda env", "Get-Conda-Environment %l"),
-            ("copy", "Copy-Item %l"),
-            ("cp", "Copy-Item %l"),
-            ("del", "Remove-Item %l"),
-            ("dir", "Get-ChildItem %l"),
-            ("echo", "Write-Output %l"),
-            # ('history', 'Get-History %l'),
-            ("kill", "Stop-Process"),
-            ("l", "Get-ChildItem %l"),
-            ("ll", "GetChildItem -Verbose %l"),
-            ("ls", "Get-ChildItem %l"),
-            ("man", "Get-Help %l"),
-            ("md", "mkdir %l"),
-            ("move", "Move-Item %l"),
-            ("mv", "Move-Item %l"),
-            # ('popd', 'Pop-Location %l'),
-            ("pro", "nvim $Profile.CurrentUserAllHosts"),
-            ("ps", "Get-Process %l"),
-            # ('pushd', 'Push-Location %l'),
-            # ('pwd', 'Get-Location %l'),
-            ("ren", "Rename-Item %l"),
-            ("rm", "Remove-Item %l"),
-            ("rmdir", "Remove-Item %l"),
-            ("rp", "Remove-ItemProperty %l"),
-            ("rsn", "Remove-PSSession %l"),
-            ("rv", "Remove-Variable %l"),
-            ("rvpa", "Resolve-Path %l"),
-            ("sajb", "Start-Job %l"),
-            ("sal", "Set-Alias %l"),
-            ("saps", "Start-Process %l"),
-            ("sasv", "Start-Service %l"),
-            ("sbp", "Set-PSBreakpoint %l"),
-            ("select", "Select-Object %l"),
-            ("set", "Set-Variable %l"),
-            ("si", "Set-Item %l"),
-            ("sl", "Set-Location %l"),
-            ("sleep", "Start-Sleep %l"),
-            ("sls", "Select-String %l"),
-            ("sort", "Sort-Object %l"),
-            ("sp", "Set-ItemProperty %l"),
-            ("spjb", "Stop-Job %l"),
-            ("spps", "Stop-Process %l"),
-            ("spsv", "Stop-Service %l"),
-            ("start", "Start-Process %l"),
-            ("stz", "Set-TimeZone %l"),
-            ("sv", "Set-Variable %l"),
-            ("tee", "Tee-Object %l"),
-            ("tree", "tree /F /A %l",),
-            ("type", "Get-Content %l"),
-            ("where", "Where-Object %l"),
-            ("wjb", "Wait-Job %l"),
-            ("write", "Write-Output %l"),
-        ])
+        self.dict_aliases.update(
+            [
+                ("ac", "Add-Content %l"),
+                ("asnp", "Add-PSSnapin %l"),
+                ("cat", "Get-Content %l"),
+                # ('cd', 'Set-Location %l'),
+                ("clc", "Clear-Content %l"),
+                # ('clear', 'Clear-History %l'),
+                ("conda env", "Get-Conda-Environment %l"),
+                ("copy", "Copy-Item %l"),
+                ("cp", "Copy-Item %l"),
+                ("del", "Remove-Item %l"),
+                ("dir", "Get-ChildItem %l"),
+                ("echo", "Write-Output %l"),
+                # ('history', 'Get-History %l'),
+                ("kill", "Stop-Process"),
+                ("l", "Get-ChildItem %l"),
+                ("ll", "GetChildItem -Verbose %l"),
+                ("ls", "Get-ChildItem %l"),
+                ("man", "Get-Help %l"),
+                ("md", "mkdir %l"),
+                ("move", "Move-Item %l"),
+                ("mv", "Move-Item %l"),
+                # ('popd', 'Pop-Location %l'),
+                ("pro", "nvim $Profile.CurrentUserAllHosts"),
+                ("ps", "Get-Process %l"),
+                # ('pushd', 'Push-Location %l'),
+                # ('pwd', 'Get-Location %l'),
+                ("ren", "Rename-Item %l"),
+                ("rm", "Remove-Item %l"),
+                ("rmdir", "Remove-Item %l"),
+                ("rp", "Remove-ItemProperty %l"),
+                ("rsn", "Remove-PSSession %l"),
+                ("rv", "Remove-Variable %l"),
+                ("rvpa", "Resolve-Path %l"),
+                ("sajb", "Start-Job %l"),
+                ("sal", "Set-Alias %l"),
+                ("saps", "Start-Process %l"),
+                ("sasv", "Start-Service %l"),
+                ("sbp", "Set-PSBreakpoint %l"),
+                ("select", "Select-Object %l"),
+                ("set", "Set-Variable %l"),
+                ("si", "Set-Item %l"),
+                ("sl", "Set-Location %l"),
+                ("sleep", "Start-Sleep %l"),
+                ("sls", "Select-String %l"),
+                ("sort", "Sort-Object %l"),
+                ("sp", "Set-ItemProperty %l"),
+                ("spjb", "Stop-Job %l"),
+                ("spps", "Stop-Process %l"),
+                ("spsv", "Stop-Service %l"),
+                ("start", "Start-Process %l"),
+                ("stz", "Set-TimeZone %l"),
+                ("sv", "Set-Variable %l"),
+                ("tee", "Tee-Object %l"),
+                ("tree", "tree /F /A %l",),
+                ("type", "Get-Content %l"),
+                ("where", "Where-Object %l"),
+                ("wjb", "Wait-Job %l"),
+                ("write", "Write-Output %l"),
+            ]
+        )
 
 
 def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:

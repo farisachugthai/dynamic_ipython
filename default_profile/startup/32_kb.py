@@ -37,10 +37,11 @@ class KeyBindingsManager(UserList):
     By defining dunders, the collection of keybindings are much
     easier to work with.
     """
+
     _get_bindings_for_keys_cache: SimpleCache[Any, Any]
 
     def __init__(
-        self, kb: KeyBindings = None, shell: InteractiveShell = None
+        self, kb: KeyBindings = None, shell: InteractiveShell = None, **kwargs
     ) -> Optional:
         """Initialize the class.
 
@@ -234,8 +235,14 @@ class HandlesMergedKB(KeyBindingsManager):
 
     """
 
-    shell = get_ipython()
-    if shell is not None:
+    def __init__(
+        self, kb: KeyBindings = None, shell: InteractiveShell = None, **kwargs
+    ):
+        if shell is None:
+            shell = get_ipython()
+        if shell is None:
+            raise
+
         if hasattr(shell, "pt_app"):
             kb = shell.pt_app.app.key_bindings
             if kb is None:

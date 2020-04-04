@@ -54,6 +54,7 @@ c = get_config()
 class ApplicationError(Exception):
     """Base exception class."""
 
+
 class UsageError(ApplicationError):
     def __init__(self, err=None, *args, **kwargs):
         self.err = err
@@ -64,6 +65,7 @@ class UsageError(ApplicationError):
 
     def __call__(self, err):
         return self.__repr__()
+
 
 class NotInIPythonError(UsageError):
     """Error raised when a magic is invoked outside of IPython."""
@@ -683,10 +685,13 @@ else:
                     pm = "\xb1"
                 except:
                     pass
-            ret = [f"{_format_time(self.average, self._precision)}",
-                   f"{pm} {_format_time(self.stdev, self._precision)} per loop",
-                   f"{mean} {pm} std. dev. of {self.repeat} run.",
-                   f"{'' if self.repeat == 1 else 's'} {self.loops} loop", f"{'' if self.loops == 1 else 's'} each"]
+            ret = [
+                f"{_format_time(self.average, self._precision)}",
+                f"{pm} {_format_time(self.stdev, self._precision)} per loop",
+                f"{mean} {pm} std. dev. of {self.repeat} run.",
+                f"{'' if self.repeat == 1 else 's'} {self.loops} loop",
+                f"{'' if self.loops == 1 else 's'} each",
+            ]
             return ret
 
         def timings(self):
@@ -697,6 +702,7 @@ else:
 
         def __repr__(self):
             return f"{self.__class__.__name__}"
+
 
 # ----------------------------------------------------------------------------
 # Completer(Configurable) configuration

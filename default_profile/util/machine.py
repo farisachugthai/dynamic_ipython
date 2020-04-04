@@ -11,7 +11,6 @@ from IPython.core.getipython import get_ipython
 
 
 class Platform:
-
     def __init__(self, shell=None, env=None, **kwargs):
         try:
             self.logger = kwargs["LOGGER"]

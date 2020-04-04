@@ -19,6 +19,7 @@ import inspect
 import keyword
 import os
 import pdb
+
 # noinspection PyProtectedMember
 import pydoc
 
@@ -187,7 +188,7 @@ class DebuggerPrompt(Prompts):
 
     def _is_vi_mode(self):
         """We don't have to make this but my god look at the original implementation."""
-        return getattr(self.shell.pt_app, 'editing_mode', None)
+        return getattr(self.shell.pt_app, "editing_mode", None)
 
     def vi_mode(self):
         if self._is_vi_mode():
