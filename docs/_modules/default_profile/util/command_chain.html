@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -38,7 +37,9 @@
         
 
 <h1>Source code for default_profile.util.command_chain</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Redo the CommandChainDispatcher in IPython.core.hooks for more flexbility.&quot;&quot;&quot;</span>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;Redo the CommandChainDispatcher in IPython.core.hooks for more flexbility.&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
 <span class="kn">from</span> <span class="nn">reprlib</span> <span class="kn">import</span> <span class="n">Repr</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -49,8 +50,138 @@
 <span class="kn">from</span> <span class="nn">IPython.utils.ipstruct</span> <span class="kn">import</span> <span class="n">Struct</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
 
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">types</span>
+
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">ContextDecorator</span><span class="p">,</span> <span class="n">contextmanager</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">DEVNULL</span><span class="p">,</span> <span class="n">PIPE</span><span class="p">,</span> <span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">CompletedProcess</span><span class="p">,</span> <span class="n">Popen</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.run_in_terminal</span> <span class="kn">import</span> <span class="n">run_in_terminal</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span> <span class="k">as</span> <span class="nb">print</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.utils</span> <span class="kn">import</span> <span class="n">Event</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pyfzf</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">pyfzf</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">fufpy</span> <span class="o">=</span> <span class="n">fuf</span> <span class="o">=</span> <span class="n">FzfPrompt</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pyfzf.pyfzf</span> <span class="kn">import</span> <span class="n">FzfPrompt</span>
+
+    <span class="n">fufpy</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="n">fuf</span> <span class="o">=</span> <span class="n">fufpy</span><span class="o">.</span><span class="n">prompt</span>
+
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+
+
+<div class="viewcode-block" id="inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.inside_dir">[docs]</a><span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Context manager that executes code from inside the given directory.</span>
+
+<span class="sd">    :param dirpath: String, path of the directory the command is being run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">old_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">)</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">old_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="run_inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.run_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">run_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a command from inside a given directory, returning the exit status.</span>
+
+<span class="sd">    :param command: Command that will be executed</span>
+<span class="sd">    :param dirpath: String, path of the directory the command is being run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
+            <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">)),</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_output_inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.check_output_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">check_output_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a command from inside a given directory, returning the command output.</span>
+
+<span class="sd">    :param command: Command that will be executed</span>
+<span class="sd">    :param dirpath: String, path of the directory the command is being run.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="n">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">)),</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize with *command*.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_command_path</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">command</span>
+
+    <span class="k">def</span> <span class="nf">_get_command_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the path to an executable if *command* is on `PATH`.</span>
+
+<span class="sd">        Same signature as :func:`shutil.which`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str (path-like)</span>
+<span class="sd">            Path to an executable if it&#39;s found. Otherwise `None`.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Executable: </span><span class="si">{!r}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">command</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
+            <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s2">&quot;bash&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span><span class="p">(),</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="is_tmux"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.is_tmux">[docs]</a><span class="k">def</span> <span class="nf">is_tmux</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if we&#39;re using tmux or not.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TMUX&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="is_rg"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.is_rg">[docs]</a><span class="k">def</span> <span class="nf">is_rg</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns the path to rg.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="CommandChainDispatcherRepr"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.CommandChainDispatcherRepr">[docs]</a><span class="k">class</span> <span class="nc">CommandChainDispatcherRepr</span><span class="p">(</span><span class="n">Struct</span><span class="p">):</span>
@@ -110,6 +241,196 @@
         <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
         <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FZF"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF">[docs]</a><span class="k">class</span> <span class="nc">FZF</span><span class="p">(</span><span class="n">FzfPrompt</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Wrap FZF together.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;sh&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span></div>
+        <span class="c1"># so fzfprompt could be none so this needs to be conditional.</span>
+        <span class="c1"># super().__init__()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">    </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run :attr:`safe_default_cmd` with ``*args`` as a command.</span>
+
+<span class="sd">        Accepts any optional ``**kwargs`` passed along to :func:`subprocess.run`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="p">(</span><span class="n">RedirectStdout</span><span class="p">(),</span> <span class="s2">&quot;rt+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="FZF.run"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+            <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.default_cmds">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading&quot;</span>
+            <span class="s2">&quot;--no-messages --no-column --no-line-number -C 0 -e ^ &quot;</span>
+            <span class="s2">&quot;| fzf --ansi --multi &quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="FZF.default_cmd"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.default_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Define the cmd for FZF.</span>
+
+<span class="sd">        In the sane vein as json.load and json.loads, separate the 2 based on</span>
+<span class="sd">        the &#39;s&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s2">&quot;rg&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--pretty&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--hidden&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--max-columns-preview&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-heading&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-messages&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-column&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-line-number&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-C&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-e&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;^&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;|&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fzf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--ansi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--multi&quot;</span><span class="p">,</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="FZF.safe_default_cmd"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.safe_default_cmd">[docs]</a>    <span class="nd">@contextmanager</span>
+    <span class="k">def</span> <span class="nf">safe_default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_cmds</span><span class="p">()))</span></div>
+
+    <span class="k">def</span> <span class="nf">_setup_fzf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;fzf&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading&quot;</span>
+                <span class="s2">&quot;--no-messages --no-column --no-line-number -C 0 -e ^ &quot;</span>
+                <span class="s2">&quot;| fzf --ansi --multi &quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;ag&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;fzf&quot;</span><span class="p">,</span> <span class="s2">&quot;ag -C 0 --color-win-ansi --noheading %l | fzf&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="FZF.prompt"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.prompt">[docs]</a>    <span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzf_options</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+        <span class="c1"># convert lists to strings [ 1, 2, 3 ] =&gt; &quot;1\n2\n3&quot;</span>
+        <span class="n">choices_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">)</span>
+        <span class="n">selection</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">input_file</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">()</span> <span class="k">as</span> <span class="n">output_file</span><span class="p">:</span>
+                <span class="c1"># Create an temp file with list entries as lines</span>
+                <span class="n">input_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">choices_str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+                <span class="n">input_file</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                <span class="c1"># Invoke fzf externally and write to output file</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">[</span>
+                    <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;cat </span><span class="si">{</span><span class="n">input_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | fzf </span><span class="si">{</span><span class="n">fzf_options</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">output_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+                <span class="c1"># get selected options</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">selection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">selection</span></div></div>
+
+
+
+<div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Use this function along with the keybindings module to effectively use FZF.&quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">pd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
+    <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
+    <span class="n">itext</span> <span class="o">=</span> <span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">itext</span><span class="p">:</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="add_fzf_binding"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.add_fzf_binding">[docs]</a><span class="k">def</span> <span class="nf">add_fzf_binding</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Bind `fzf_history` to :kbd:`ControlY`.&quot;&quot;&quot;</span>
+    <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
+    <span class="n">registry</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
+
+    <span class="n">handle</span> <span class="o">=</span> <span class="n">registry</span><span class="o">.</span><span class="n">add_binding</span>
+    <span class="n">handle</span><span class="p">(</span><span class="n">Keys</span><span class="o">.</span><span class="n">ControlY</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">HasFocus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">))(</span><span class="n">fzf_history</span><span class="p">)</span></div>
+    <span class="c1"># this freezes the whole prompt holy hell</span>
+    <span class="c1"># handle(Keys.ControlT, filter=HasFocus(DEFAULT_BUFFER))(fzf_keys)</span>
+
+
+<div class="viewcode-block" id="fzf_keys"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_keys">[docs]</a><span class="k">def</span> <span class="nf">fzf_keys</span><span class="p">(</span><span class="n">inputted_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">inputted_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">inputted_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">old_stdout</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+    <span class="n">old_stdin</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span>
+    <span class="c1"># idk if you can do this.</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">mkstemp</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;rt+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">f</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span> <span class="o">=</span> <span class="n">f</span>
+            <span class="c1"># also is this class a contextmanager because that&#39;d be thoughtful</span>
+            <span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">old_stdout</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span> <span class="o">=</span> <span class="n">old_stdin</span></div>
+
+
+<div class="viewcode-block" id="run_in_terminal_fzf"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.run_in_terminal_fzf">[docs]</a><span class="k">def</span> <span class="nf">run_in_terminal_fzf</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="c1"># not sure how pt wants us to do this part</span>
+    <span class="c1"># TODO:</span>
+    <span class="c1"># Ah so this raises an error because FzfPrompt() doesn&#39;t have an __enter__</span>
+    <span class="c1"># attribute and we&#39;re trying to run it as a contextmanager. ah.</span>
+    <span class="k">with</span> <span class="n">run_in_terminal</span><span class="p">(</span><span class="n">FZF</span><span class="p">(),</span> <span class="n">render_cli_done</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">in_executor</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="n">fzf_prompt</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
+        <span class="c1"># launch with</span>
+        <span class="n">fzf_prompt</span><span class="o">.</span><span class="n">prompt</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="fgs"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fgs">[docs]</a><span class="k">def</span> <span class="nf">fgs</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Return git status!&quot;&quot;&quot;</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bash&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s1">&#39;source &quot;$HOME/.bashrc.d/fzf_git.bash&quot;</span><span class="se">\n</span><span class="s1">fgh</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span><span class="p">:</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="fzf_ctrl_r"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_ctrl_r">[docs]</a><span class="k">def</span> <span class="nf">fzf_ctrl_r</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
+    <span class="n">fzf</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM history&quot;</span><span class="p">,</span> <span class="n">cnx</span><span class="p">)</span>
+    <span class="n">itext</span> <span class="o">=</span> <span class="n">fzf</span><span class="o">.</span><span class="n">prompt</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
+    <span class="c1"># print(itext)</span>
+    <span class="k">if</span> <span class="n">itext</span><span class="p">:</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 </pre></div>
 
         </div>
@@ -117,7 +438,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

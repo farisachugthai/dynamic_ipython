@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -80,12 +79,15 @@
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">format_exc</span><span class="p">,</span> <span class="n">format_tb</span>
 <span class="kn">from</span> <span class="nn">runpy</span> <span class="kn">import</span> <span class="n">run_path</span>
 
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">AnyStr</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
+
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">():</span>
+<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a str of the last exception.</span>
 
 <span class="sd">    Returns</span>
@@ -96,24 +98,17 @@
     <span class="k">return</span> <span class="n">format_tb</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">():</span>
+<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return `format_exc`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">format_exc</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    shell : |ip| instance</span>
-<span class="sd">        IPython shell instance.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.&quot;&quot;&quot;</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">():</span>
+<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns IPython&#39;s profile_dir.startup_dir. If that can&#39;t be determined, return CWD.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -123,7 +118,7 @@
     <span class="k">return</span> <span class="n">exec_dir</span></div>
 
 
-<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File to execute is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">)</span>
@@ -224,7 +219,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

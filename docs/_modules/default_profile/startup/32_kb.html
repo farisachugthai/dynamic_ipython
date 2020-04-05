@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -77,10 +76,11 @@
 <span class="sd">    By defining dunders, the collection of keybindings are much</span>
 <span class="sd">    easier to work with.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">_get_bindings_for_keys_cache</span><span class="p">:</span> <span class="n">SimpleCache</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
 
 <div class="viewcode-block" id="KeyBindingsManager.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.KeyBindingsManager.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="p">:</span> <span class="n">KeyBindings</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="p">:</span> <span class="n">InteractiveShell</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="p">:</span> <span class="n">KeyBindings</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="p">:</span> <span class="n">InteractiveShell</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Initialize the class.</span>
 
@@ -274,14 +274,20 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="HandlesMergedKB.__init__"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.32_kb.HandlesMergedKB.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">kb</span><span class="p">:</span> <span class="n">KeyBindings</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">shell</span><span class="p">:</span> <span class="n">InteractiveShell</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span>
+
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
             <span class="n">kb</span> <span class="o">=</span> <span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
             <span class="k">if</span> <span class="n">kb</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">kb</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">pass</span>  <span class="c1"># todo</span></div>
+                <span class="k">pass</span>  <span class="c1"># todo</span></div></div>
                 <span class="c1"># if isinstance(kb, _MergedKeyBindings):</span>
                 <span class="c1">#     for i in kb.registries:</span>
                 <span class="c1">#         unpack(i)</span>
@@ -412,7 +418,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

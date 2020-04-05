@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -400,13 +399,6 @@
             <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Could not create the history file.&quot;</span><span class="p">)</span>
 
     <span class="n">histfile_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">(</span><span class="n">histfile_str</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Could not read the history file.&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">set_history_length</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
     <span class="c1"># now ipython</span>
     <span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -471,7 +463,6 @@
         <span class="n">history_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.python_history&quot;</span><span class="p">)</span>
         <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
         <span class="n">original_hist_length</span> <span class="o">=</span> <span class="n">readline</span><span class="o">.</span><span class="n">get_current_history_length</span><span class="p">()</span>
-        <span class="n">readline</span><span class="o">.</span><span class="n">read_history_file</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
         <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
         <span class="c1"># readline.set_startup_hook(readline_config())</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="s2">&quot;@#$_&amp;-+()/*</span><span class="se">\&quot;</span><span class="s2">&#39;:;!?~`|÷×</span><span class="si">{}</span><span class="s2">=[]%&lt;&gt;</span><span class="se">\r\t\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -482,7 +473,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -94,6 +93,7 @@
 <div class="viewcode-block" id="ApplicationError"><a class="viewcode-back" href="../../index.html#default_profile.ipython_config.ApplicationError">[docs]</a><span class="k">class</span> <span class="nc">ApplicationError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Base exception class.&quot;&quot;&quot;</span></div>
 
+
 <div class="viewcode-block" id="UsageError"><a class="viewcode-back" href="../../index.html#default_profile.ipython_config.UsageError">[docs]</a><span class="k">class</span> <span class="nc">UsageError</span><span class="p">(</span><span class="n">ApplicationError</span><span class="p">):</span>
 <div class="viewcode-block" id="UsageError.__init__"><a class="viewcode-back" href="../../index.html#default_profile.ipython_config.UsageError.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">err</span> <span class="o">=</span> <span class="n">err</span>
@@ -104,6 +104,7 @@
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">err</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="NotInIPythonError"><a class="viewcode-back" href="../../index.html#default_profile.ipython_config.NotInIPythonError">[docs]</a><span class="k">class</span> <span class="nc">NotInIPythonError</span><span class="p">(</span><span class="n">UsageError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error raised when a magic is invoked outside of IPython.&quot;&quot;&quot;</span>
@@ -723,10 +724,13 @@
                     <span class="n">pm</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\xb1</span><span class="s2">&quot;</span>
                 <span class="k">except</span><span class="p">:</span>
                     <span class="k">pass</span>
-            <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_format_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precision</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pm</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">_format_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stdev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precision</span><span class="p">)</span><span class="si">}</span><span class="s2"> per loop&quot;</span><span class="p">,</span>
-                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mean</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pm</span><span class="si">}</span><span class="s2"> std. dev. of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repeat</span><span class="si">}</span><span class="s2"> run.&quot;</span><span class="p">,</span>
-                   <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">repeat</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="si">}</span><span class="s2"> loop&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="si">}</span><span class="s2"> each&quot;</span><span class="p">]</span>
+            <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">_format_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">average</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precision</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">pm</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">_format_time</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stdev</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_precision</span><span class="p">)</span><span class="si">}</span><span class="s2"> per loop&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">mean</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pm</span><span class="si">}</span><span class="s2"> std. dev. of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repeat</span><span class="si">}</span><span class="s2"> run.&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">repeat</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">loops</span><span class="si">}</span><span class="s2"> loop&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loops</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="si">}</span><span class="s2"> each&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
             <span class="k">return</span> <span class="n">ret</span></div>
 
 <div class="viewcode-block" id="TimedFormatter.timings"><a class="viewcode-back" href="../../index.html#default_profile.ipython_config.TimedFormatter.timings">[docs]</a>        <span class="k">def</span> <span class="nf">timings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -737,6 +741,7 @@
 
         <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
             <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
 
 <span class="c1"># ----------------------------------------------------------------------------</span>
 <span class="c1"># Completer(Configurable) configuration</span>
@@ -834,7 +839,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

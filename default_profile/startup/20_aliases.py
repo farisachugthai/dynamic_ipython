@@ -331,8 +331,11 @@ class CommonAliases(UserDict):
         for i in aliases:
             self.__add__(i)
 
-    # def __getattr__(self, attr):
-    #     return getattr(self, attr)
+    def __getattr__(self, attr):
+        try:
+            return operator.getattr(self, attr)
+        except KeyError:
+            raise AttributeError
 
     def tuple_to_dict(self, list_of_tuples):
         a = list_of_tuples

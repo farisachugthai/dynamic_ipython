@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -64,11 +63,16 @@
 <span class="kn">import</span> <span class="nn">sphinx</span>
 <span class="kn">from</span> <span class="nn">sphinx.application</span> <span class="kn">import</span> <span class="n">Sphinx</span>
 
-<span class="c1"># from sphinx.cmd.build import build_main</span>
-<span class="c1"># from sphinx.cmd.build import handle_exception</span>
+<span class="c1"># So we have to make the Sphinx app first. Then we can make this</span>
+<span class="c1"># theme_factory = HTMLThemeFactory(self.app)</span>
+<span class="c1"># Then make this</span>
+<span class="c1"># from sphinx.builders.html import StandAloneHTMLBuilder</span>
+<span class="c1"># And we&#39;ll have repieced together sphinx</span>
 <span class="kn">from</span> <span class="nn">sphinx.cmd.make_mode</span> <span class="kn">import</span> <span class="n">Make</span>
 <span class="kn">from</span> <span class="nn">sphinx.errors</span> <span class="kn">import</span> <span class="n">ApplicationError</span>
 
+<span class="c1"># from sphinx.cmd.build import build_main</span>
+<span class="c1"># from sphinx.cmd.build import handle_exception</span>
 <span class="c1"># from sphinx.jinja2glue import SphinxFileSystemLoader</span>
 <span class="c1"># from sphinx.util.console import (  # type: ignore</span>
 <span class="c1">#   colorize, color_terminal</span>
@@ -122,7 +126,7 @@
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--destdir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sourcedir to pass to Sphinx&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--destdir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Destination to pass to Sphinx&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -143,7 +147,7 @@
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;open_browser&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Toggle opening the docs in the default&quot;</span>
-             <span class="s2">&quot; browser after a successful build.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot; browser after a successful build.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -440,7 +444,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

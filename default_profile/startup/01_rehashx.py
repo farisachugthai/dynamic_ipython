@@ -40,12 +40,15 @@ from pathlib import Path
 from traceback import format_exc, format_tb
 from runpy import run_path
 
+from typing import Any, Callable, Iterable, List, Mapping, Optional, AnyStr
+from types import TracebackType
+
 from IPython.core.getipython import get_ipython
 
 logging.basicConfig(level=logging.WARNING)
 
 
-def formatted_tb():
+def formatted_tb() -> TracebackType:
     """Return a str of the last exception.
 
     Returns
@@ -56,24 +59,17 @@ def formatted_tb():
     return format_tb(*sys.exc_info())
 
 
-def last_exc():
+def last_exc() -> TracebackType:
     """Return `format_exc`."""
     return format_exc()
 
 
-def rehashx_run():
-    """Add all executables on the user's :envvar:`PATH` into the IPython ns.
-
-    Parameters
-    ----------
-    shell : |ip| instance
-        IPython shell instance.
-
-    """
+def rehashx_run() -> None:
+    """Add all executables on the user's :envvar:`PATH` into the IPython ns."""
     get_ipython().run_line_magic("rehashx", "")
 
 
-def get_exec_dir():
+def get_exec_dir() -> AnyStr:
     """Returns IPython's profile_dir.startup_dir. If that can't be determined, return CWD."""
     _ip = get_ipython()
     if _ip is not None:
@@ -83,7 +79,7 @@ def get_exec_dir():
     return exec_dir
 
 
-def safe_run_path(fileobj, logger=None):
+def safe_run_path(fileobj, logger=None) -> Mapping:
     if logger is None:
         logger = logging.getLogger(name=__name__)
     logger.debug("File to execute is: %s", fileobj)

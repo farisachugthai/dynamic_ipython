@@ -23,7 +23,6 @@
 
   </head><body>
 
-<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
@@ -79,6 +78,7 @@
     <span class="c1"># actually we can&#39;t do this. he requires that styles have an invalidationhash</span>
 
     <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
+
     <span class="c1"># pygments_style = default_pygments_style()</span>
     <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">InkPotStyle</span>
 <span class="k">else</span><span class="p">:</span>
@@ -98,7 +98,9 @@
 
 <div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Merges the styles from default_pygments_style and the previously imported `pygments_style`.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">([</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">pygments_style</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">()])</span></div>
+    <span class="k">return</span> <span class="n">merge_styles</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">pygments_style</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">()]</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">(</span><span class="n">header_text</span><span class="p">:</span> <span class="n">AnyStr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Frame</span><span class="p">:</span>
@@ -129,7 +131,11 @@
 
 <div class="viewcode-block" id="LineCounter.display"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.LineCounter.display">[docs]</a>    <span class="k">def</span> <span class="nf">display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Subheading</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;&lt; In[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">]:&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]]</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Subheading</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt; In[</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">]:&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Time:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span>
+        <span class="p">]</span>
         <span class="k">return</span> <span class="n">ret</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -168,7 +174,9 @@
 
     <span class="c1"># are you allowed to doctest fstrings</span>
 
-<div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="p">:</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.33_bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="p">:</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Require an &#39;app&#39; for initialization.</span>
 
 <span class="sd">        This will eliminate all IPython code out of this class and make things</span>
@@ -243,9 +251,12 @@
 
     <span class="k">def</span> <span class="nf">_render_vi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">current_vi_mode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">vi_state</span><span class="o">.</span><span class="n">input_mode</span>
-        <span class="n">_toolbar</span> <span class="o">=</span> <span class="p">[(</span><span class="n">Token</span><span class="o">.</span><span class="n">Keyword</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;[F4] </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span> <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Heading</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_vi_mode</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span>
-                    <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Double</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cwd: </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">stem</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span>
-                    <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">Number</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Clock: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)]</span>
+        <span class="n">_toolbar</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">Keyword</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;[F4] </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Heading</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">current_vi_mode</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">Literal</span><span class="o">.</span><span class="n">String</span><span class="o">.</span><span class="n">Double</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;cwd: </span><span class="si">{</span><span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">stem</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">Token</span><span class="o">.</span><span class="n">Number</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Clock: </span><span class="si">{</span><span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">()</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">),</span>
+        <span class="p">]</span>
         <span class="c1"># how do i fill all this dead space?</span>
         <span class="c1"># remaining_space = terminal_width() - len(self)</span>
         <span class="c1"># _toolbar.append((Token.Operator, remaining_space * &quot; &quot;))</span>
@@ -288,7 +299,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 03, 2020.
+      Last updated on Apr 05, 2020.
     </div>
   </body>
 </html>

@@ -360,13 +360,6 @@ def setup_historyfile(filename=None):
             logging.exception("Could not create the history file.")
 
     histfile_str = str(histfile)
-    try:
-        readline.read_history_file(histfile_str)
-    except OSError as e:
-        logging.exception("Could not read the history file.")
-    else:
-        readline.set_history_length(-1)
-
     # now ipython
     shell = get_ipython()
     if shell is None:
@@ -431,7 +424,6 @@ if __name__ == "__main__":
         history_file = os.path.expanduser("~/.python_history")
         setup_historyfile(history_file)
         original_hist_length = readline.get_current_history_length()
-        readline.read_history_file(history_file)
         atexit.register(readline.write_history_file, history_file)
         # readline.set_startup_hook(readline_config())
         readline.set_completer_delims("@#$_&-+()/*\"':;!?~`|÷×{}=[]%<>\r\t\n")
