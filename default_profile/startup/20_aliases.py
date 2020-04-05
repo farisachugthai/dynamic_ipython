@@ -703,7 +703,9 @@ class WindowsAliases(CommonAliases):
                     ("rd", "rd %l"),
                     ("ren", "ren %l"),
                     ("rename", "rename %l"),
-                    ("rm", "del %l"),
+                    # should probably stop doing stuff like this with the real
+                    # rm still on path
+                    # ("rm", "del %l"),
                     ("rmdir", "rmdir %l"),
                     # i'll admit this is specific but I'm NEVER gonna remember it
                     ("rmdir -r", "rmdir /S %l"),

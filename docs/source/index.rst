@@ -162,7 +162,6 @@ Startup API Docs
    IPython Logger <startup/ipython-logger>
    Clipboard <startup/clipboard>
    Aliases <startup/aliases>
-   FZF <startup/fzf>
    Setup Readline <startup/setup_readline>
    prompt_toolkit <startup/prompt_toolkit>
    Completions <startup/completions>
