@@ -3,7 +3,7 @@
 SPHINXBUILD   = sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
-SPHINXOPTS    = -P
+SPHINXOPTS    = -P -j4
 SPHINXAUTOGEN = sphinx-autogen
 
 # Put it first so that "make" without argument is like "make help".

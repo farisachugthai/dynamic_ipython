@@ -57,11 +57,6 @@ COLORS = {
 RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
 
 
-def setup_module(tmpdir):
-    # Wait what is this one?
-    return tmpdir.chdir()
-
-
 @pytest.fixture
 def spawn_pytest():
     # Like how wild is this?

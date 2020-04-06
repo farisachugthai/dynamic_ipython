@@ -5,6 +5,7 @@ import asyncio
 import cgitb
 import logging
 import math
+import multiprocessing
 import os
 import re
 import sys
@@ -42,6 +43,9 @@ from sphinx import addnodes
 # from sphinx.environment import BuildEnvironment
 # could manually start creating extensions
 # from sphinx.errors import SphinxError, ExtensionError
+# this is used alongside multiprocessing.connection.Connection
+# from sphinx.util.parallel import ParallelTasks
+
 # from sphinx.extension import Extension
 from sphinx.ext.autodoc import cut_lines
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
@@ -60,6 +64,14 @@ except ImportError:
     dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
 
 # Logging: {{{
+mp_logger = multiprocessing.get_logger()
+mp_context = multiprocessing.get_context()
+mp_logger.setLevel(logging.INFO)
+mp_handler = logging.StreamHandler()
+mp_handler.setLevel(logging.INFO)
+mp_logger.handlers = []
+mp_logger.addHandler(mp_handler)
+mp_logger.info(f"mp context: {mp_context}")
 
 DOCS_LOGGER = logging.getLogger(name=__name__)
 DOCS_HANDLER = logging.StreamHandler()
@@ -262,6 +274,12 @@ default_domain = u"py"
 # 'py:obj' to make `filter` a cross-reference to the Python function “filter”.
 # The default is None, which doesn’t reassign the default role.
 
+# The reST default role (used for this markup: `text`) to use for all
+# documents.
+# The default role can always be set within individual documents using the
+# standard reST default-role directive.
+default_role = "py:obj"
+
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 exclude_patterns = [
@@ -274,12 +292,6 @@ exclude_patterns = [
     "tags",
     "*.ipynb",
 ]
-
-# The reST default role (used for this markup: `text`) to use for all
-# documents.
-# The default role can always be set within individual documents using the
-# standard reST default-role directive.
-default_role = "py:obj"
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 # add_function_parentheses = True

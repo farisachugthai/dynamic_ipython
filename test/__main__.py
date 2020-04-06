@@ -5,6 +5,7 @@ import argparse
 import doctest
 import importlib
 import logging
+import multiprocessing
 import os
 import sys
 import unittest
@@ -74,7 +75,9 @@ def _parse():
         ),
     )
 
-    parser.add_argument("-m", "--module", type=ModuleType, help="Module to run")
+    parser.add_argument(
+        "-m", "--module", type=ModuleType, nargs="+", help=("Module to run")
+    )
 
     parser.add_argument(
         "-f",
@@ -251,4 +254,13 @@ def run():
 
 
 if __name__ == "__main__":
+    mp_logger = multiprocessing.get_logger()
+    mp_context = multiprocessing.get_context()
+    mp_logger.setLevel(logging.INFO)
+    mp_handler = logging.StreamHandler()
+    mp_handler.setLevel(logging.INFO)
+    mp_logger.handlers = []
+    mp_logger.addHandler(mp_handler)
+    mp_logger.info(f"mp context: {mp_context}")
+
     run()
