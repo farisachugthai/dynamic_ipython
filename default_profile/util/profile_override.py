@@ -26,6 +26,11 @@ class ReprProfileDir(ProfileDir):
 
     This object knows how to find, create and manage these directories. This
     should be used by any code that wants to handle profiles.
+
+    Notes
+    -----
+    Implements `__fspath__` to implement the pathlib protocol.
+
     """
 
     def __init__(self, **kwargs):
@@ -60,6 +65,9 @@ class ReprProfileDir(ProfileDir):
             else:
                 raise
 
+    def __fspath__(self):
+        return str(self.location)
+
     @observe("location")
     def _location_changed(self, change):
         """This is so odd to me. What is change when does it get called?
@@ -82,23 +90,20 @@ class ReprProfileDir(ProfileDir):
 
 
 class DirectoryChecker:
-    """Let's redo profiledir with pathlib.
+    """Checks for the presence of needed directories and creates them."""
 
-    Dude we're allowed to subclass os.Pathlike. I wonder if that'd make this
-    easier.
-    """
-
-    def __init__(self):
-        """Initialize our own version of ipython."""
+    def __init__(self, *args):
+        """Initialize with optional needed dirs."""
         self.fs = Path
         self.initialize()
 
     @property
     def shell(self):
+        """Return the global IPython instance."""
         return get_ipython()
 
     def initialize(self):
-        """TODO: Add getattr checks for this func so we don't call on an uninitialized object."""
+        """Initialize with a modified version of the IPython shell."""
         if self.shell.initialized():
             # Running inside IPython
 

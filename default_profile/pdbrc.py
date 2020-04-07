@@ -10,52 +10,58 @@ prompt_toolkit, jedi and pygments are all dependencies of IPython, so a simple
 
 In addition, readline is assumed to be present on the system. On systems that don't have readline installed by default, ``pyreadline`` can work as a drop-in replacement.
 """
-
+# {{{
+import __main__
 import argparse
+import builtins
 import cgitb
 import faulthandler
 import gc
+import io
 import inspect
 import keyword
 import os
 import pdb
-
-# noinspection PyProtectedMember
+import platform
 import pydoc
+import runpy
+import sys
+import time
+import traceback
+from bdb import BdbQuit, Breakpoint
+from contextlib import contextmanager
+from logging import BufferingFormatter, Filter, StreamHandler, getLogger
+from pathlib import Path
+from pdb import Pdb, Restart
+from textwrap import dedent
+from typing import Any, AnyStr, Union, TYPE_CHECKING
 
-import __main__
+import ipdb
+import pygments
+from IPython.core.getipython import get_ipython
+from IPython.terminal.embed import InteractiveShellEmbed
+from IPython.terminal.ipapp import TerminalIPythonApp
+from IPython.terminal.prompts import Prompts
+from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
+from prompt_toolkit.shortcuts import (
+    print_formatted_text,
+)  # don't replace this with print
+
+# It just errored on Win32 because the output didn't get initialized correctly
+if platform.platform().startswith("Win32"):
+    from prompt_toolkit.output.windows10 import Windows10_Output
+else:
+    Windows10_Output = None
+
+    from ipykernel.zmqshell import ZMQInteractiveShell
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
+from pygments.lexers.python import PythonLexer
+from pygments.token import Token
 
 try:
     import readline
 except ImportError:
     readline = None
-import runpy
-import sys
-from textwrap import dedent
-import time
-import traceback
-
-from bdb import BdbQuit, Breakpoint
-from contextlib import contextmanager
-from logging import getLogger, StreamHandler, Filter, BufferingFormatter
-from pathlib import Path
-from pdb import Restart, Pdb
-from typing import Any, AnyStr, Union
-
-import ipdb
-
-from IPython.core.getipython import get_ipython
-from IPython.terminal.prompts import Prompts
-from IPython.terminal.embed import InteractiveShellEmbed
-from IPython.terminal.ipapp import TerminalIPythonApp
-
-from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
-from prompt_toolkit.shortcuts import print_formatted_text as print
-
-import pygments
-from pygments.lexers.python import PythonLexer
-from pygments.formatters.terminal256 import TerminalTrueColorFormatter
-from pygments.token import Token
 
 try:
     from gruvbox.gruvbox import GruvboxStyle
@@ -75,15 +81,11 @@ except (ImportError, ModuleNotFoundError):  # noqa
     pass
 else:
     readline.parse_and_bind("Tab:menu-complete")
-
-try:
-    from pdbrc import MyPdb
-except (ImportError, ModuleNotFoundError):  # noqa
-    MyPdb = None
+# }}}
 
 print(f".pdbrc.py started {time.ctime()}")
 
-# GLOBALS:
+# GLOBALS: {{{
 log_format = (
     "[ %(name)s : %(relativeCreated)d :] %(levelname)s : %(module)s : --- %(message)s "
 )
@@ -103,8 +105,12 @@ shell = get_ipython()
 cgitb.enable(format="text")
 faulthandler.enable()
 
+if Windows10_Output is not None:
+    output = Windows10_Output(io.StringIO())
 
-# History: Set up separately
+# }}}
+
+# History: Set up separately {{{
 
 
 def save_history(hist_path=None):
@@ -118,10 +124,10 @@ def save_history(hist_path=None):
         if not hist_path.exists():
             logger.warning("Creating PDB history file at ~/.pdb_history.")
             hist_path.touch()
-        return str(hist_path)
+        return str(hist_path)  # }}}
 
 
-def get_parser():
+def get_parser():  # {{{
     """Factored out of main. Well sweet this now rasies an error."""
     parser = argparse.ArgumentParser(
         prog="ipdb+",
@@ -175,16 +181,23 @@ def get_parser():
 
     parser.add_argument("-v", "--version", action="version")
 
-    return parser
+    return parser  # }}}
 
 
-# Customized prompt
+# Customized Prompt: {{{
 
 
 class DebuggerPrompt(Prompts):
     """Create a customized prompt for the debugger."""
 
     shell = get_ipython()
+
+    def __init__(self, shell=None, **kwargs):
+        self.shell = shell or get_ipython()
+        if self.shell is not None:
+            if not isinstance(self.shell, ZMQInteractiveShell):
+                self.old_prompt = self.shell.prompts
+                super().__init__(self.shell, **kwargs)
 
     def _is_vi_mode(self):
         """We don't have to make this but my god look at the original implementation."""
@@ -225,13 +238,10 @@ class DebuggerPrompt(Prompts):
 
     def __len__(self):
         """Define length of the instance by the superclasses `_width`."""
-        return self._width()
+        return self._width()  # }}}
 
 
-# Customized Pdb
-
-
-def _init_pdb(context=3, commands=None, debugger_kls=None):
+def _init_pdb(context=3, commands=None, debugger_kls=None):  # {{{
     """Needed to add a debugger_cls param to this."""
     if debugger_kls is None:
         if MyPdb is not None:
@@ -272,7 +282,9 @@ class MyPdb(pdb.Pdb):
     doc_header = "Whew!"
 
     lexer = PythonLexer()
-    formatter = TerminalTrueColorFormatter(style=pdb_style.styles.items())
+    # why the fuck is this erroring
+    # formatter = TerminalTrueColorFormatter(style=pdb_style.styles.items())
+    formatter = TerminalTrueColorFormatter()
 
     def __init__(
         self, completekey="tab", skip="traitlets", _shell=None, *args, **kwargs,
@@ -348,7 +360,7 @@ class MyPdb(pdb.Pdb):
                 "__package__": mod_spec.parent,
                 "__loader__": mod_spec.loader,
                 "__spec__": mod_spec,
-                "__builtins__": __builtins__,
+                "__builtins__": builtins,
             },
         )
         self.run(code)
@@ -376,7 +388,7 @@ class MyPdb(pdb.Pdb):
     #     return
 
 
-debugger = MyPdb(shell=get_ipython())
+debugger = MyPdb(_shell=get_ipython())  # }}}
 
 
 def wrap_sys_excepthook():

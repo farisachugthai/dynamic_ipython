@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import importlib
 import inspect
+import sys
 import unittest
 from io import StringIO
 from unittest import TestCase

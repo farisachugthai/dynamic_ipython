@@ -1,19 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from importlib import import_module
-import inspect
 from inspect import getdoc
-import logging
 import pydoc
 import sys
 
-import IPython
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import line_magic, magics_class, Magics
 from IPython.core.magics.namespace import NamespaceMagics
-from IPython.core.page import pager_page
 
-from default_profile.ipython_config import UsageError, NotInIPythonError
+from default_profile.ipython_config import NotInIPythonError
 
 
 @magics_class
@@ -32,6 +27,7 @@ class PyPager(Magics):
             Text to page
         use_pager : bool, optional
             Whether to print to the shell or pipe to a pager.
+
         """
         super().__init__(**kwargs)
         self.use_pager = use_pager
@@ -135,11 +131,9 @@ def c(s=None):
     namespace = NamespaceMagics()
     if hasattr(namespace, "pycat"):
         try:
-            get_ipython().run_line_magic("pycat", "code")
+            get_ipython().run_line_magic("pycat", code)
         except (KeyboardInterrupt, EOFError):
             return
-    else:
-        raise UsageError("ya dun goofed")
 
 
 if __name__ == "__main__":
