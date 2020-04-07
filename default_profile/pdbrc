@@ -8,9 +8,11 @@ from inspect import getmembers
 from pprint import pprint
 
 try:
-    from .pdbrc import debugger
+    from pdbrc import debugger
 except ImportError:
     debugger = None
+
+from IPython.core.magics.namespace import NamespaceMagics
 
 # eval(compile(".pdbrc", '<pdbrc>', 'eval'))
 
@@ -26,9 +28,9 @@ alias ps pdict self
 
 # Apr 07, 2019
 # How in the world have I gone this long without noticing this isn't set up
-alias ? pinfo
+alias ? NamespaceMagics().pinfo
 # Kinda sucks now only ?func is valid not func?
-alias ?? pinfo2
+alias ?? NamespaceMagics().pinfo2
 
 # Been reading through the inspect docs a little
 
