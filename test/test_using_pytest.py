@@ -36,7 +36,6 @@ with the sphinx build so it's cool to see it in this context.
 """
 import re
 import sys
-from typing import TYPE_CHECKING
 
 import pytest
 
@@ -58,11 +57,11 @@ RE_COLORS = {k: re.escape(v) for k, v in COLORS.items()}
 
 
 # def setup_module(tmpdir):
-    # Wait what is this one?
-    # tmpdir = <module 'dynamic_ipython.test.test_using_pytest' from
-    # '/home/runner/work/dynamic_ipython/dynamic_ipython/test/test_using_pytest.py'>
-    # so that makes no sense to me but whatever
-    # return tmpdir.chdir()
+# Wait what is this one?
+# tmpdir = <module 'dynamic_ipython.test.test_using_pytest' from
+# '/home/runner/work/dynamic_ipython/dynamic_ipython/test/test_using_pytest.py'>
+# so that makes no sense to me but whatever
+# return tmpdir.chdir()
 
 
 @pytest.fixture
