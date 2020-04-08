@@ -15,6 +15,7 @@ import builtins
 import cgitb
 import faulthandler
 import gc
+import importlib
 import inspect
 import io
 import keyword
@@ -37,9 +38,11 @@ from typing import Any, AnyStr, Union
 import ipdb
 import pygments
 from IPython.core.getipython import get_ipython
+from IPython.core.magics.namespace import NamespaceMagics
 from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.prompts import Prompts
+
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
 
 # {{{
@@ -105,6 +108,12 @@ faulthandler.enable()
 
 if Windows10_Output is not None:
     output = Windows10_Output(io.StringIO())
+
+nsmagics = NamespaceMagics()
+pinfo = nsmagics.pinfo
+pinfo2 = nsmagics.pinfo2
+pdef = nsmagics.pdef
+psource = nsmagics.psource
 
 # }}}
 
@@ -172,9 +181,8 @@ def get_parser():  # {{{
         "-i",
         "--interactive",
         help="Force interactivity if pdb would otherwise exit.",
-        const=True,
-        nargs="?",
         default=False,
+        action='store_true',
     )
 
     parser.add_argument("-v", "--version", action="version")
@@ -302,12 +310,13 @@ class MyPdb(pdb.Pdb):
         self.stack = []
         self.curindex = 0
         self.curframe = inspect.currentframe()
-        super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
-
+        # keep this above super because cmd uses prompt. and shell above prompt
         self.shell = get_ipython() if _shell is None else _shell
         self.prompt = (
             DebuggerPrompt(self.shell) if self.shell is not None else "YourPdb: "
         )
+        super().__init__(completekey=self.completekey, skip=self.skip, *args, **kwargs)
+
         self._wait_for_mainpyfile = False
         self._user_requested_quit = True
         self.forget()
@@ -384,6 +393,9 @@ class MyPdb(pdb.Pdb):
     # TODO:
     # def default(self):
     #     return
+
+    def do_import(self, mod):
+        return importlib.import_module(mod)
 
 
 debugger = MyPdb(_shell=get_ipython())  # }}}
@@ -547,13 +559,14 @@ def get_or_start_ipython():
                 "\nYou are currently into an embedded ipython shell,\n"
                 "the configuration will not be loaded.\n\n"
             )
+    shell.interact()
 
 
 def main():
     """Parses users argument and dispatches based on responses."""
     program_name, *args = sys.argv
     parser = get_parser()
-    if not args:
+    if len(args) == 1:
         # Print some help, then don't do the other junk here
         parser.print_help()
         return
@@ -569,7 +582,9 @@ def main():
             if not Path(namespace.mainpyfile).exists():
                 raise FileNotFoundError
     else:
-        namespace.mainpyfile = None
+        if hasattr(namespace, "interactive"):
+            if namespace.interactive:
+                get_or_start_ipython()
 
     mainpyfile = namespace.mainpyfile
     # Replace pdb's dir with script's dir in front of module search path.
