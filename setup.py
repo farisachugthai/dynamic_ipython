@@ -22,23 +22,14 @@ from shutil import rmtree
 
 import distutils  # noqa
 import setuptools  # noqa
-from setuptools.dist import Distribution
-from setuptools import setup, find_packages, Command
 from distutils.errors import DistutilsArgError
+from setuptools import setup, find_packages, Command
+from setuptools.command.easy_install import chmod, current_umask
+from setuptools.dist import Distribution
+from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 
 logging.basicConfig()
-
-# This is useful
 d = Distribution()
-
-# Obviously there's a ton more we can do here
-# try:
-#     from setuptools.wheel import (
-#         Wheel,
-#     )  # this module imports posixpath but that worked on win32 for me???
-# except ImportError:
-#     Wheel = None
-
 if len(sys.argv) == 0:
     d.print_commands()
 
@@ -63,16 +54,11 @@ else:
 
 try:  # new replacement for the pkg_resources API
     import importlib_metadata
-
     our_dist = importlib_metadata.distribution("dynamic_ipython")
 except ImportError:
     importlib_metadata = None
 except importlib_metadata.PackageNotFoundError:
     pass
-
-# }}}
-
-# Metadata: {{{
 
 # DON'T GET RID OF THIS. This took a while to debug and honestly it was an accident.
 # Incorrectly installing the package will leave the package partially installed
@@ -83,11 +69,10 @@ try:
 except ImportError:  # noqa
     __version__ = "0.0.2"
 
-__path__ = find_packages()
+# That might be risky
+# __path__ = find_packages()
 
-# }}}
-
-# Conda Support: {{{
+# Conda Support:
 
 try:
     import distutils.command.bdist_conda
@@ -121,10 +106,8 @@ README = os.path.join(ROOT_PATH, "", "README.rst")
 with codecs.open(README, encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
 
-
-# TODO: How to do conditionals? Only windows needs pyreadline
 REQUIRED = [
-    "IPython>=7.12",
+    "IPython",
     "ipykernel",
     "curio",
     "importlib-metadata",
@@ -132,7 +115,6 @@ REQUIRED = [
     "pyperclip",
     "trio",
     "pygments",
-    # 'pyreadline',
     "jinja2",
     "jedi",
     "pyzmq",
@@ -160,7 +142,6 @@ EXTRAS = {
 }
 
 # }}}
-
 
 class UploadCommand(Command):  # {{{
     """Support setup.py upload."""
@@ -202,6 +183,19 @@ class UploadCommand(Command):  # {{{
         os.system("git push --tags")
         sys.exit()
 
+    def write_script(self, script_name, contents, mode="t", *ignored):
+        """Write an executable file to the scripts directory"""
+        log.info("Installing %s script to %s", script_name, self.install_dir)
+        target = os.path.join(self.install_dir, script_name)
+        self.outfiles.append(target)
+
+        mask = current_umask()
+        if not self.dry_run:
+            ensure_directory(target)
+            f = open(target, "w" + mode)
+            f.write(contents)
+            f.close()
+            chmod(target, 0o777 - mask)
 
 # }}}
 
@@ -220,6 +214,7 @@ try:
         maintainer_email=EMAIL,
         url=URL,
         packages=find_packages(where="."),
+        package_dir="default_profile",
         entry_points={
             "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
         },

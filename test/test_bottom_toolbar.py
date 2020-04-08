@@ -43,6 +43,7 @@ class TestBottomToolbar(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.logpoint()
+        _ip = get_ipython()
         if bt_mod.BottomToolbar() is None:
             if _ip is not None:
                 bt_mod.add_toolbar(cls.toolbar)

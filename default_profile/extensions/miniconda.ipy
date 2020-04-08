@@ -1,17 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# You know what would be useful that ipython doesn't use?
+# They have line as a parameter to most magics.
+# I just found out about argparse.Remainder today
 import shutil
-
-# import sys
+import shlex
 import subprocess
-
-# from subprocess import Popen, PIPE
+import sys
 import warnings
+from typing import AnyStr
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic
-from IPython.core.magics.packaging import PackagingMagics, CONDA_ENV_FLAGS, CONDA_COMMANDS_REQUIRING_PREFIX, \
-    CONDA_YES_FLAGS, CONDA_COMMANDS_REQUIRING_YES
+from IPython.core.magics.packaging import (
+    PackagingMagics,
+    CONDA_ENV_FLAGS,
+    CONDA_COMMANDS_REQUIRING_PREFIX,
+    CONDA_YES_FLAGS,
+    CONDA_COMMANDS_REQUIRING_YES,
+)
 from IPython.terminal.interactiveshell import TerminalInteractiveShell
 
 try:
@@ -25,7 +32,7 @@ class PackagingMagics(Magics):
     """Override the PackagingMagic."""
 
     @staticmethod
-    def _get_conda_executable():
+    def _get_conda_executable() -> AnyStr:
         # If necessary call their goofy ass way but then i can't use conda the env
         # manager outside of that env.
         return shutil.which("conda")
@@ -35,7 +42,7 @@ class PackagingMagics(Magics):
         return getattr(self.shell, kernel, None)
 
     @line_magic
-    def conda(self, line):
+    def conda(self, line, extra_args=None):
         """Simpler re-implemented line magic.
 
         Usage:

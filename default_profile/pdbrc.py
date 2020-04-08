@@ -10,15 +10,13 @@ prompt_toolkit, jedi and pygments are all dependencies of IPython, so a simple
 
 In addition, readline is assumed to be present on the system. On systems that don't have readline installed by default, ``pyreadline`` can work as a drop-in replacement.
 """
-# {{{
-import __main__
 import argparse
 import builtins
 import cgitb
 import faulthandler
 import gc
-import io
 import inspect
+import io
 import keyword
 import os
 import pdb
@@ -34,7 +32,7 @@ from logging import BufferingFormatter, Filter, StreamHandler, getLogger
 from pathlib import Path
 from pdb import Pdb, Restart
 from textwrap import dedent
-from typing import Any, AnyStr, Union, TYPE_CHECKING
+from typing import Any, AnyStr, Union
 
 import ipdb
 import pygments
@@ -43,17 +41,17 @@ from IPython.terminal.embed import InteractiveShellEmbed
 from IPython.terminal.ipapp import TerminalIPythonApp
 from IPython.terminal.prompts import Prompts
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter
-from prompt_toolkit.shortcuts import (
-    print_formatted_text,
-)  # don't replace this with print
+
+# {{{
+import __main__
 
 # It just errored on Win32 because the output didn't get initialized correctly
-if platform.platform().startswith("Win32"):
+if platform.platform().startswith("Win"):
     from prompt_toolkit.output.windows10 import Windows10_Output
 else:
     Windows10_Output = None
 
-    from ipykernel.zmqshell import ZMQInteractiveShell
+from ipykernel.zmqshell import ZMQInteractiveShell
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 from pygments.lexers.python import PythonLexer
 from pygments.token import Token

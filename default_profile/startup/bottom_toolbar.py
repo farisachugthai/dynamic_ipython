@@ -67,9 +67,9 @@ def init_style():
 def show_header(header_text: AnyStr = None) -> prompt_toolkit.widgets.Frame:
     if header_text is None:
         header_text = textwrap.dedent(
-            "Press Control-Y to paste from the system clipboard.\n"
+            "Press Control-Y to paste from the system _clipboard.\n"
             "Press Control-Space or Control-@ to enter selection mode.\n"
-            "Press Control-W to cut to clipboard.\n"
+            "Press Control-W to cut to _clipboard.\n"
         )
     text_area = TextArea(header_text, style="#ebdbb2")
     return Frame(text_area)

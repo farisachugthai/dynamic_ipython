@@ -124,7 +124,7 @@ def instantiate_jinja_loader():
                 FileSystemLoader(template_path),
             ]
         )
-    except TemplateError:
+    except (TemplateError, TemplateSyntaxError):
         return
     else:
         return loader

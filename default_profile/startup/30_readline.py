@@ -4,12 +4,14 @@
 
 Summary
 -------
-In tandem with :file:`../pyreadlineconfig.ini`, keybindings
+
+In tandem with :file:`../pyreadlineconfig.ini`_, keybindings
 are set up to attempt adding the standard readline bindings
 to Vim insert mode.
 
 Extended Summary
 ----------------
+
 The keybindings that prompt_toolkit provides are more powerful;
 however they're substantially more complicated and for simple
 modifications of how to work with a line-editor buffer, this proves
@@ -24,10 +26,12 @@ See Also
 """
 import asyncio
 import atexit
+import codecs
 import logging
 import os
 from pathlib import Path
 import platform
+import shlex
 import subprocess
 import sys
 import tempfile
@@ -64,40 +68,13 @@ class ViExternalEditor:
         >>> def cd(arg):
         >>>     pass
 
-    Readline internal error
-    Traceback (most recent call last):
-
-      File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/console/console.py",
-      line 768, in hook_wrapper_23 res = ensure_str(readline_hook(prompt)) File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py",
-      line 571, in readline self._readline_from_keyboard() File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py",
-      line 536, in _readline_from_keyboard if
-      self._readline_from_keyboard_poll(): File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py",
-      line 556, in _readline_from_keyboard_poll result =
-      self.mode.process_keyevent(event.keyinfo) File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
-      line 41, in process_keyevent r = dispatch_func(keyinfo) File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
-      line 101, in vi_key self._vi_command.add_char (e.char) File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
-      line 384, in add_char fcn_instance (char) File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
-      line 767, in key_v editor = ViExternalEditor
-      (self.readline.l_buffer.line_buffer) File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
-      line 959, in __init__ fp_tmp = self.file_open (file_tmp, 'w') File
-      "C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py",
-      line 973, in file_open return file (filename, mode) NameError: name 'file'
-      is not defined
-
     Let's see what happens if we get rid of the space between file and ``(``
 
+    Alright well in my defense this class was created quitely poorly; however,
+    it's a little too easy to initialize this sucker with no state.
     """
 
-    def __init__(self, line):
+    def __init__(self, line=None):
         """Instantiate the editor :command:`vi`.
 
         Parameters
@@ -106,55 +83,38 @@ class ViExternalEditor:
             Line that the user is typing.
 
         """
-        if isinstance(line, list):
-            line = "".join(i for i in line)
-        fp_tmp = self.file_open(self.file_tmp, "w")
-        fp_tmp.write(line)
-        fp_tmp.close()
-        self.run_editor(self.file_tmp)
-        # i really don't think you need to do this part in 2 steps like this
-        fp_tmp = self.file_open(self.file_tmp, "r")
-        self.result = fp_tmp.read()
-        fp_tmp.close()
-        self.file_remove(self.file_tmp)
+        if line is not None:
+            if isinstance(line, list):
+                line = "".join(i for i in line)
+            elif isinstance(line, bytes):
+                line = codecs.decode(line, 'utf-8')
+        else:
+            line = ""
 
-    def get_tempfile(self):
-        return tempfile.mktemp(prefix="readline-", suffix=".py")
+    def __repr__(self):
+        return f"{self.__class__.__name__}>:"
 
-    @property
-    def file_tmp(self):
-        return self.get_tempfile()
+    def __call__(self, filename=None):
+        return self.run_editor(filename)
 
-    def file_open(self, filename, mode):
-        """Can we just take a second to review this line of code...
-
-        return file (filename, mode)
-
-        In case you're confused the gap in between file and the parenthesis
-        is in fact intentional.
-
-        .. todo::
-            Would `mmap.mmap` do us any good here?
-
-        """
-        return open(filename, mode=mode)
-
-    def file_remove(self, filename):
-        os.remove(filename)
-
-    def get_editor(self):
+    def run_editor(self, filename=None):
+        """It's the goddamn ViExternalEditor default to Vim!"""
         try:
-            return os.environ["EDITOR"]
+            editor = os.environ["EDITOR"]
         except KeyError:
-            return "vim"  # ouch
+            editor = "vim"
 
-    def run_editor(self, filename):
-        cmd = [self.get_editor(), filename]
-        self.run_command(cmd)
+        if filename is None:
+            filename = tempfile.mktemp(prefix="readline-", suffix=".py")
+
+        with open(filename, "rt+") as fp_tmp:
+            fp_tmp.write(line)
+            cmd = [editor, filename]
+            return self.run_command(cmd)
 
     def run_command(self, command):
         return subprocess.run(
-            command,
+            shlex.quote(command),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -401,24 +361,23 @@ if __name__ == "__main__":
         # All the pyreadline submodules have to be called as pyreadline.
         # not all clases show up though, so they have to be called as readline
         # in that case
-        from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
         from readline import GetOutputFile  # output console via ctype
-
         # oh also call the pyreadline top module
         import readline
+        # from pyreadline.lineeditor.lineobj import ReadLineTextBuffer
+        # from pyreadline.console.ansi import AnsiState, AnsiWriter
+        from pyreadline.console import Console
+        # from pyreadline.modes.emacs import EmacsMode
+        # emacs_mode = EmacsMode(pyreadline.Readline())
+        from pyreadline.modes.vi import ViMode, ViCommand
+        # from pyreadline import append_history_file
 
         out_console = GetOutputFile()
-        from pyreadline.console.ansi import AnsiState, AnsiWriter
-
-        # from pyreadline import append_history_file
+        console = Console()
         rl_class = Readline()
         pyreadline_specific(rl_class)
-        # not needed yet but a good reminder of the API
-        # from pyreadline.modes.emacs import EmacsMode
-        # from pyreadline.modes.vi import ViMode, ViExternalEditor, ViCommand
-
-        # emacs_mode = EmacsMode(pyreadline.Readline())
-        # vi_mode = ViMode(pyreadline.Readline())
+        vi_mode = ViMode(pyreadline.rlmain.Readline())
+        vi_mode.complete_filesystem = True
 
     if readline is not None:
         history_file = os.path.expanduser("~/.python_history")
@@ -427,3 +386,4 @@ if __name__ == "__main__":
         atexit.register(readline.write_history_file, history_file)
         # readline.set_startup_hook(readline_config())
         readline.set_completer_delims("@#$_&-+()/*\"':;!?~`|÷×{}=[]%<>\r\t\n")
+        readline_config()

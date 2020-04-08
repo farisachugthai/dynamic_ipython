@@ -1,4 +1,4 @@
-"""Need to do redo :mod:`IPython.lib.clipboard` because it doesn't work.
+"""Need to do redo :mod:`IPython.lib._clipboard` because it doesn't work.
 
 `%paste` or `%cpaste` doesn't work on Termux and there's no built-in
 customizability.
@@ -38,7 +38,7 @@ class ClipboardEmpty(ValueError):
 
 
 class WindowsClipboard(Clipboard):
-    """Creates a prompt_toolkit compatible implementation of a clipboard.
+    """Creates a prompt_toolkit compatible implementation of a _clipboard.
 
     Notes
     ------
@@ -46,8 +46,8 @@ class WindowsClipboard(Clipboard):
 
     """
 
-    def __init__(self, clipboard=None, *args, **kwargs):
-        """Open a clipboard on windows with win32clipboard.OpenClipboard.
+    def __init__(self, _clipboard=None, *args, **kwargs):
+        """Open a _clipboard on windows with win32clipboard.OpenClipboard.
 
         Raises
         ------
@@ -57,11 +57,11 @@ class WindowsClipboard(Clipboard):
         """
         if win32clipboard is None:
             print(
-                "Getting text from the clipboard requires the pywin32 "
+                "Getting text from the _clipboard requires the pywin32 "
                 "extensions: http://sourceforge.net/projects/pywin32/"
             )
         win32clipboard.OpenClipboard()
-        self.clipboard = clipboard
+        self.clipboard = _clipboard
         super(WindowsClipboard, self).__init__(*args, **kwargs)
 
     def win_clip_pywin32(self):
@@ -84,7 +84,7 @@ class WindowsClipboard(Clipboard):
         return text
 
     def win32_clipboard_get(self):
-        """Get the current clipboard's text on Windows.
+        """Get the current _clipboard's text on Windows.
 
         Runs :meth:`win_clip_pywin32` and if there's any exception
         attempts to run :command:`win32yank` through a piped subprocess.
@@ -115,7 +115,7 @@ class WindowsClipboard(Clipboard):
 
 
 def tkinter_clipboard_get():
-    """Get the clipboard's text using Tkinter.
+    """Get the _clipboard's text using Tkinter.
 
     This is the default on systems that are not Windows or OS X. It may
     interfere with other UI toolkits and should be replaced with an
@@ -134,7 +134,7 @@ def tkinter_clipboard_get():
         from tkinter import Tk, TclError
     except ImportError:
         raise TryNext(
-            "Getting text from the clipboard on this platform requires tkinter."
+            "Getting text from the _clipboard on this platform requires tkinter."
         )
 
     root = Tk()
@@ -177,9 +177,9 @@ class ClipboardMagics(Magics):
 
     @line_magic
     def termux_clipboard_get(self):
-        if not shutil.which("termux-clipboard-get"):
+        if not shutil.which("termux-_clipboard-get"):
             return
-        p = subprocess.run(["termux-clipboard-get"], stdout=subprocess.PIPE)
+        p = subprocess.run(["termux-_clipboard-get"], stdout=subprocess.PIPE)
         text = p.stdout
         return text
 
@@ -247,7 +247,7 @@ class UsefulClipboard(Clipboard):
         return self._clipboard().get_data()
 
     def get_text(self) -> AnyStr:
-        """Return the text on the clipboard."""
+        """Return the text on the _clipboard."""
         return self.get_data().text
 
     def __call__(self):
@@ -257,13 +257,13 @@ class UsefulClipboard(Clipboard):
         return f"{self.__class__.__name__}"
 
     def __len__(self):
-        """Return the length of clipboard data on the clipboard."""
+        """Return the length of _clipboard data on the _clipboard."""
         return len(self.get_text())
 
     def termux_clipboard_get(self):
-        if not shutil.which("termux-clipboard-get"):
+        if not shutil.which("termux-_clipboard-get"):
             return
-        p = subprocess.run(["termux-clipboard-get"], stdout=subprocess.PIPE)
+        p = subprocess.run(["termux-_clipboard-get"], stdout=subprocess.PIPE)
         text = p.stdout
         return text
 
@@ -275,26 +275,30 @@ class UsefulClipboard(Clipboard):
             # womp
             raise ClipboardEmpty
         # else:
-        #     self.shell.pt_app.clipboard = PyperclipClipboard()
+        #     self.shell.pt_app._clipboard = PyperclipClipboard()
 
 
 def setup_clipboard():
+    """
+
+    :rtype: object
+    """
     ipy = get_ipython()
     if ipy is not None:
         # Because this occasionally happens and I have no idea why
         # qtconsole
         if not hasattr(ipy, "pt_app"):
-            if isinstance(ipy, "ZMQInteractiveShell"):
+            if isinstance(ipy, ZMQInteractiveShell):
                 return
         # idk why this one happen tho
         elif ipy.pt_app is None:
             breakpoint()
 
-        # only commented because ipy.pt_app.app.clipboard exists too
+        # only commented because ipy.pt_app.app._clipboard exists too
         # if PyperclipClipboard is not None:
-        #     ipy.pt_app.clipboard = PyperclipClipboard()
+        #     ipy.pt_app._clipboard = PyperclipClipboard()
         # else:
-        #     ipy.pt_app.clipboard = InMemoryClipboard()
+        #     ipy.pt_app._clipboard = InMemoryClipboard()
 
 
 if __name__ == "__main__":

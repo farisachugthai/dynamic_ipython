@@ -27,6 +27,7 @@ An object that contains the default_buffer, `DEFAULT_BUFFER`, a reference
 to a container `HSplit` and a few other things possibly worth exploring.
 
 """
+import functools
 import sys
 
 import jedi
@@ -476,6 +477,86 @@ def pt_validator():
     return validator
 
 
+def user_overrides(overrides=None, *args, **kwargs):
+    """Decorator that allows a user to fill in the remainder of a functools.partial."""
+    # problematically i don't really know how to do this.
+
+    @functools.wraps
+    def _():
+        pass
+
+    if overrides is None:
+        return
+
+
+@user_overrides
+def initialize_prompt_toolkit(prompt=None):
+    # make these imports local because shits gonna run so slow otherwise
+    from default_profile.startup.lexer import get_lexer
+    # from default_profile.startup.completions import create_pt_completers
+    # from default_profile.startup.clipboard import UsefulClipboard
+    from prompt_toolkit.clipboard.base import DynamicClipboard
+    from prompt_toolkit.clipboard.in_memory import InMemoryClipboard
+    from prompt_toolkit.key_binding.defaults import load_key_bindings
+
+    if prompt is None:
+        prompt = 'YourPTApp:'
+    from prompt_toolkit.output import ColorDepth
+    partial_session = functools.partial(prompt_toolkit.shortcuts.PromptSession(
+        message=prompt,
+        vi_mode=True,
+        lexer=get_lexer(),
+        key_bindings=load_key_bindings(),
+        enable_open_in_editor=True,
+        enable_history_search=True,
+        enable_system_prompt=True,
+        enable_suspend=True,
+        color_depth=ColorDepth.TRUE_COLOR,
+        clipboard=DynamicClipboard(InMemoryClipboard()),
+        validator=pt_validator(),
+        # TODO: style
+        # include_default_pygments_style
+        # history
+        # and then eventually layout
+    ))
+    return partial_session
+
+
+def determine_which_pt_attribute():
+    _ip = get_ipython()
+    # IPython < 7.0
+    if hasattr(_ip, "pt_cli"):
+        return _ip.pt_cli.application.key_bindings_registry
+    # IPython >= 7.0
+    elif hasattr(_ip, "pt_app"):
+        # Here's one that might blow your mind.
+        if _ip.pt_app is None:
+            # also happens in pydevd in pycharm. we gotta fix this though.
+
+            initialize_prompt_toolkit()  # ran into this while running pytest.
+
+            # If you start IPython from something like pytest i guess it starts
+            # the machinery with a few parts missing...I don't know.
+
+        return _ip.pt_app.app.key_bindings
+
+    else:
+        try:
+            from ipykernel.zmqshell import ZMQInteractiveShell
+        except (ImportError, ModuleNotFoundError):
+            return
+        else:
+            # Jupyter QTConsole
+            if isinstance(_ip, ZMQInteractiveShell):
+                return
+
+
 if __name__ == "__main__":
-    pt_helper = Helpers()
+    try:
+        pt_helper = Helpers()
+    except Exception as e:  # noqa
+        print(e)
+
+    pt = determine_which_pt_attribute()
     get_ipython().pt_app.validator = pt_validator()
+

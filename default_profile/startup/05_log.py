@@ -49,7 +49,6 @@ if SimpleQueue is None:
     from queue import _PySimpleQueue as SimpleQueue
 
 from IPython.core.getipython import get_ipython
-from IPython.core.error import UsageError
 from IPython.core.history import HistoryAccessor
 
 # from IPython.core.history import HistorySavinThread, HistoryManager
@@ -58,7 +57,7 @@ from traitlets.config.configurable import LoggingConfigurable
 from traitlets.config.application import LevelFormatter
 from traitlets.traitlets import Instance
 
-import default_profile
+from default_profile.ipython_config import UsageError
 
 
 def print_history(hist_file=None):
@@ -174,8 +173,13 @@ def betterConfig(name=None, parent=None):
 
 
 class ConfigurableLogger(LoggingConfigurable, logging.Logger):
+    logger: logging.Logger
     name = __name__
     level = 30
+
+    def __init__(self, logger = None, **kwargs):
+        super().__init__(**kwargs)
+        self.logger = logger
 
     def log(self, msg, level=None):
         """Override the superclasses implementation of log.
@@ -191,7 +195,7 @@ class ConfigurableLogger(LoggingConfigurable, logging.Logger):
         """
         if level is None:
             level = logging.WARNING
-        self.log.log(msg, level=level)
+        self.logger.log(msg, level=level)
 
     def __repr__(self):
         """Pretty print the truncated results of :meth:`traits`."""
@@ -223,7 +227,7 @@ def logging_decorator(f):
     return wrapper
 
 
-def ipython_logger(shell=None):
+def ipython_logger():
     """Saves all commands run in the interactive namespace as valid IPython code.
 
     .. warning:: This is not necessarily valid python code.
@@ -346,15 +350,14 @@ def access_all_history(*args):
 if __name__ == "__main__":
 
     ipy_logger = ipython_logger()
-    if ipy_logger is not None:
-        if hasattr(ipy_logger, "logmode"):
-            logmode = "append"
-            log_output = True
-            ipy_logger.logmode = logmode
-            ipy_logger.log_output = log_output
-            ipy_logger.timestamp = True
-            # I think this has to be set
-            ipy_logger.log_active = True
+    if ipy_logger is not None and hasattr(ipy_logger, "logmode"):
+        logmode = "append"
+        log_output = True
+        ipy_logger.logmode = logmode
+        ipy_logger.log_output = log_output
+        ipy_logger.timestamp = True
+        # I think this has to be set
+        ipy_logger.log_active = True
 
     # Don't use name=__name__ here or it'll dump a log file in your cwd
     # better_logger = betterConfig(parent=STARTUP_LOGGER)

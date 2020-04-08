@@ -25,7 +25,7 @@ from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyB
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
-from default_profile.startup.ptoolkit import create_searching_keybindings
+from default_profile.startup.ptoolkit import create_searching_keybindings, determine_which_pt_attribute
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -315,37 +315,13 @@ def custom_keybindings() -> ConditionalKeyBindings:
     return ConditionalKeyBindings(kb, filter=ViInsertMode())
 
 
-def determine_which_pt_attribute():
-    _ip = get_ipython()
-    # IPython < 7.0
-    if hasattr(_ip, "pt_cli"):
-        return _ip.pt_cli.application.key_bindings_registry
-    # IPython >= 7.0
-    elif hasattr(_ip, "pt_app"):
-        # Here's one that might blow your mind.
-        if type(_ip.pt_app) is None:
-            sys.exit()  # ran into this while running pytest.
-            # If you start IPython from something like pytest i guess it starts
-            # the machinery with a few parts missing...I don't know.
-
-        return _ip.pt_app.app.key_bindings
-
-    else:
-        try:
-            from ipykernel.zmqshell import ZMQInteractiveShell
-        except (ImportError, ModuleNotFoundError):
-            pass
-        else:
-            # Jupyter QTConsole
-            if isinstance(_ip, ZMQInteractiveShell):
-                sys.exit()
-
-
 def create_kb():
     # Honestly I'm wary to do this but let's go for it
     if get_ipython() is None:
         return
     pre_existing_keys = determine_which_pt_attribute()
+    if pre_existing_keys is None:
+        return
     all_kb = merge_key_bindings(
         [
             pre_existing_keys,
@@ -367,7 +343,6 @@ def flatten_kb(merge):
 
 
 if __name__ == "__main__":
-    current_kb = determine_which_pt_attribute()
     merged_kb = create_kb()
     if merged_kb is not None:
         kb_we_want = flatten_kb(merged_kb)

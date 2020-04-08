@@ -16,8 +16,11 @@ from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 try:
     from gruvbox.gruvbox import GruvboxStyle
 except ImportError:
-    GruvboxStyle = None
     from pygments.styles.inkpot import InkPotStyle
+
+    style = InkPotStyle()
+else:
+    style = GruvboxStyle()
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, line_magic

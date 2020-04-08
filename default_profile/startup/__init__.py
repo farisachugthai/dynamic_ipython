@@ -15,9 +15,7 @@ import logging
 
 # noinspection PyProtectedMember
 from importlib.util import _find_spec_from_path
-import os
 import pkgutil
-import sys
 
 try:
     from importlib.machinery import SourceFileLoader, FileFinder
@@ -62,15 +60,11 @@ def module_from_path(path):
 # rehashx_mod = module_from_path("01_rehashx")
 
 rehashx_mod = module_from_path("default_profile.startup.01_rehashx")
-
 log_mod = module_from_path("default_profile.startup.05_log")
-
-help_helpers_mod = module_from_path("default_profile.startup.06_help_helpers")
 envvar_mod = module_from_path("default_profile.startup.10_envvar")
 clipboard_mod = module_from_path("default_profile.startup.11_clipboard")
 aliases_mod = module_from_path("default_profile.startup.20_aliases")
-
 readline_mod = module_from_path("default_profile.startup.30_readline")
-kb_mod = module_from_path("default_profile.startup.32_kb")
-bottom_toolbar_mod = module_from_path("default_profile.startup.33_bottom_toolbar")
+kb_mod = module_from_path("default_profile.startup.kb")
+bottom_toolbar_mod = module_from_path("default_profile.startup.34_bottom_toolbar")
 numpy_init_mod = module_from_path("default_profile.startup.41_numpy_init")
