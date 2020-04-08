@@ -188,12 +188,12 @@ would emit :exc:`ImportError` on startup, which would be frustrating for
 users.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :titlesonly:
    :caption: sphinx
 
    sphinxext/ipython_sphinx_directive
-   sphinxext/lexer
+   sphinxext/ipython_lexer
    sphinxext/custom_doctests
    sphinxext/magics
    sphinxext/make

@@ -42,6 +42,7 @@
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">from</span> <span class="nn">asyncio.events</span> <span class="kn">import</span> <span class="n">get_event_loop_policy</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="c1"># get_event_loop() is one of the most frequently called</span>
@@ -129,7 +130,7 @@
 <span class="c1"># except:</span>
 <span class="c1">#     from asyncio.tasks import Task</span>
 
-<span class="kn">from</span> <span class="nn">curio</span> <span class="kn">import</span> <span class="n">Kernel</span>
+<span class="kn">from</span> <span class="nn">curio</span> <span class="kn">import</span> <span class="n">Kernel</span><span class="p">,</span> <span class="n">timeout_after</span><span class="p">,</span> <span class="n">TaskTimeout</span>
 <span class="kn">from</span> <span class="nn">curio.debug</span> <span class="kn">import</span> <span class="n">logcrash</span><span class="p">,</span> <span class="n">longblock</span>
 
 <span class="c1"># from asyncio.tasks import current_task, all_tasks, create_task</span>
@@ -164,11 +165,11 @@
 <span class="sd">        In [40]: await system_command(&#39;ls&#39;)  # +NORMALIZE_WHITESPACE</span>
 <span class="sd">        01_rehashx.py       20_aliases.py        31_yank_last_arg.py</span>
 <span class="sd">        36_ptutils.py     cscope.out  05_log.py           21_fzf.py</span>
-<span class="sd">        32_kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py</span>
-<span class="sd">        22_alias_manager.py  33_bottom_toolbar.py  43_matplotlib.py</span>
+<span class="sd">        kb.py              41_numpy_init.py  event_loops.py 06_help_helpers.py</span>
+<span class="sd">        22_alias_manager.py  bottom_toolbar.py  43_matplotlib.py</span>
 <span class="sd">        interpreter.py 10_envvar.py        23_git_commands.py   34_completion.py</span>
 <span class="sd">        __init__.py       repralias.py</span>
-<span class="sd">        11_clipboard.py     30_readline.py       35_lexer.py</span>
+<span class="sd">        clipboard.py     30_readline.py       35_lexer.py</span>
 <span class="sd">        __main__.py       tags</span>
 
 <span class="sd">    .. doctest::</span>
@@ -180,7 +181,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">command_to_run</span><span class="p">,</span> <span class="s2">&quot;startswith&quot;</span><span class="p">):</span>
         <span class="n">com</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command_to_run</span><span class="p">)</span>
-        <span class="n">command_to_run</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">com</span><span class="p">)</span>
+        <span class="n">com</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">com</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">command_to_run</span><span class="p">,</span> <span class="s2">&quot;append&quot;</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">TypeError</span>
@@ -252,7 +253,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 06, 2020.
+      Last updated on Apr 08, 2020.
     </div>
   </body>
 </html>

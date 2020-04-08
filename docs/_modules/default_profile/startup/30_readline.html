@@ -43,12 +43,14 @@
 
 <span class="sd">Summary</span>
 <span class="sd">-------</span>
-<span class="sd">In tandem with :file:`../pyreadlineconfig.ini`, keybindings</span>
+
+<span class="sd">In tandem with :file:`../pyreadlineconfig.ini`_, keybindings</span>
 <span class="sd">are set up to attempt adding the standard readline bindings</span>
 <span class="sd">to Vim insert mode.</span>
 
 <span class="sd">Extended Summary</span>
 <span class="sd">----------------</span>
+
 <span class="sd">The keybindings that prompt_toolkit provides are more powerful;</span>
 <span class="sd">however they&#39;re substantially more complicated and for simple</span>
 <span class="sd">modifications of how to work with a line-editor buffer, this proves</span>
@@ -63,10 +65,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">atexit</span>
+<span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
@@ -103,40 +107,13 @@
 <span class="sd">        &gt;&gt;&gt; def cd(arg):</span>
 <span class="sd">        &gt;&gt;&gt;     pass</span>
 
-<span class="sd">    Readline internal error</span>
-<span class="sd">    Traceback (most recent call last):</span>
-
-<span class="sd">      File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/console/console.py&quot;,</span>
-<span class="sd">      line 768, in hook_wrapper_23 res = ensure_str(readline_hook(prompt)) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py&quot;,</span>
-<span class="sd">      line 571, in readline self._readline_from_keyboard() File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py&quot;,</span>
-<span class="sd">      line 536, in _readline_from_keyboard if</span>
-<span class="sd">      self._readline_from_keyboard_poll(): File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/rlmain.py&quot;,</span>
-<span class="sd">      line 556, in _readline_from_keyboard_poll result =</span>
-<span class="sd">      self.mode.process_keyevent(event.keyinfo) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
-<span class="sd">      line 41, in process_keyevent r = dispatch_func(keyinfo) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
-<span class="sd">      line 101, in vi_key self._vi_command.add_char (e.char) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
-<span class="sd">      line 384, in add_char fcn_instance (char) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
-<span class="sd">      line 767, in key_v editor = ViExternalEditor</span>
-<span class="sd">      (self.readline.l_buffer.line_buffer) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
-<span class="sd">      line 959, in __init__ fp_tmp = self.file_open (file_tmp, &#39;w&#39;) File</span>
-<span class="sd">      &quot;C:/Users/fac/.virtualenvs/dynamic_ipython-BYhWmG8z/lib/site-packages/pyreadline/modes/vi.py&quot;,</span>
-<span class="sd">      line 973, in file_open return file (filename, mode) NameError: name &#39;file&#39;</span>
-<span class="sd">      is not defined</span>
-
 <span class="sd">    Let&#39;s see what happens if we get rid of the space between file and ``(``</span>
 
+<span class="sd">    Alright well in my defense this class was created quitely poorly; however,</span>
+<span class="sd">    it&#39;s a little too easy to initialize this sucker with no state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ViExternalEditor.__init__"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">):</span>
+<div class="viewcode-block" id="ViExternalEditor.__init__"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Instantiate the editor :command:`vi`.</span>
 
 <span class="sd">        Parameters</span>
@@ -145,55 +122,38 @@
 <span class="sd">            Line that the user is typing.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)</span>
-        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
-        <span class="n">fp_tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-        <span class="n">fp_tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">)</span>
-        <span class="c1"># i really don&#39;t think you need to do this part in 2 steps like this</span>
-        <span class="n">fp_tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">fp_tmp</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-        <span class="n">fp_tmp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">file_remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_tmp</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">line</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">line</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
 
-<div class="viewcode-block" id="ViExternalEditor.get_tempfile"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.get_tempfile">[docs]</a>    <span class="k">def</span> <span class="nf">get_tempfile</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;readline-&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt;:&quot;</span>
 
-<div class="viewcode-block" id="ViExternalEditor.file_tmp"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_tmp">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">file_tmp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_tempfile</span><span class="p">()</span></div>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_editor</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ViExternalEditor.file_open"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_open">[docs]</a>    <span class="k">def</span> <span class="nf">file_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Can we just take a second to review this line of code...</span>
-
-<span class="sd">        return file (filename, mode)</span>
-
-<span class="sd">        In case you&#39;re confused the gap in between file and the parenthesis</span>
-<span class="sd">        is in fact intentional.</span>
-
-<span class="sd">        .. todo::</span>
-<span class="sd">            Would `mmap.mmap` do us any good here?</span>
-
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ViExternalEditor.file_remove"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.file_remove">[docs]</a>    <span class="k">def</span> <span class="nf">file_remove</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="ViExternalEditor.get_editor"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.get_editor">[docs]</a>    <span class="k">def</span> <span class="nf">get_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ViExternalEditor.run_editor"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.run_editor">[docs]</a>    <span class="k">def</span> <span class="nf">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;It&#39;s the goddamn ViExternalEditor default to Vim!&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;EDITOR&quot;</span><span class="p">]</span>
+            <span class="n">editor</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;EDITOR&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;vim&quot;</span>  <span class="c1"># ouch</span></div>
+            <span class="n">editor</span> <span class="o">=</span> <span class="s2">&quot;vim&quot;</span>
 
-<div class="viewcode-block" id="ViExternalEditor.run_editor"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.run_editor">[docs]</a>    <span class="k">def</span> <span class="nf">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_editor</span><span class="p">(),</span> <span class="n">filename</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mktemp</span><span class="p">(</span><span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;readline-&quot;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;.py&quot;</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rt+&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp_tmp</span><span class="p">:</span>
+            <span class="n">fp_tmp</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">editor</span><span class="p">,</span> <span class="n">filename</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ViExternalEditor.run_command"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.ViExternalEditor.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">command</span><span class="p">,</span>
+            <span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">),</span>
             <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
@@ -440,24 +400,23 @@
         <span class="c1"># All the pyreadline submodules have to be called as pyreadline.</span>
         <span class="c1"># not all clases show up though, so they have to be called as readline</span>
         <span class="c1"># in that case</span>
-        <span class="kn">from</span> <span class="nn">pyreadline.lineeditor.lineobj</span> <span class="kn">import</span> <span class="n">ReadLineTextBuffer</span>
         <span class="kn">from</span> <span class="nn">readline</span> <span class="kn">import</span> <span class="n">GetOutputFile</span>  <span class="c1"># output console via ctype</span>
-
         <span class="c1"># oh also call the pyreadline top module</span>
         <span class="kn">import</span> <span class="nn">readline</span>
+        <span class="c1"># from pyreadline.lineeditor.lineobj import ReadLineTextBuffer</span>
+        <span class="c1"># from pyreadline.console.ansi import AnsiState, AnsiWriter</span>
+        <span class="kn">from</span> <span class="nn">pyreadline.console</span> <span class="kn">import</span> <span class="n">Console</span>
+        <span class="c1"># from pyreadline.modes.emacs import EmacsMode</span>
+        <span class="c1"># emacs_mode = EmacsMode(pyreadline.Readline())</span>
+        <span class="kn">from</span> <span class="nn">pyreadline.modes.vi</span> <span class="kn">import</span> <span class="n">ViMode</span><span class="p">,</span> <span class="n">ViCommand</span>
+        <span class="c1"># from pyreadline import append_history_file</span>
 
         <span class="n">out_console</span> <span class="o">=</span> <span class="n">GetOutputFile</span><span class="p">()</span>
-        <span class="kn">from</span> <span class="nn">pyreadline.console.ansi</span> <span class="kn">import</span> <span class="n">AnsiState</span><span class="p">,</span> <span class="n">AnsiWriter</span>
-
-        <span class="c1"># from pyreadline import append_history_file</span>
+        <span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
         <span class="n">rl_class</span> <span class="o">=</span> <span class="n">Readline</span><span class="p">()</span>
         <span class="n">pyreadline_specific</span><span class="p">(</span><span class="n">rl_class</span><span class="p">)</span>
-        <span class="c1"># not needed yet but a good reminder of the API</span>
-        <span class="c1"># from pyreadline.modes.emacs import EmacsMode</span>
-        <span class="c1"># from pyreadline.modes.vi import ViMode, ViExternalEditor, ViCommand</span>
-
-        <span class="c1"># emacs_mode = EmacsMode(pyreadline.Readline())</span>
-        <span class="c1"># vi_mode = ViMode(pyreadline.Readline())</span>
+        <span class="n">vi_mode</span> <span class="o">=</span> <span class="n">ViMode</span><span class="p">(</span><span class="n">pyreadline</span><span class="o">.</span><span class="n">rlmain</span><span class="o">.</span><span class="n">Readline</span><span class="p">())</span>
+        <span class="n">vi_mode</span><span class="o">.</span><span class="n">complete_filesystem</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">if</span> <span class="n">readline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">history_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.python_history&quot;</span><span class="p">)</span>
@@ -466,6 +425,7 @@
         <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
         <span class="c1"># readline.set_startup_hook(readline_config())</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="s2">&quot;@#$_&amp;-+()/*</span><span class="se">\&quot;</span><span class="s2">&#39;:;!?~`|÷×</span><span class="si">{}</span><span class="s2">=[]%&lt;&gt;</span><span class="se">\r\t\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">readline_config</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -473,7 +433,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 06, 2020.
+      Last updated on Apr 08, 2020.
     </div>
   </body>
 </html>

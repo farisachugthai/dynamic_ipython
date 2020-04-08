@@ -42,14 +42,18 @@
         },
         {
             "command": "${config:python.pythonPath} -m unittest",
-            "group": "test",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "label": "unittest",
             "presentation": {
                 "focus": true,
                 "panel": "new",
                 "reveal": "always"
             },
-            "type": "shell"
+            "type": "shell",
+            "problemMatcher": []
         },
         {
             "command": "pipenv shell",
@@ -140,10 +144,7 @@
                 "electron"
             ],
             "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "type": "npm",

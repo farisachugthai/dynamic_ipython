@@ -88,7 +88,6 @@
     <span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">_PySimpleQueue</span> <span class="k">as</span> <span class="n">SimpleQueue</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.core.error</span> <span class="kn">import</span> <span class="n">UsageError</span>
 <span class="kn">from</span> <span class="nn">IPython.core.history</span> <span class="kn">import</span> <span class="n">HistoryAccessor</span>
 
 <span class="c1"># from IPython.core.history import HistorySavinThread, HistoryManager</span>
@@ -97,7 +96,7 @@
 <span class="kn">from</span> <span class="nn">traitlets.config.application</span> <span class="kn">import</span> <span class="n">LevelFormatter</span>
 <span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
 
-<span class="kn">import</span> <span class="nn">default_profile</span>
+<span class="kn">from</span> <span class="nn">default_profile.ipython_config</span> <span class="kn">import</span> <span class="n">UsageError</span>
 
 
 <div class="viewcode-block" id="print_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.print_history">[docs]</a><span class="k">def</span> <span class="nf">print_history</span><span class="p">(</span><span class="n">hist_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -213,8 +212,13 @@
 
 
 <div class="viewcode-block" id="ConfigurableLogger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger">[docs]</a><span class="k">class</span> <span class="nc">ConfigurableLogger</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span>
     <span class="n">name</span> <span class="o">=</span> <span class="vm">__name__</span>
     <span class="n">level</span> <span class="o">=</span> <span class="mi">30</span>
+
+<div class="viewcode-block" id="ConfigurableLogger.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span></div>
 
 <div class="viewcode-block" id="ConfigurableLogger.log"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Override the superclasses implementation of log.</span>
@@ -230,7 +234,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pretty print the truncated results of :meth:`traits`.&quot;&quot;&quot;</span>
@@ -262,7 +266,7 @@
     <span class="k">return</span> <span class="n">wrapper</span></div>
 
 
-<div class="viewcode-block" id="ipython_logger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ipython_logger">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ipython_logger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ipython_logger">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Saves all commands run in the interactive namespace as valid IPython code.</span>
 
 <span class="sd">    .. warning:: This is not necessarily valid python code.</span>
@@ -385,15 +389,14 @@
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="n">ipy_logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">ipy_logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ipy_logger</span><span class="p">,</span> <span class="s2">&quot;logmode&quot;</span><span class="p">):</span>
-            <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
-            <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
-            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
-            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="c1"># I think this has to be set</span>
-            <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_active</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">ipy_logger</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ipy_logger</span><span class="p">,</span> <span class="s2">&quot;logmode&quot;</span><span class="p">):</span>
+        <span class="n">logmode</span> <span class="o">=</span> <span class="s2">&quot;append&quot;</span>
+        <span class="n">log_output</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">ipy_logger</span><span class="o">.</span><span class="n">logmode</span> <span class="o">=</span> <span class="n">logmode</span>
+        <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_output</span> <span class="o">=</span> <span class="n">log_output</span>
+        <span class="n">ipy_logger</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># I think this has to be set</span>
+        <span class="n">ipy_logger</span><span class="o">.</span><span class="n">log_active</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># Don&#39;t use name=__name__ here or it&#39;ll dump a log file in your cwd</span>
     <span class="c1"># better_logger = betterConfig(parent=STARTUP_LOGGER)</span>
@@ -404,7 +407,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 06, 2020.
+      Last updated on Apr 08, 2020.
     </div>
   </body>
 </html>

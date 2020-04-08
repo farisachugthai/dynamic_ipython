@@ -1,8 +1,8 @@
 ==================================================
-:mod:`~default_profile.startup.33_bottom_toolbar`
+:mod:`~default_profile.startup.bottom_toolbar`
 ==================================================
 
-.. currentmodule:: default_profile.startup.33_bottom_toolbar
+.. currentmodule:: default_profile.startup.bottom_toolbar
 
 This module begins the section of the repository that entails more advanced
 customization of prompt_toolkit.
@@ -64,10 +64,8 @@ Examples
 Toolbar API
 -----------
 
-.. automodule:: default_profile.startup.33_bottom_toolbar
+.. automodule:: default_profile.startup.bottom_toolbar
    :synopsis: Generate a toolbar using lower-level controls.
    :members:
    :undoc-members:
    :show-inheritance:
-
-

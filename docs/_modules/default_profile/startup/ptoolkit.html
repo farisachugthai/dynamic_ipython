@@ -66,6 +66,7 @@
 <span class="sd">to a container `HSplit` and a few other things possibly worth exploring.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">jedi</span>
@@ -515,8 +516,87 @@
     <span class="k">return</span> <span class="n">validator</span></div>
 
 
+<div class="viewcode-block" id="user_overrides"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.user_overrides">[docs]</a><span class="k">def</span> <span class="nf">user_overrides</span><span class="p">(</span><span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Decorator that allows a user to fill in the remainder of a functools.partial.&quot;&quot;&quot;</span>
+    <span class="c1"># problematically i don&#39;t really know how to do this.</span>
+
+    <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
+    <span class="k">def</span> <span class="nf">_</span><span class="p">():</span>
+        <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="n">overrides</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span></div>
+
+
+<span class="nd">@user_overrides</span>
+<span class="k">def</span> <span class="nf">initialize_prompt_toolkit</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="c1"># make these imports local because shits gonna run so slow otherwise</span>
+    <span class="kn">from</span> <span class="nn">default_profile.startup.lexer</span> <span class="kn">import</span> <span class="n">get_lexer</span>
+    <span class="c1"># from default_profile.startup.completions import create_pt_completers</span>
+    <span class="c1"># from default_profile.startup.clipboard import UsefulClipboard</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.base</span> <span class="kn">import</span> <span class="n">DynamicClipboard</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.clipboard.in_memory</span> <span class="kn">import</span> <span class="n">InMemoryClipboard</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_key_bindings</span>
+
+    <span class="k">if</span> <span class="n">prompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">prompt</span> <span class="o">=</span> <span class="s1">&#39;YourPTApp:&#39;</span>
+    <span class="kn">from</span> <span class="nn">prompt_toolkit.output</span> <span class="kn">import</span> <span class="n">ColorDepth</span>
+    <span class="n">partial_session</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">shortcuts</span><span class="o">.</span><span class="n">PromptSession</span><span class="p">(</span>
+        <span class="n">message</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+        <span class="n">vi_mode</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">lexer</span><span class="o">=</span><span class="n">get_lexer</span><span class="p">(),</span>
+        <span class="n">key_bindings</span><span class="o">=</span><span class="n">load_key_bindings</span><span class="p">(),</span>
+        <span class="n">enable_open_in_editor</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">enable_history_search</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">enable_system_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">enable_suspend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">color_depth</span><span class="o">=</span><span class="n">ColorDepth</span><span class="o">.</span><span class="n">TRUE_COLOR</span><span class="p">,</span>
+        <span class="n">clipboard</span><span class="o">=</span><span class="n">DynamicClipboard</span><span class="p">(</span><span class="n">InMemoryClipboard</span><span class="p">()),</span>
+        <span class="n">validator</span><span class="o">=</span><span class="n">pt_validator</span><span class="p">(),</span>
+        <span class="c1"># TODO: style</span>
+        <span class="c1"># include_default_pygments_style</span>
+        <span class="c1"># history</span>
+        <span class="c1"># and then eventually layout</span>
+    <span class="p">))</span>
+    <span class="k">return</span> <span class="n">partial_session</span>
+
+
+<div class="viewcode-block" id="determine_which_pt_attribute"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.determine_which_pt_attribute">[docs]</a><span class="k">def</span> <span class="nf">determine_which_pt_attribute</span><span class="p">():</span>
+    <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="c1"># IPython &lt; 7.0</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pt_cli&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_cli</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">key_bindings_registry</span>
+    <span class="c1"># IPython &gt;= 7.0</span>
+    <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
+        <span class="c1"># Here&#39;s one that might blow your mind.</span>
+        <span class="k">if</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># also happens in pydevd in pycharm. we gotta fix this though.</span>
+
+            <span class="n">initialize_prompt_toolkit</span><span class="p">()</span>  <span class="c1"># ran into this while running pytest.</span>
+
+            <span class="c1"># If you start IPython from something like pytest i guess it starts</span>
+            <span class="c1"># the machinery with a few parts missing...I don&#39;t know.</span>
+
+        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">ipykernel.zmqshell</span> <span class="kn">import</span> <span class="n">ZMQInteractiveShell</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Jupyter QTConsole</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">_ip</span><span class="p">,</span> <span class="n">ZMQInteractiveShell</span><span class="p">):</span>
+                <span class="k">return</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">pt_helper</span> <span class="o">=</span> <span class="n">Helpers</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pt_helper</span> <span class="o">=</span> <span class="n">Helpers</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># noqa</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+
+    <span class="n">pt</span> <span class="o">=</span> <span class="n">determine_which_pt_attribute</span><span class="p">()</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">validator</span> <span class="o">=</span> <span class="n">pt_validator</span><span class="p">()</span>
 </pre></div>
 
@@ -525,7 +605,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 06, 2020.
+      Last updated on Apr 08, 2020.
     </div>
   </body>
 </html>
