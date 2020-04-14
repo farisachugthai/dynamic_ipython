@@ -41,8 +41,6 @@
 <li><a class="reference internal" href="#ipython-history">IPython history</a></li>
 <li><a class="reference internal" href="#ipython-history-api">IPython History API</a></li>
 <li><a class="reference internal" href="#writing-magics-for-our-users">Writing Magics For Our Users</a></li>
-<li><a class="reference internal" href="#prompt-toolkit">Prompt Toolkit</a></li>
-<li><a class="reference internal" href="#alias-magic"><code class="xref std std-magic docutils literal notranslate"><span class="pre">alias_magic</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -80,7 +78,7 @@ and was being called with 4. <em>sigh</em>.</p>
 </div>
 <div class="section" id="ipython-history">
 <span id="history-app"></span><h2>IPython history<a class="headerlink" href="#ipython-history" title="Permalink to this headline">¶</a></h2>
-<dl class="std cmdoption">
+<dl class="cmdoption">
 <dt id="cmdoption-ipython-arg-history">
 <code class="sig-name descname">history</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-ipython-arg-history" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -108,13 +106,13 @@ So how does the <code class="xref py py-obj docutils literal notranslate"><span 
 <div class="section" id="ipython-history-api">
 <h2>IPython History API<a class="headerlink" href="#ipython-history-api" title="Permalink to this headline">¶</a></h2>
 <p>Interact with the IPython <a class="reference external" href="https://docs.python.org/3/library/sqlite3.html#module-sqlite3" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sqlite3</span></code></a> database.</p>
-<dl class="std cmdoption">
+<dl class="cmdoption">
 <dt id="cmdoption-ipython-arg-trim">
 <code class="sig-name descname">trim</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-ipython-arg-trim" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trim the IPython history database to the last 1000 entries.</p>
 </dd></dl>
 
-<dl class="std cmdoption">
+<dl class="cmdoption">
 <dt id="cmdoption-ipython-arg-clear">
 <code class="sig-name descname">clear</code><code class="sig-prename descclassname"></code><a class="headerlink" href="#cmdoption-ipython-arg-clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the IPython history database, deleting all entries.</p>
@@ -208,54 +206,12 @@ wrapper function? Off the top of my head I’m guessing something like this.:</p
 </div>
 <p>I’m sure that I poorly executed that here; however, after some deliberation,
 would it be that hard to do?</p>
-</div>
-<div class="section" id="prompt-toolkit">
-<h2>Prompt Toolkit<a class="headerlink" href="#prompt-toolkit" title="Permalink to this headline">¶</a></h2>
-<p>Modify the KeyBindings classes so that the following works.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">shell</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="s1">&#39;vi&#39;</span><span class="p">:</span>
-    <span class="c1"># kb.add(load_vi_bindings(), filter=(has_focus(DEFAULT_BUFFER)))</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_vi_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
-        <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)))</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_basic_bindings</span><span class="p">():</span>
-        <span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">(</span><span class="n">has_focus</span><span class="p">(</span><span class="n">DEFAULT_BUFFER</span><span class="p">)))</span>
+<dl class="magic">
+<dt id="magic-alias_magic">
+<code class="sig-name descname">%alias_magic</code><a class="headerlink" href="#magic-alias_magic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an alias for an already definedmagic.</p>
+</dd></dl>
 
-<span class="c1"># don&#39;t do this one of these keys steals &lt;C-d&gt;</span>
-<span class="n">kb</span> <span class="o">=</span> <span class="n">merge_key_bindings</span><span class="p">([</span>
-    <span class="n">load_cpr_bindings</span><span class="p">(),</span>
-    <span class="n">load_basic_bindings</span><span class="p">(),</span>
-    <span class="n">load_mouse_bindings</span><span class="p">(),</span>
-    <span class="n">kb</span><span class="p">,</span>
-<span class="p">])</span>
-</pre></div>
-</div>
-<p>Currently every part fails.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">kb</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">load_vi_bindings</span><span class="p">())</span>
-
-<span class="ne">TypeError</span><span class="p">:</span> <span class="nb">object</span> <span class="n">of</span> <span class="nb">type</span> <span class="s1">&#39;ConditionalKeyBindings&#39;</span> <span class="n">has</span> <span class="n">no</span> <span class="nb">len</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Uh that’s really confusing but when you go to
-prompt_toolkit.key_binding.key_bindings you’ll see a …wow I can’t find the
-method that this came from. Whatever. Next!:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">39</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.defaults</span> <span class="kn">import</span> <span class="n">load_basic_bindings</span>
-<span class="n">In</span> <span class="p">[</span><span class="mi">40</span><span class="p">]:</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">load_basic_bindings</span><span class="p">():</span>
-    <span class="o">...</span><span class="p">:</span>     <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="o">...</span><span class="p">:</span>
-         <span class="ne">TypeError</span><span class="p">:</span> <span class="s1">&#39;KeyBindings&#39;</span> <span class="nb">object</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">iterable</span>
-</pre></div>
-</div>
-<p>This doesn’t even feel internally consistent. Alright let’s play by his rules.:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">42</span><span class="p">]:</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">add</span><span class="p">()</span>
-<span class="ne">AttributeError</span><span class="p">:</span> <span class="s1">&#39;_MergedKeyBindings&#39;</span> <span class="nb">object</span> <span class="n">has</span> <span class="n">no</span> <span class="n">attribute</span> <span class="s1">&#39;add&#39;</span>
-</pre></div>
-</div>
-<p>So if I merge my key bindings at any point I shoot myself in the foot from
-adding more later?</p>
-<p>Holy hell.</p>
-</div>
-<div class="section" id="alias-magic">
-<h2><a class="reference external" href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#magic-alias_magic" title="(in IPython v7.13.0)"><code class="xref std std-magic docutils literal notranslate"><span class="pre">alias_magic</span></code></a><a class="headerlink" href="#alias-magic" title="Permalink to this headline">¶</a></h2>
 <p><code class="xref py py-obj docutils literal notranslate"><span class="pre">%alias_magic</span></code> is really convenient and makes it possible to create really
 short monikers for rather complicated mixes of shell scripts and object-oriented
 python. But it doesn’t copy over the __doc__ from the old magic.</p>
@@ -270,7 +226,7 @@ python. But it doesn’t copy over the __doc__ from the old magic.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 08, 2020.
+      Last updated on Apr 14, 2020.
     </div>
   </body>
 </html>

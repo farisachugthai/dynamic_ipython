@@ -56,7 +56,7 @@
 
 <div class="section" id="default-profile-util-machine">
 <h1><a class="reference internal" href="#module-default_profile.util.machine" title="default_profile.util.machine: Account for platform differences when creating a system shell."><code class="xref py py-mod docutils literal notranslate"><span class="pre">default_profile.util.machine</span></code></a><a class="headerlink" href="#default-profile-util-machine" title="Permalink to this headline">¶</a></h1>
-<p>Generate a <a class="reference internal" href="#default_profile.util.machine.platform" title="default_profile.util.machine.Platform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Platform</span></code></a> class that can be used to identify varying
+<p>Generate a <a class="reference internal" href="#default_profile.util.machine.Platform" title="default_profile.util.machine.Platform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Platform</span></code></a> class that can be used to identify varying
 characteristics of a user’s device.</p>
 <p>Aims to clearly identify OS, CPU architecture and in the future may work
 to identify varying shells and terminals.</p>
@@ -75,19 +75,19 @@ to identify varying shells and terminals.</p>
 </dl>
 <div class="section" id="platform-specific-abstractions">
 <h3>Platform Specific Abstractions<a class="headerlink" href="#platform-specific-abstractions" title="Permalink to this headline">¶</a></h3>
-<dl class="py class">
+<dl class="class">
 <dt>
 <em class="property">class </em><code class="sig-name descname">Platform</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Abstract away platform differences.</p>
 <p>After toying with the initial implementation, I realized I could simply
-bind the <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path()</span></code> instance directly to <a class="reference internal" href="#default_profile.util.machine.platform" title="default_profile.util.machine.Platform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Platform</span></code></a>
+bind the <code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path()</span></code> instance directly to <a class="reference internal" href="#default_profile.util.machine.Platform" title="default_profile.util.machine.Platform"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Platform</span></code></a>
 during initialization.</p>
 <p>This allows for a user to check the <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.platform" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sys.platform</span></code></a> instance, and then
 act in an appropriate manner without knowing what the
 <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code></a> actually initialized to.</p>
-<dl class="py method">
+<dl class="method">
 <dt>
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shell</span></em>, <em class="sig-param"><span class="n">user_env</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.__init__"><span class="viewcode-link">[source]</span></a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">shell</em>, <em class="sig-param">user_env</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.__init__"><span class="viewcode-link">[source]</span></a></dt>
 <dd><p>Initialize a user specific object.</p>
 <dl>
 <dt>shell<span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>, optional</span></dt><dd><p>Global IPython instance.</p>
@@ -97,15 +97,15 @@ act in an appropriate manner without knowing what the
 </dl>
 </dd></dl>
 
-<dl class="py attribute">
+<dl class="attribute">
 <dt>
 <code class="sig-name descname">LOGGER : :class:`logging.Logger`</code></dt>
 <dd><p>Class attribute. Logger for the class</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt id="default_profile.util.machine.platform._sys_platform">
-<span id="default_profile.util.machine.Platform._sys_platform"></span><code class="sig-name descname">_sys_platform</code><a class="headerlink" href="#default_profile.util.machine.platform._sys_platform" title="Permalink to this definition">¶</a></dt>
+<dl class="attribute">
+<dt id="default_profile.util.machine.Platform._sys_platform">
+<code class="sig-name descname">_sys_platform</code><a class="headerlink" href="#default_profile.util.machine.Platform._sys_platform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Value returned by sys.platform</p>
 </dd></dl>
 
@@ -114,46 +114,46 @@ act in an appropriate manner without knowing what the
 </div>
 <div class="section" id="module-default_profile.util.machine">
 <span id="sphinx-autogenerated-docs-for-machine"></span><h3>Sphinx Autogenerated Docs for <a class="reference internal" href="#module-default_profile.util.machine" title="default_profile.util.machine: Account for platform differences when creating a system shell."><code class="xref py py-mod docutils literal notranslate"><span class="pre">machine</span></code></a><a class="headerlink" href="#module-default_profile.util.machine" title="Permalink to this headline">¶</a></h3>
-<dl class="py class">
-<dt id="default_profile.util.machine.platform">
-<span id="default_profile.util.machine.Platform"></span><em class="property">class </em><code class="sig-name descname">Platform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">env</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform" title="Permalink to this definition">¶</a></dt>
+<dl class="class">
+<dt id="default_profile.util.machine.Platform">
+<em class="property">class </em><code class="sig-name descname">Platform</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.__init__">
-<span id="default_profile.util.machine.Platform.__init__"></span><code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.__init__" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.is_windows">
-<span id="default_profile.util.machine.Platform.is_windows"></span><em class="property">property </em><code class="sig-name descname">is_windows</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_windows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.is_windows" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.is_windows">
+<em class="property">property </em><code class="sig-name descname">is_windows</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_windows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.is_windows" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.uname">
-<span id="default_profile.util.machine.Platform.uname"></span><em class="property">property </em><code class="sig-name descname">uname</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.uname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.uname" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.uname">
+<em class="property">property </em><code class="sig-name descname">uname</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.uname"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.uname" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.is_conemu">
-<span id="default_profile.util.machine.Platform.is_conemu"></span><em class="property">property </em><code class="sig-name descname">is_conemu</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_conemu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.is_conemu" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.is_conemu">
+<em class="property">property </em><code class="sig-name descname">is_conemu</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_conemu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.is_conemu" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.is_win_vt100">
-<span id="default_profile.util.machine.Platform.is_win_vt100"></span><em class="property">property </em><code class="sig-name descname">is_win_vt100</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_win_vt100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.is_win_vt100" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.is_win_vt100">
+<em class="property">property </em><code class="sig-name descname">is_win_vt100</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_win_vt100"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.is_win_vt100" title="Permalink to this definition">¶</a></dt>
 <dd><p>True when we are using Windows, but with VT100 esc sequences.</p>
 <p>Import needs to be inline. Windows libraries are not always available.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.is_linux">
-<span id="default_profile.util.machine.Platform.is_linux"></span><em class="property">property </em><code class="sig-name descname">is_linux</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_linux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.is_linux" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.is_linux">
+<em class="property">property </em><code class="sig-name descname">is_linux</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.is_linux"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.is_linux" title="Permalink to this definition">¶</a></dt>
 <dd><p>True when <code class="xref py py-func docutils literal notranslate"><span class="pre">sys.platform()</span></code> returns linux.</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.get_env">
-<span id="default_profile.util.machine.Platform.get_env"></span><em class="property">static </em><code class="sig-name descname">get_env</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.get_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.get_env" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.get_env">
+<em class="property">static </em><code class="sig-name descname">get_env</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.get_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.get_env" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p><strong>env</strong> – The user’s environment variables.</p>
@@ -164,9 +164,9 @@ act in an appropriate manner without knowing what the
 </dl>
 </dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.platform.update_env">
-<span id="default_profile.util.machine.Platform.update_env"></span><code class="sig-name descname">update_env</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">env=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.update_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.platform.update_env" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Platform.update_env">
+<code class="sig-name descname">update_env</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">env=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Platform.update_env"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Platform.update_env" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add more arguments to the environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -180,25 +180,25 @@ act in an appropriate manner without knowing what the
 
 </dd></dl>
 
-<dl class="py class">
-<dt id="default_profile.util.machine.shell">
-<span id="default_profile.util.machine.Shell"></span><em class="property">class </em><code class="sig-name descname">Shell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">shell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">env</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.shell" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#default_profile.util.machine.platform" title="default_profile.util.machine.Platform"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.util.machine.Platform</span></code></a></p>
+<dl class="class">
+<dt id="default_profile.util.machine.Shell">
+<em class="property">class </em><code class="sig-name descname">Shell</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">env=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#default_profile.util.machine.Platform" title="default_profile.util.machine.Platform"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.util.machine.Platform</span></code></a></p>
 <p>Subclass Platform to gain information about the user’s shell.</p>
-<dl class="py method">
-<dt id="default_profile.util.machine.shell.is_cmd">
-<span id="default_profile.util.machine.Shell.is_cmd"></span><em class="property">property </em><code class="sig-name descname">is_cmd</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell.is_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.shell.is_cmd" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Shell.is_cmd">
+<em class="property">property </em><code class="sig-name descname">is_cmd</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell.is_cmd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Shell.is_cmd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unsure of how to implement this. TODO:</p>
 </dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.shell.is_powershell">
-<span id="default_profile.util.machine.Shell.is_powershell"></span><em class="property">property </em><code class="sig-name descname">is_powershell</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell.is_powershell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.shell.is_powershell" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Shell.is_powershell">
+<em class="property">property </em><code class="sig-name descname">is_powershell</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell.is_powershell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Shell.is_powershell" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py method">
-<dt id="default_profile.util.machine.shell.is_pwsh">
-<span id="default_profile.util.machine.Shell.is_pwsh"></span><em class="property">property </em><code class="sig-name descname">is_pwsh</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell.is_pwsh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.shell.is_pwsh" title="Permalink to this definition">¶</a></dt>
+<dl class="method">
+<dt id="default_profile.util.machine.Shell.is_pwsh">
+<em class="property">property </em><code class="sig-name descname">is_pwsh</code><a class="reference internal" href="../_modules/default_profile/util/machine.html#Shell.is_pwsh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.machine.Shell.is_pwsh" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -213,7 +213,7 @@ act in an appropriate manner without knowing what the
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 08, 2020.
+      Last updated on Apr 14, 2020.
     </div>
   </body>
 </html>

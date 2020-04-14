@@ -70,41 +70,32 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="kn">import</span> <span class="nn">jedi</span>
-
-<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
 <span class="kn">import</span> <span class="nn">prompt_toolkit</span>
+<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.buffer</span> <span class="kn">import</span> <span class="n">Buffer</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.document</span> <span class="kn">import</span> <span class="n">Document</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding</span> <span class="kn">import</span> <span class="n">merge_key_bindings</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">is_searching</span><span class="p">,</span> <span class="n">ViInsertMode</span>
+<span class="c1"># from prompt_toolkit.keys import Keys</span>
+<span class="c1"># from prompt_toolkit.key_binding import merge_key_bindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">is_searching</span><span class="p">,</span> <span class="n">ViInsertMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="kn">import</span> <span class="n">search</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">ConditionalKeyBindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">Window</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">ConditionalKeyBindings</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">SearchToolbar</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.processors</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ConditionalProcessor</span><span class="p">,</span>
-    <span class="n">DisplayMultipleCursors</span><span class="p">,</span>
     <span class="n">HighlightSearchProcessor</span><span class="p">,</span>
     <span class="n">HighlightIncrementalSearchProcessor</span><span class="p">,</span>
     <span class="n">HighlightSelectionProcessor</span><span class="p">,</span>
     <span class="n">HighlightMatchingBracketProcessor</span><span class="p">,</span>
     <span class="n">DisplayMultipleCursors</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.styles.pygments</span> <span class="kn">import</span> <span class="n">style_from_pygments_cls</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.validation</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ConditionalValidator</span><span class="p">,</span>
-    <span class="n">ValidationError</span><span class="p">,</span>
-    <span class="n">Validator</span><span class="p">,</span>
     <span class="n">ThreadedValidator</span><span class="p">,</span>
     <span class="n">DummyValidator</span><span class="p">,</span>
-    <span class="n">DynamicValidator</span><span class="p">,</span>
 <span class="p">)</span>
-
-<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-
+<span class="kn">from</span> <span class="nn">prompt_toolkit.widgets.toolbars</span> <span class="kn">import</span> <span class="n">SearchToolbar</span>
 <span class="kn">from</span> <span class="nn">pygments.styles.inkpot</span> <span class="kn">import</span> <span class="n">InkPotStyle</span>
 
 <span class="n">DEDENT_TOKENS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;raise&quot;</span><span class="p">,</span> <span class="s2">&quot;return&quot;</span><span class="p">,</span> <span class="s2">&quot;pass&quot;</span><span class="p">,</span> <span class="s2">&quot;break&quot;</span><span class="p">,</span> <span class="s2">&quot;continue&quot;</span><span class="p">])</span>
@@ -427,7 +418,7 @@
         <span class="n">search_buffer_control</span><span class="o">=</span><span class="n">search_toolbar</span><span class="o">.</span><span class="n">control</span><span class="p">,</span>
         <span class="n">preview_search</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">include_default_input_processors</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">input_processors</span><span class="o">=</span><span class="n">all_processors_for_searching</span><span class="p">(),</span>
+        <span class="n">input_processors</span><span class="o">=</span><span class="n">all_input_processors</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">style</span> <span class="o">=</span> <span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">InkPotStyle</span><span class="p">)</span>
     <span class="c1"># Apparently theres something wrong with the style other put it in the</span>
@@ -507,7 +498,7 @@
     <span class="k">return</span> <span class="n">ConditionalCallable</span><span class="p">(</span><span class="n">validator</span><span class="p">,</span> <span class="n">document</span><span class="o">=</span><span class="n">document</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">ViInsertMode</span><span class="p">())</span>
 
 
-<div class="viewcode-block" id="pt_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.pt_validator">[docs]</a><span class="k">def</span> <span class="nf">pt_validator</span><span class="p">():</span>
+<div class="viewcode-block" id="pt_validator"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.pt_validator">[docs]</a><span class="k">def</span> <span class="nf">pt_validator</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">validation</span><span class="o">.</span><span class="n">Validator</span><span class="p">:</span>
     <span class="n">validator</span> <span class="o">=</span> <span class="n">ThreadedValidator</span><span class="p">(</span>
         <span class="n">_conditional_validator</span><span class="p">(</span>
             <span class="n">DummyValidator</span><span class="p">(),</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">document</span>
@@ -516,20 +507,18 @@
     <span class="k">return</span> <span class="n">validator</span></div>
 
 
-<div class="viewcode-block" id="user_overrides"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.user_overrides">[docs]</a><span class="k">def</span> <span class="nf">user_overrides</span><span class="p">(</span><span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="user_overrides"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.user_overrides">[docs]</a><span class="k">def</span> <span class="nf">user_overrides</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Decorator that allows a user to fill in the remainder of a functools.partial.&quot;&quot;&quot;</span>
     <span class="c1"># problematically i don&#39;t really know how to do this.</span>
 
     <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
     <span class="k">def</span> <span class="nf">_</span><span class="p">():</span>
-        <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">overrides</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">overrides</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span></div>
+    <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<span class="nd">@user_overrides</span>
-<span class="k">def</span> <span class="nf">initialize_prompt_toolkit</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="initialize_prompt_toolkit"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.initialize_prompt_toolkit">[docs]</a><span class="k">def</span> <span class="nf">initialize_prompt_toolkit</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="c1"># make these imports local because shits gonna run so slow otherwise</span>
     <span class="kn">from</span> <span class="nn">default_profile.startup.lexer</span> <span class="kn">import</span> <span class="n">get_lexer</span>
     <span class="c1"># from default_profile.startup.completions import create_pt_completers</span>
@@ -558,7 +547,7 @@
         <span class="c1"># history</span>
         <span class="c1"># and then eventually layout</span>
     <span class="p">))</span>
-    <span class="k">return</span> <span class="n">partial_session</span>
+    <span class="k">return</span> <span class="n">partial_session</span></div>
 
 
 <div class="viewcode-block" id="determine_which_pt_attribute"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.determine_which_pt_attribute">[docs]</a><span class="k">def</span> <span class="nf">determine_which_pt_attribute</span><span class="p">():</span>
@@ -605,7 +594,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 08, 2020.
+      Last updated on Apr 14, 2020.
     </div>
   </body>
 </html>

@@ -253,7 +253,38 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dispatch </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">line</span><span class="p">))</span></div>
 
 
+
 <span class="c1"># Readline Config</span>
+
+<div class="viewcode-block" id="gnu_readline_config"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.gnu_readline_config">[docs]</a><span class="k">def</span> <span class="nf">gnu_readline_config</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Readline configuration that&#39;s incompatible with GNU readline.</span>
+
+<span class="sd">    Pyreadline doesn&#39;t recognize a lot of the standard Readline functions,</span>
+<span class="sd">    so to avoid emitting warnings upon startup, a handful of bindings</span>
+<span class="sd">    were separated from `readline_config`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Up&quot;: history-search-forward&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Down&quot;: history-search-backward&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-d&quot;: end-of-file&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-g&quot;: abort&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-n&quot;: menu-complete&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-p&quot;: menu-complete-backward&#39;</span><span class="p">)</span>
+    <span class="c1"># &quot;\C-q&quot;: quoted-insert</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-r&quot;: reverse-search-history&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-s&quot;: forward-search-history&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-t&quot;: transpose-chars&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-u&quot;: unix-line-discard&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-v&quot;: quoted-insert&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-w&quot;: unix-filename-rubout&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-y&quot;: yank&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-x</span><span class="se">\\</span><span class="s1">C-g&quot;: abort&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-x</span><span class="se">\\</span><span class="s1">C-r&quot;: re-read-init-file&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Whew!</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-]&quot;: character-search&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-_&quot;: undo&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Insert&quot;: overwrite-mode&#39;</span><span class="p">)</span>
+    <span class="n">readline</span><span class="o">.</span><span class="n">set_completer</span><span class="p">(</span><span class="n">Completer</span><span class="p">()</span><span class="o">.</span><span class="n">complete</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="readline_config"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.readline_config">[docs]</a><span class="k">def</span> <span class="nf">readline_config</span><span class="p">():</span>
@@ -266,41 +297,18 @@
 <span class="sd">    as parameters.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Dude how refreshing is that</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Up&quot;: history-search-forward&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Down&quot;: history-search-backward&#39;</span><span class="p">)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-d&quot;: end-of-file&#39;)</span>
-
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-a&quot;: beginning-of-line&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-b&quot;: backward-char&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-e&quot;: end-of-line&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-f&quot;: forward-char&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-g&quot;: abort&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-h&quot;: backward-delete-char&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-i&quot;: complete&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-j&quot;: accept-line&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-k&quot;: &quot;kill-whole-line&quot;&#39;</span><span class="p">)</span>
     <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-l&quot;: clear-screen&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-m&quot;: accept-line&#39;</span><span class="p">)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-n&quot;: menu-complete&#39;)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-p&quot;: menu-complete-backward&#39;)</span>
-    <span class="c1"># &quot;\C-q&quot;: quoted-insert</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-r&quot;: reverse-search-history&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-s&quot;: forward-search-history&#39;</span><span class="p">)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-t&quot;: transpose-chars&#39;)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-u&quot;: unix-line-discard&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-v&quot;: quoted-insert&#39;</span><span class="p">)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-w&quot;: unix-filename-rubout&#39;)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-y&quot;: yank&#39;</span><span class="p">)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-x\\C-g&quot;: abort&#39;)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;&quot;\\C-x\\C-r&quot;: re-read-init-file&#39;)</span>
-
-    <span class="c1"># Whew!</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-]&quot;: character-search&#39;</span><span class="p">)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-_&quot;: undo&#39;</span><span class="p">)</span>
-    <span class="c1"># readline.parse_and_bind(&#39;\\e\C-]&quot;: character-search-backward&#39;)</span>
-    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;Insert&quot;: overwrite-mode&#39;</span><span class="p">)</span></div>
+    <span class="n">readline</span><span class="o">.</span><span class="n">parse_and_bind</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">C-m&quot;: accept-line&#39;</span><span class="p">)</span></div>
     <span class="c1"># readline.parse_and_bind(&quot;Meta-/: complete&quot;)</span>
+    <span class="c1"># readline.parse_and_bind(&#39;\\e\C-]&quot;: character-search-backward&#39;)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\eb&quot;: backward-word&#39;)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\ef&quot;: forward-word&#39;)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\e?&quot;: possible-completions&#39;)</span>
@@ -308,7 +316,6 @@
     <span class="c1"># readline.parse_and_bind(&#39;&quot;\\ed&quot;: kill-word&#39;)</span>
     <span class="c1"># readline.parse_and_bind(&#39;&quot;Meta-Tab&quot;: tab-insert&#39;)</span>
     <span class="c1"># &quot;\er&quot;: redraw-current-line</span>
-    <span class="c1"># readline.set_completer(Completer().complete</span>
 
 
 <div class="viewcode-block" id="pyreadline_specific"><a class="viewcode-back" href="../../../startup/setup_readline.html#default_profile.startup.30_readline.pyreadline_specific">[docs]</a><span class="k">def</span> <span class="nf">pyreadline_specific</span><span class="p">(</span><span class="n">rl</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -395,6 +402,7 @@
         <span class="c1"># doesn&#39;t match all of it&#39;s API</span>
         <span class="kn">import</span> <span class="nn">rlcompleter</span>
         <span class="kn">from</span> <span class="nn">rlcompleter</span> <span class="kn">import</span> <span class="n">Completer</span>
+        <span class="n">gnu_readline_config</span><span class="p">()</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># All the pyreadline submodules have to be called as pyreadline.</span>
@@ -423,7 +431,6 @@
         <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
         <span class="n">original_hist_length</span> <span class="o">=</span> <span class="n">readline</span><span class="o">.</span><span class="n">get_current_history_length</span><span class="p">()</span>
         <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
-        <span class="c1"># readline.set_startup_hook(readline_config())</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="s2">&quot;@#$_&amp;-+()/*</span><span class="se">\&quot;</span><span class="s2">&#39;:;!?~`|÷×</span><span class="si">{}</span><span class="s2">=[]%&lt;&gt;</span><span class="se">\r\t\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">readline_config</span><span class="p">()</span>
 </pre></div>
@@ -433,7 +440,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 08, 2020.
+      Last updated on Apr 14, 2020.
     </div>
   </body>
 </html>
