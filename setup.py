@@ -2,6 +2,14 @@
 # -*- coding: utf-8 -*-
 """Install the repo as a python package.
 
+Notes
+------
+
+.. envvar:: PIP_VERBOSE
+
+    Who knew that this was a recognized thing? As is PIP_QUIET!
+
+
 .. tip::
     Always have a fallback for determining version.
     If using an import from your repo doesn't work, then depending on that
@@ -20,43 +28,63 @@ import platform
 from pathlib import Path
 from shutil import rmtree
 
-import distutils  # noqa
-import setuptools  # noqa
-from distutils.errors import DistutilsArgError
+import distutils
+import setuptools
+from distutils.errors import DistutilsArgError, DistutilsError
 from setuptools import setup, find_packages, Command
-from setuptools.command.easy_install import chmod, current_umask
+# from setuptools.command import easy_install
+# from setuptools.command.egg_info import egg_info
+from setuptools.command.easy_install import chmod, current_umask, find_distributions
+# from setuptools.command.easy_install import get_script_args, sys_executable
 from setuptools.dist import Distribution
 from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 
+try:
+    import pkg_resources
+except ImportError:
+    sys.exit('pkg_resources not found but is a hard requirement. Please install with.:'
+             '`python3.8 -m pip install -U pkg_resources`.')
+
 logging.basicConfig()
-d = Distribution()
-if len(sys.argv) == 0:
-    d.print_commands()
+dist = Distribution()
+
+if len(sys.argv) == 1:
+    dist.print_commands()
+
+
+# TODO: i feel like building up the distribution instance could be informative
+# dist.include(py_modules=["x"])
+
+
+def parse_command_line():
+    """Process features after parsing command line options"""
+    _Distribution = setuptools.monkey.get_unpatched(distutils.core.Distribution)
+    _distribution: setuptools.Distribution = _Distribution()
+    result = dist.parse_command_line()
+    # if dist.features: dist._finalize_features()
+    print('\n\n\n****')
+    print(result)
+    return _distribution
+
+
+# Btw all that d.parse_command_line is doing is this ^---
 
 try:
-    d.parse_command_line()
+    parse_command_line()
 except DistutilsArgError:
     print("No args provided.")
 except TypeError:  # path was supposed to be path not NoneType
     print("No args.")
 
-try:
-    from pkg_resources import find_distributions
-except ImportError:
-    pass
-else:
-    # check this one out
-    listdist = list(find_distributions(os.path.abspath(".")))
-    try:
-        dist = listdist[0]
-    except IndexError:
-        pass
-
 try:  # new replacement for the pkg_resources API
-    import importlib_metadata
-    our_dist = importlib_metadata.distribution("dynamic_ipython")
+    from importlib import metadata as importlib_metadata
 except ImportError:
-    importlib_metadata = None
+    try:
+        import importlib_metadata
+
+        our_dist = importlib_metadata.distribution("dynamic_ipython")
+    except ImportError:
+        importlib_metadata = None
 except importlib_metadata.PackageNotFoundError:
     pass
 
@@ -82,6 +110,70 @@ except ImportError:
 else:
     distclass = distutils.command.bdist_conda.CondaDistribution
 
+
+# }}}
+
+# Wrangling with Setuptools: {{{
+
+def check_installed_modules(requirement):
+    try:
+        return pkg_resources.get_distribution(requirement)
+    except pkg_resources.DistributionNotFoundError as e:
+        logging.error(e)
+
+
+def install(wheel_dirs=None):
+    """Install wheels. Thanks Wheel!
+
+    Old `~inspect.Signature` was.:
+
+        def install(requirements, requirements_file=None, wheel_dirs=None,
+                    force=False, list_files=False, dry_run=False):
+
+    :param wheel_dirs: A list of directories to search for wheels.
+    """
+    # If no wheel directories specified, use the WHEELPATH environment
+    # variable, or the current directory if that is not set.
+    if not wheel_dirs:
+        wheelpath = os.getenv("WHEELPATH")
+        if wheelpath:
+            wheel_dirs = wheelpath.split(os.pathsep)
+        else:
+            wheel_dirs = [os.path.curdir]
+
+    # Get a list of all valid wheels in wheel_dirs
+    all_wheels = []
+    for d in wheel_dirs:
+        for w in os.listdir(d):
+            if w.endswith('.whl'):
+                # XXX: is this necessary?
+                # from setuptools.wheel import Wheel might work
+                wheel = check_installed_modules('wheel')
+                if wheel is None:
+                    return
+                from wheel.wheelfile import WheelFile
+                wf = WheelFile(os.path.join(d, w))
+                if wf.compatible:
+                    all_wheels.append(wf)
+
+    return all_wheels
+
+
+def find_dist():
+    return list(find_distributions(os.path.abspath(".")))
+
+
+def msft():
+    if not platform.platform().startswith('Win'):
+        return
+    # These actually sequentially require each other. Like why guys.
+    pinfo = PlatformInfo('amd64')
+    rinfo = RegistryInfo(pinfo)
+    sinfo = SystemInfo(rinfo)  # XXX this can raise
+    einfo = EnvironmentInfo(sinfo)
+    return einfo
+
+
 # }}}
 
 # Metadata: {{{
@@ -106,31 +198,39 @@ README = os.path.join(ROOT_PATH, "", "README.rst")
 with codecs.open(README, encoding="utf-8") as f:
     LONG_DESCRIPTION = "\n" + f.read()
 
+# Note: I don't think you can put versions in here.
+# "jedi>=0.14.0",
+# A line like ^---- raised for me
 REQUIRED = [
     "IPython",
-    "ipykernel",
     "curio",
-    "importlib-metadata",
-    "pyfzf",
-    "pyperclip",
-    "trio",
-    "pygments",
-    "jinja2",
-    "jedi",
-    "pyzmq",
-    "traitlets",
-    "requests",
     "docutils",
+    "importlib_metadata",
+    "ipykernel",
+    "ipyparallel",
+    "jedi",
+    "jinja2",
+    "nbformat",
     "py",
+    "pyfzf",
+    "pygments",
+    "pyperclip",
+    "pyreadline",
+    "pyzmq",
+    "pyzmq",
+    "requests",
+    "setuptools",
+    "traitlets",
+    "traitlets",
+    "trio",
 ]
 
 if platform.platform().startswith("Win"):
     REQUIRED.append("pyreadline")
     REQUIRED.append("colorama")
 
-
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib",],
+    "develop": ["pipenv", "pandas", "matplotlib", ],
     "docs": [
         "sphinx>=2.2",
         "matplotlib>=3.0.0",
@@ -138,8 +238,9 @@ EXTRAS = {
         "flake8-rst",
         "recommonmark",
     ],
-    "test": ["ipyparallel", "pytest", "testpath", "nose", "matplotlib"],
+    "test": ["pytest", "testpath", "nose", "matplotlib"],
 }
+
 
 # }}}
 
@@ -163,6 +264,22 @@ class UploadCommand(Command):  # {{{
         """Finalize upload options."""
         pass
 
+    @property
+    def path_metadata(self):
+        # At this point i'm kind just blindly flailing about
+        egg_info = "dynamic_ipython.egg-info"
+        base_dir = os.path.dirname(os.path.abspath(egg_info))
+        metadata = pkg_resources.PathMetadata(base_dir, egg_info)
+        return metadata
+
+    @property
+    def dist(self):
+        egg_install_cmd = self.get_finalized_command("egg_info")
+        distribution = pkg_resources.Distribution(egg_install_cmd.egg_base,
+                                                  self.path_metadata, egg_install_cmd.egg_name,
+                                                  egg_install_cmd.egg_version)
+        return distribution
+
     def run(self):
         """Upload package."""
         try:
@@ -175,7 +292,8 @@ class UploadCommand(Command):  # {{{
         # I really dislike the idea of forking a new process from python to make
         # a new python process....will this work the same way with exec(compile)?
         # os.system("{0} setup.py sdist bdist_wheel --universal".format(sys.executable))
-        setup()
+        # setup()
+        self.run_command("egg_info")
         self.status("Uploading the package to PyPI via Twine...")
         os.system("twine upload dist/*")
         self.status("Pushing git tags…")
@@ -183,19 +301,18 @@ class UploadCommand(Command):  # {{{
         os.system("git push --tags")
         sys.exit()
 
-    def write_script(self, script_name, contents, mode="t", *ignored):
+    def write_script(self, script_name, contents, mode="t"):
         """Write an executable file to the scripts directory"""
-        log.info("Installing %s script to %s", script_name, self.install_dir)
+        self.log.info("Installing %s script to %s", script_name, self.install_dir)
         target = os.path.join(self.install_dir, script_name)
         self.outfiles.append(target)
 
-        mask = current_umask()
         if not self.dry_run:
-            ensure_directory(target)
-            f = open(target, "w" + mode)
-            f.write(contents)
-            f.close()
-            chmod(target, 0o777 - mask)
+            pkg_resources.ensure_directory(target)
+            with open(target, "w" + mode) as f:
+                f.write(contents)
+            chmod(target, 0o777 - current_umask())
+
 
 # }}}
 
@@ -213,11 +330,28 @@ try:
         maintainer=AUTHOR,
         maintainer_email=EMAIL,
         url=URL,
-        packages=find_packages(where="."),
-        package_dir="default_profile",
+        # in which i add parameters based on running this script through pdb
+        # packages=find_packages(where="default_profile"),
+        # no! this HAS to be a dict
+        # as oddly ubiquitious as the package=find_packages() thing is though,
+        # package_dir is WAY more lenient. it recursively adds EVERYTHING
+        # It's kinda set up as an either or tho
+        # nvm this didn't work at all
+        # package_dir={"default_profile": ""},
+
+        packages=find_packages(where="default_profile"),
+        src_root='default_profile',
+        tests_require=EXTRAS['test'],
+        # py_modules=find_packages(where="default_profile"),
+        platforms="any",
+        requires=REQUIRED,  # in what way is this different than install_requires?
         entry_points={
             "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
         },
+        # i dont even understand what error this raised but let's leave this
+        # commented out
+        # setup_requires=["pkg_resources", "pipenv"],
+
         # namespace_packages=["default_profile", "default_profile.sphinxext"],
         install_requires=REQUIRED,
         extras_require=EXTRAS,
@@ -249,7 +383,7 @@ try:
             "Programming Language :: Python :: Implementation :: CPython",
         ],
         # $ setup.py publish support.
-        cmdclass={"upload": UploadCommand,},
+        cmdclass={"upload": UploadCommand, },
         # project home page, if any
         project_urls={
             "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
@@ -260,6 +394,9 @@ try:
     )
 except DistutilsArgError:
     d.print_commands()
+
+except DistutilsError:
+    raise
 
 # }}}
 

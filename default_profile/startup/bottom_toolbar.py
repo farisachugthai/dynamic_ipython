@@ -213,10 +213,10 @@ class BottomToolbar:
     def _render_vi(self):
         current_vi_mode = self.app.vi_state.input_mode
         _toolbar = [
-            (Token.Keyword, f"[F4] {self.app.editing_mode!r}"),
-            (Token.String.Heading, f"{current_vi_mode!r}"),
-            (Token.Literal.String.Double, f"cwd: {Path.cwd().stem!r}"),
-            (Token.Number.Integer, f"Clock: {time.ctime()!r}"),
+            (Token.Keyword, f" [F4] {self.app.editing_mode!r} "),
+            (Token.String.Heading, f" {current_vi_mode!r} "),
+            (Token.Name.Tag, f" cwd: {Path.cwd().stem!r} "),
+            (Token.Number.Integer, f" Clock: {time.ctime()!r} "),
         ]
         # how do i fill all this dead space?
         # remaining_space = terminal_width() - len(self)

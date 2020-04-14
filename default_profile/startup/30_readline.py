@@ -214,7 +214,38 @@ def input_loop():
         print("Dispatch {}".format(line))
 
 
+
 # Readline Config
+
+def gnu_readline_config():
+    """Readline configuration that's incompatible with GNU readline.
+
+    Pyreadline doesn't recognize a lot of the standard Readline functions,
+    so to avoid emitting warnings upon startup, a handful of bindings
+    were separated from `readline_config`.
+    """
+    readline.parse_and_bind('"Up": history-search-forward')
+    readline.parse_and_bind('"Down": history-search-backward')
+    readline.parse_and_bind('"\\C-d": end-of-file')
+    readline.parse_and_bind('"\\C-g": abort')
+    readline.parse_and_bind('"\\C-n": menu-complete')
+    readline.parse_and_bind('"\\C-p": menu-complete-backward')
+    # "\C-q": quoted-insert
+    readline.parse_and_bind('"\\C-r": reverse-search-history')
+    readline.parse_and_bind('"\\C-s": forward-search-history')
+    readline.parse_and_bind('"\\C-t": transpose-chars')
+    readline.parse_and_bind('"\\C-u": unix-line-discard')
+    readline.parse_and_bind('"\\C-v": quoted-insert')
+    readline.parse_and_bind('"\\C-w": unix-filename-rubout')
+    readline.parse_and_bind('"\\C-y": yank')
+    readline.parse_and_bind('"\\C-x\\C-g": abort')
+    readline.parse_and_bind('"\\C-x\\C-r": re-read-init-file')
+
+    # Whew!
+    readline.parse_and_bind('"\\C-]": character-search')
+    readline.parse_and_bind('"\\C-_": undo')
+    readline.parse_and_bind('"Insert": overwrite-mode')
+    readline.set_completer(Completer().complete)
 
 
 def readline_config():
@@ -227,41 +258,18 @@ def readline_config():
     as parameters.
 
     """
-    # Dude how refreshing is that
-    readline.parse_and_bind('"Up": history-search-forward')
-    readline.parse_and_bind('"Down": history-search-backward')
-    # readline.parse_and_bind('"\\C-d": end-of-file')
-
     readline.parse_and_bind('"\\C-a": beginning-of-line')
     readline.parse_and_bind('"\\C-b": backward-char')
     readline.parse_and_bind('"\\C-e": end-of-line')
     readline.parse_and_bind('"\\C-f": forward-char')
-    readline.parse_and_bind('"\\C-g": abort')
     readline.parse_and_bind('"\\C-h": backward-delete-char')
     readline.parse_and_bind('"\\C-i": complete')
     readline.parse_and_bind('"\\C-j": accept-line')
     readline.parse_and_bind('"\\C-k": "kill-whole-line"')
     readline.parse_and_bind('"\\C-l": clear-screen')
     readline.parse_and_bind('"\\C-m": accept-line')
-    # readline.parse_and_bind('"\\C-n": menu-complete')
-    # readline.parse_and_bind('"\\C-p": menu-complete-backward')
-    # "\C-q": quoted-insert
-    readline.parse_and_bind('"\\C-r": reverse-search-history')
-    readline.parse_and_bind('"\\C-s": forward-search-history')
-    # readline.parse_and_bind('"\\C-t": transpose-chars')
-    readline.parse_and_bind('"\\C-u": unix-line-discard')
-    readline.parse_and_bind('"\\C-v": quoted-insert')
-    # readline.parse_and_bind('"\\C-w": unix-filename-rubout')
-    readline.parse_and_bind('"\\C-y": yank')
-    # readline.parse_and_bind('"\\C-x\\C-g": abort')
-    # readline.parse_and_bind('"\\C-x\\C-r": re-read-init-file')
-
-    # Whew!
-    readline.parse_and_bind('"\\C-]": character-search')
-    readline.parse_and_bind('"\\C-_": undo')
-    # readline.parse_and_bind('\\e\C-]": character-search-backward')
-    readline.parse_and_bind('"Insert": overwrite-mode')
     # readline.parse_and_bind("Meta-/: complete")
+    # readline.parse_and_bind('\\e\C-]": character-search-backward')
     # readline.parse_and_bind('"\\eb": backward-word')
     # readline.parse_and_bind('"\\ef": forward-word')
     # readline.parse_and_bind('"\\e?": possible-completions')
@@ -269,7 +277,6 @@ def readline_config():
     # readline.parse_and_bind('"\\ed": kill-word')
     # readline.parse_and_bind('"Meta-Tab": tab-insert')
     # "\er": redraw-current-line
-    # readline.set_completer(Completer().complete
 
 
 def pyreadline_specific(rl=None):
@@ -356,6 +363,7 @@ if __name__ == "__main__":
         # doesn't match all of it's API
         import rlcompleter
         from rlcompleter import Completer
+        gnu_readline_config()
 
     else:
         # All the pyreadline submodules have to be called as pyreadline.
@@ -384,6 +392,5 @@ if __name__ == "__main__":
         setup_historyfile(history_file)
         original_hist_length = readline.get_current_history_length()
         atexit.register(readline.write_history_file, history_file)
-        # readline.set_startup_hook(readline_config())
         readline.set_completer_delims("@#$_&-+()/*\"':;!?~`|÷×{}=[]%<>\r\t\n")
         readline_config()

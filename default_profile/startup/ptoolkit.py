@@ -31,41 +31,32 @@ import functools
 import sys
 
 import jedi
-
-from IPython.core.getipython import get_ipython
-
 import prompt_toolkit
+from IPython.core.getipython import get_ipython
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
-from prompt_toolkit.keys import Keys
-from prompt_toolkit.key_binding import merge_key_bindings
-from prompt_toolkit.filters import Condition, is_searching, ViInsertMode
+# from prompt_toolkit.keys import Keys
+# from prompt_toolkit.key_binding import merge_key_bindings
+from prompt_toolkit.filters import is_searching, ViInsertMode
 from prompt_toolkit.key_binding.bindings import search
+from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyBindings
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
-from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyBindings
-from prompt_toolkit.styles.pygments import style_from_pygments_cls
-from prompt_toolkit.widgets.toolbars import SearchToolbar
 from prompt_toolkit.layout.processors import (
     ConditionalProcessor,
-    DisplayMultipleCursors,
     HighlightSearchProcessor,
     HighlightIncrementalSearchProcessor,
     HighlightSelectionProcessor,
     HighlightMatchingBracketProcessor,
     DisplayMultipleCursors,
 )
+from prompt_toolkit.styles.pygments import style_from_pygments_cls
 from prompt_toolkit.validation import (
     ConditionalValidator,
-    ValidationError,
-    Validator,
     ThreadedValidator,
     DummyValidator,
-    DynamicValidator,
 )
-
-from IPython.core.getipython import get_ipython
-
+from prompt_toolkit.widgets.toolbars import SearchToolbar
 from pygments.styles.inkpot import InkPotStyle
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
@@ -388,7 +379,7 @@ def search_layout():
         search_buffer_control=search_toolbar.control,
         preview_search=True,
         include_default_input_processors=False,
-        input_processors=all_processors_for_searching(),
+        input_processors=all_input_processors,
     )
     style = style_from_pygments_cls(InkPotStyle)
     # Apparently theres something wrong with the style other put it in the
@@ -468,7 +459,7 @@ def _conditional_validator(validator, document):
     return ConditionalCallable(validator, document=document, filter=ViInsertMode())
 
 
-def pt_validator():
+def pt_validator() -> prompt_toolkit.validation.Validator:
     validator = ThreadedValidator(
         _conditional_validator(
             DummyValidator(), get_ipython().pt_app.app.current_buffer.document
@@ -477,19 +468,17 @@ def pt_validator():
     return validator
 
 
-def user_overrides(overrides=None, *args, **kwargs):
+def user_overrides(f, overrides=None, *args, **kwargs):
     """Decorator that allows a user to fill in the remainder of a functools.partial."""
     # problematically i don't really know how to do this.
 
     @functools.wraps
     def _():
-        pass
+        return f(overrides)
 
-    if overrides is None:
-        return
+    return f(*args, **kwargs)
 
 
-@user_overrides
 def initialize_prompt_toolkit(prompt=None):
     # make these imports local because shits gonna run so slow otherwise
     from default_profile.startup.lexer import get_lexer

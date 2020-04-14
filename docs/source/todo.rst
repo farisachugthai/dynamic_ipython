@@ -182,57 +182,9 @@ wrapper function? Off the top of my head I'm guessing something like this.::
 I'm sure that I poorly executed that here; however, after some deliberation,
 would it be that hard to do?
 
-Prompt Toolkit
-===============
+.. magic:: alias_magic
 
-Modify the KeyBindings classes so that the following works.::
-
-    if shell.editing_mode == 'vi':
-        # kb.add(load_vi_bindings(), filter=(has_focus(DEFAULT_BUFFER)))
-        for i in load_vi_bindings().bindings:
-            kb.add(i, filter=(has_focus(DEFAULT_BUFFER)))
-    else:
-        for i in load_basic_bindings():
-            kb.add(i, filter=(has_focus(DEFAULT_BUFFER)))
-
-    # don't do this one of these keys steals <C-d>
-    kb = merge_key_bindings([
-        load_cpr_bindings(),
-        load_basic_bindings(),
-        load_mouse_bindings(),
-        kb,
-    ])
-
-Currently every part fails.::
-
-   kb.add(load_vi_bindings())
-
-   TypeError: object of type 'ConditionalKeyBindings' has no len()
-
-Uh that's really confusing but when you go to
-prompt_toolkit.key_binding.key_bindings you'll see a ...wow I can't find the
-method that this came from. Whatever. Next!::
-
-   In [39]: from prompt_toolkit.key_binding.defaults import load_basic_bindings
-   In [40]: for i in load_basic_bindings():
-       ...:     print(i)
-       ...:
-            TypeError: 'KeyBindings' object is not iterable
-
-
-This doesn't even feel internally consistent. Alright let's play by his rules.::
-
-   In [42]: _ip.pt_app.app.key_bindings.add()
-   AttributeError: '_MergedKeyBindings' object has no attribute 'add'
-
-So if I merge my key bindings at any point I shoot myself in the foot from
-adding more later?
-
-Holy hell.
-
-
-:magic:`alias_magic`
-====================
+    Create an alias for an already definedmagic.
 
 `%alias_magic` is really convenient and makes it possible to create really
 short monikers for rather complicated mixes of shell scripts and object-oriented
@@ -240,4 +192,3 @@ python. But it doesn't copy over the __doc__ from the old magic.
 
 There's a ton of good information that gets lost going from `%edit` to `%ed` and
 `%history` to `%hist`. Anything we can do about that?
-

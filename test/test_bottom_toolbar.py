@@ -5,23 +5,25 @@ import inspect
 import sys
 import unittest
 from io import StringIO
+from importlib.util import module_from_spec
 from unittest import TestCase
 from unittest.mock import patch
 
+from IPython import get_ipython
 from IPython.terminal.interactiveshell import InteractiveShell
 
 try:
     spec = importlib.util.spec_from_file_location(
         "default_profile.startup.bottom_toolbar_mod",
-        location="../default_profile/startup/33_bottom_toolbar",
+        location="../default_profile/startup/bottom_toolbar",
     )
 except ModuleNotFoundError:
     spec = None
 
 if spec is not None:
-    bt_mod = importlib.util.module_from_spec(spec)
+    bt_mod = module_from_spec(spec)
 else:
-    bt_mod = importlib.import_module("default_profile.startup.33_bottom_toolbar")
+    bt_mod = importlib.import_module("default_profile.startup.bottom_toolbar")
 
 if bt_mod is None:
     unittest.skip("Import failure for bottom_toolbar.")
@@ -72,4 +74,4 @@ def debugging_myoutput(capsys):
     sys.stderr.write("world\n")
     captured = capsys.readouterr()
     # todo
-    # assert capture.out
+    assert captured
