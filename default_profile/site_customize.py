@@ -33,15 +33,11 @@ Pyximport you can import it in a regular Python module like this::
 
 """
 import atexit
-import builtins
 import cgitb
-import errno
-import functools
 import inspect
 import linecache
 import logging
 import os
-import pdb
 import pprint
 import pydoc
 import re
@@ -49,18 +45,16 @@ import shutil
 import site
 import sys
 import types
+
 from inspect import findsource, getmodule, getsource, getsourcefile
 from io import StringIO
-
-# noinspection PyProtectedMember
-# noinspection PyProtectedMember
 from linecache import cache
 from pathlib import Path
-
-# noinspection PyProtectedMember
-from pydoc import pager
+from pydoc import pager, safeimport
 
 logging.basicConfig(level=logging.WARNING)
+
+parso = safeimport('parso')
 
 try:
     import pygments
@@ -116,22 +110,21 @@ def _complete(text, state):
         return old_complete(text, state)
 
 
-def _pythonrc_enable_readline(history_path=None):
+def _pythonrc_enable_readline():
     """Enable readline, tab completion, and history"""
-    if readline is None:
-        return
-    if history_path is None:
-        history_path = Path("~/.python_history").expanduser()
-    try:
-        readline.read_history_file(history_path)
-    except OSError:
-        print("Error while trying to read the history file.")
-
-    write_history(history_path)
-    atexit.register(write_history, history_path)
     readline.set_history_length(-1)
-    # readline.parse_and_bind("tab: complete")
+    readline.parse_and_bind("tab: complete")
     readline.parse_and_bind("\\C-Space: _complete")
+    readline.parse_and_bind('"\\C-a": beginning-of-line')
+    readline.parse_and_bind('"\\C-b": backward-char')
+    readline.parse_and_bind('"\\C-e": end-of-line')
+    readline.parse_and_bind('"\\C-f": forward-char')
+    readline.parse_and_bind('"\\C-h": backward-delete-char')
+    readline.parse_and_bind('"\\C-i": complete')
+    readline.parse_and_bind('"\\C-j": accept-line')
+    readline.parse_and_bind('"\\C-k": "kill-whole-line"')
+    readline.parse_and_bind('"\\C-l": clear-screen')
+    readline.parse_and_bind('"\\C-m": accept-line')
     if rlcompleter is not None:
         readline.set_completer(rlcompleter.Completer)
 
@@ -147,11 +140,7 @@ def write_history(history_path=None):
 
 def _pythonrc_enable_history():
     """Register readline's history functions with atexit.
-
-    "NOHIST= python" will disable history.
     """
-    if os.environ.get("NOHIST"):
-        return
     history_path = Path("~/.python_history").expanduser()
     atexit.register(write_history, history_path)
     if not history_path.exists():
@@ -173,18 +162,6 @@ def pphighlight(o, *a, **kw):
         sys.stdout.write("\n")
 
 
-def initialize_excepthook(func, **kwargs):
-    """Passes \*\*kwargs along to `cgitb.Hook`."""
-    syshook = cgitb.Hook(format="text", **kwargs)
-    sys.excepthook = syshook
-
-    @functools.wraps
-    def _(**kwargs):
-        return pyg_highlight(func, **kwargs)
-
-    return syshook
-
-
 def get_height():
     return shutil.get_terminal_size()
 
@@ -204,7 +181,7 @@ def excepthook(exctype, value, traceback):
     old_stderr = sys.stderr
     sys.stderr = StringIO()
 
-    our_hook = initialize_excepthook()
+    our_hook = cgitb.Hook(format="text", **kwargs)
 
     try:
         our_hook(exctype, value, traceback)
@@ -244,7 +221,8 @@ def pprinthook(value=None):
     if not isinstance(value, help_types):
         return pphighlight(value, width=get_width() or 80)
 
-    reprstr = format_callable(value)
+    # reprstr = format_callable(value)
+    reprstr = repr(value)
     sys.stdout.write(reprstr)
     if getattr(value, "__doc__", None):
         sys.stdout.write("\n" + str(pydoc.getdoc(value)) + "\n")
@@ -265,77 +243,6 @@ def get_help_types():
         help_types.append(types.UnboundMethodType)
     help_types = tuple(help_types)
     return help_types
-
-
-def _pythonrc_fix_linecache():
-    """Add source(obj) that shows the source code for a given object.
-
-    linecache.updatecache() replacement that actually works with zips.
-    See http://bugs.python.org/issue4223 for more information.
-    """
-
-    def updatecache(filename, module_globals=None):
-        """Update a cache entry and return its list of lines.
-
-        If something's wrong, print a message, discard the cache entry,
-        and return an empty list.
-        """
-
-        if filename in cache:
-            del cache[filename]
-        if not filename or filename[0] + filename[-1] == "<>":
-            return []
-
-        fullname = filename
-        try:
-            stat = os.stat(fullname)
-        except os.error:
-            basename = os.path.split(filename)[1]
-
-            if module_globals and "__loader__" in module_globals:
-                name = module_globals.get("__name__")
-                loader = module_globals["__loader__"]
-                get_source = getattr(loader, "get_source", None)
-
-                if name and get_source:
-                    try:
-                        data = get_source(name)
-                    except (ImportError, IOError):
-                        pass
-                    else:
-                        if data is None:
-                            return []
-                        cache[filename] = (
-                            len(data),
-                            None,
-                            [line + "\n" for line in data.splitlines()],
-                            fullname,
-                        )
-                        return cache[filename][2]
-
-            for dirname in sys.path:
-                try:
-                    fullname = os.path.join(dirname, basename)
-                except (TypeError, AttributeError):
-                    pass
-                else:
-                    try:
-                        stat = os.stat(fullname)
-                        break
-                    except os.error:
-                        pass
-            else:
-                return []
-        try:
-            with open(fullname, "rt+") as f:
-                lines = f.readlines()
-        except OSError:
-            return []
-        size, mtime = stat.st_size, stat.st_mtime
-        cache[filename] = size, mtime, lines, fullname
-        return lines
-
-    linecache.updatecache = updatecache
 
 
 def source(obj):
@@ -389,13 +296,15 @@ if __name__ == "__main__":
     sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
+    if jedi is not None:
+        jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
     # Run installation functions and don't taint the global namespace
     history_path = Path("~/.python_history").expanduser()
+    atexit.register(write_history, history_path)
     try:
-        _pythonrc_enable_readline(history_path=history_path)
+        sys.excepthook = excepthook
+        _pythonrc_enable_readline()
         _pythonrc_enable_history()
-        initialize_excepthook(excepthook)
         sys.displayhook = pprinthook
-        _pythonrc_fix_linecache()
     except Exception as e:
         print(e)

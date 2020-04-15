@@ -9,7 +9,7 @@ from importlib.util import module_from_spec
 from unittest import TestCase
 from unittest.mock import patch
 
-from IPython import get_ipython
+from IPython.testing.globalipapp import get_ipython
 from IPython.terminal.interactiveshell import InteractiveShell
 
 try:
@@ -29,13 +29,13 @@ if bt_mod is None:
     unittest.skip("Import failure for bottom_toolbar.")
 
 
-def shell():
-    return InteractiveShell()
-
-
-def pt_app():
-    shell = shell()
-    return shell.pt_app
+def debugging_myoutput(capsys):
+    # or use "capfd" for fd-level
+    print()
+    sys.stderr.write("world\n")
+    captured = capsys.readouterr()
+    # todo
+    assert captured
 
 
 @unittest.skipIf(bt_mod.get_app() is None, "prompt_toolkit not running")
@@ -67,11 +67,3 @@ class TestBottomToolbar(TestCase):
         callingFunction = inspect.stack()[1][3]
         print("in %s - %s()" % (currentTest, callingFunction))
 
-
-def debugging_myoutput(capsys):
-    # or use "capfd" for fd-level
-    print()
-    sys.stderr.write("world\n")
-    captured = capsys.readouterr()
-    # todo
-    assert captured

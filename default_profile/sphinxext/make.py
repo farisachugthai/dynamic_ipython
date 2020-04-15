@@ -24,11 +24,13 @@ from jinja2.loaders import FileSystemLoader
 import sphinx
 from sphinx.application import Sphinx
 
-# So we have to make the Sphinx app first. Then we can make this
+# So we have to make the Sphinx app first. That'll involve a ton
+# of moving parts. It'll also require the Extension Registry which
+# is equally massive. Then we can make this
 # theme_factory = HTMLThemeFactory(self.app)
 # Then make this
 # from sphinx.builders.html import StandAloneHTMLBuilder
-# And we'll have repieced together sphinx
+# And we'll have repieced together sphinx to an order of magnitude
 from sphinx.cmd.make_mode import Make
 from sphinx.errors import ApplicationError
 
@@ -236,7 +238,9 @@ class DocBuilder:
 
     def open_browser(self, doc=None):
         """Open a browser tab to the provided document.
-        :rtype: object
+
+        :param doc: path to index.html
+        :type: str
         """
         if doc is None:
             doc = "index.html"
@@ -246,6 +250,8 @@ class DocBuilder:
 
 
 class Runner:
+    """Initializes a `DocBuilder` and proxies sphinx-build subcommands."""
+
     def __init__(self, **kwargs):
         self.builder = DocBuilder(**kwargs)
 
@@ -262,10 +268,10 @@ class Runner:
         return self.builder.run("texinfo")
 
 
-def generate_autosummary(**kwar):
+def generate_autosummary(**kwargs):
     from sphinx.ext.autosummary.generate import generate_autosummary_docs
 
-    generate_autosummary_docs(**kwar)
+    generate_autosummary_docs(**kwargs)
 
 
 def generate_sphinx_app(root: Path, namespace: argparse.Namespace = None):
@@ -320,11 +326,11 @@ def generate_sphinx_app(root: Path, namespace: argparse.Namespace = None):
         return 2
 
 
-def get_jinja_loader(template_path=None):
+def get_jinja_loader(template_path: pathlib.Path) -> jinja2.loaders.FileSystemLoader:
     if template_path is None:
         template_path = "_templates"
     try:
-        loader = FileSystemLoader(template_path)
+        loader = FileSystemLoader(template_path, follow_links=True)
     except TemplateError:
         return
     return loader

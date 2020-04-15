@@ -32,10 +32,7 @@ import distutils
 import setuptools
 from distutils.errors import DistutilsArgError, DistutilsError
 from setuptools import setup, find_packages, Command
-# from setuptools.command import easy_install
-# from setuptools.command.egg_info import egg_info
 from setuptools.command.easy_install import chmod, current_umask, find_distributions
-# from setuptools.command.easy_install import get_script_args, sys_executable
 from setuptools.dist import Distribution
 from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 

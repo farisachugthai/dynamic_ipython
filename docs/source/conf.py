@@ -205,9 +205,9 @@ extensions = [
     "default_profile.sphinxext.magics",
     "matplotlib.sphinxext.plot_directive",
     "matplotlib.sphinxext.mathmpl",
-    "flake8_rst.sphinxext.custom_roles",
+    # "flake8_rst.sphinxext.custom_roles",
     "numpydoc.numpydoc",
-    "recommonmark",
+    # "recommonmark",
 ]
 
 # -- General Configuration ----------------------------------------
@@ -222,7 +222,6 @@ renderers = ReSTRenderer(templates_path)
 source_suffix = {
     ".rst": "restructuredtext",
     ".txt": "restructuredtext",
-    ".md": "markdown",
 }
 
 # The encoding of source files.
