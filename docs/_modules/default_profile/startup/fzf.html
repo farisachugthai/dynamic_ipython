@@ -1,10 +1,10 @@
 
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.util.command_chain &#8212; Dynamic IPython</title>
+    <title>default_profile.startup.fzf &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -16,40 +16,31 @@
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/util/command_chain.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/fzf.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
 
   </head><body>
 
+<link rel="stylesheet" href="../_static/style.css" />
 
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
-          title="back to the documentation overview"><span>default_profile.util.command_chain</span></a></h1>
+          title="back to the documentation overview"><span>default_profile.startup.fzf</span></a></h1>
       </div>
       <div class="relnav" role="navigation" aria-label="related navigation">
-        <a href="#">default_profile.util.command_chain</a>
+        <a href="#">default_profile.startup.fzf</a>
       </div>
       <div id="contentwrapper">
         <div role="main">
         
 
-<h1>Source code for default_profile.util.command_chain</h1><div class="highlight"><pre>
+<h1>Source code for default_profile.startup.fzf</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="sd">&quot;&quot;&quot;Redo the CommandChainDispatcher in IPython.core.hooks for more flexbility.&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="kn">from</span> <span class="nn">reprlib</span> <span class="kn">import</span> <span class="n">Repr</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
-
-<span class="kn">import</span> <span class="nn">IPython</span>
-<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
-<span class="kn">from</span> <span class="nn">IPython.utils.ipstruct</span> <span class="kn">import</span> <span class="n">Struct</span>
-<span class="kn">from</span> <span class="nn">traitlets.traitlets</span> <span class="kn">import</span> <span class="n">Instance</span>
-
+<span class="sd">&quot;&quot;&quot;FZF works in IPython!!!!&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shlex</span>
@@ -65,13 +56,6 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">get_type_hints</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">prompt_toolkit.application.run_in_terminal</span> <span class="kn">import</span> <span class="n">run_in_terminal</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span> <span class="k">as</span> <span class="nb">print</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.utils</span> <span class="kn">import</span> <span class="n">Event</span>
-
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pyfzf</span>
 <span class="k">except</span><span class="p">:</span>
@@ -83,13 +67,17 @@
     <span class="n">fufpy</span> <span class="o">=</span> <span class="n">FzfPrompt</span><span class="p">()</span>
     <span class="n">fuf</span> <span class="o">=</span> <span class="n">fufpy</span><span class="o">.</span><span class="n">prompt</span>
 
+<span class="kn">from</span> <span class="nn">prompt_toolkit.application.run_in_terminal</span> <span class="kn">import</span> <span class="n">run_in_terminal</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.enums</span> <span class="kn">import</span> <span class="n">DEFAULT_BUFFER</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">HasFocus</span><span class="p">,</span> <span class="n">ViInsertMode</span><span class="p">,</span> <span class="n">EmacsInsertMode</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.shortcuts</span> <span class="kn">import</span> <span class="n">print_formatted_text</span> <span class="k">as</span> <span class="nb">print</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.utils</span> <span class="kn">import</span> <span class="n">Event</span>
 
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
-<div class="viewcode-block" id="inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.inside_dir">[docs]</a><span class="nd">@contextmanager</span>
+<div class="viewcode-block" id="inside_dir"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.inside_dir">[docs]</a><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">inside_dir</span><span class="p">(</span><span class="n">dirpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Context manager that executes code from inside the given directory.</span>
 
@@ -103,7 +91,7 @@
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">old_path</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="run_inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.run_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">run_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
+<div class="viewcode-block" id="run_inside_dir"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.run_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">run_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run a command from inside a given directory, returning the exit status.</span>
 
 <span class="sd">    :param command: Command that will be executed</span>
@@ -117,7 +105,7 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="check_output_inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.check_output_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">check_output_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
+<div class="viewcode-block" id="check_output_inside_dir"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.check_output_inside_dir">[docs]</a><span class="k">def</span> <span class="nf">check_output_inside_dir</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">dirpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run a command from inside a given directory, returning the command output.</span>
 
 <span class="sd">    :param command: Command that will be executed</span>
@@ -131,10 +119,10 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
+<div class="viewcode-block" id="Executable"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.Executable">[docs]</a><span class="k">class</span> <span class="nc">Executable</span><span class="p">(</span><span class="n">ContextDecorator</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;An object representing some executable on a user computer.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+<div class="viewcode-block" id="Executable.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.Executable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initialize with *command*.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="n">command</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_command_path</span><span class="p">(</span><span class="n">command</span><span class="p">)</span>
@@ -162,7 +150,6 @@
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-
             <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span>
             <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
                 <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
@@ -172,81 +159,10 @@
             <span class="k">return</span> <span class="n">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="is_tmux"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.is_tmux">[docs]</a><span class="k">def</span> <span class="nf">is_tmux</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Check if we&#39;re using tmux or not.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TMUX&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
-
-
-<div class="viewcode-block" id="is_rg"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.is_rg">[docs]</a><span class="k">def</span> <span class="nf">is_rg</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Returns the path to rg.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="CommandChainDispatcherRepr"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.CommandChainDispatcherRepr">[docs]</a><span class="k">class</span> <span class="nc">CommandChainDispatcherRepr</span><span class="p">(</span><span class="n">Struct</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Subclass IPython&#39;s Struct to allow for more functionality.</span>
-
-<span class="sd">    Methods</span>
-<span class="sd">    -------</span>
-<span class="sd">    Refer to the superclass for most methods.</span>
-<span class="sd">    Simply, all I&#39;ve done here is to remove the double underscore from most</span>
-<span class="sd">    methods to improve visibility.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># .. todo:: collection.ChainMap?</span>
-
-    <span class="n">shell</span> <span class="o">=</span> <span class="n">Instance</span><span class="p">(</span><span class="s2">&quot;IPython.core.interactiveshell.InteractiveshellABC&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="CommandChainDispatcherRepr.__init__"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.CommandChainDispatcherRepr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">chain</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize the class.</span>
-
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        shell : :class:`~IPython.core.interactiveshell.InteractiveShell`</span>
-<span class="sd">            IPython instance.</span>
-<span class="sd">        chain : dict</span>
-<span class="sd">            IPython hooks.</span>
-<span class="sd">        level : int</span>
-<span class="sd">            Passed to `reprlib.Repr` for processing visual representation.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-        <span class="c1"># self.chain might work really well as a queue.PriorityQueue</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">hooks</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">chain</span> <span class="ow">or</span> <span class="p">{}</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">level</span></div>
-
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)</span>
-
-<div class="viewcode-block" id="CommandChainDispatcherRepr.add"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.CommandChainDispatcherRepr.add">[docs]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="CommandChainDispatcherRepr.iadd"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.CommandChainDispatcherRepr.iadd">[docs]</a>    <span class="k">def</span> <span class="nf">iadd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="fm">__iadd__</span><span class="p">(</span><span class="n">other</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;If someone calls print() they actually want to see the instance&#39;s hooks.&quot;&quot;&quot;</span>
-        <span class="n">pprint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">chain</span>
-
-    <span class="k">def</span> <span class="nf">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Implement sizeof to see how much the extra methods cost us.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">getsizeof</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
-        <span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="FZF"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF">[docs]</a><span class="k">class</span> <span class="nc">FZF</span><span class="p">(</span><span class="n">FzfPrompt</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF">[docs]</a><span class="k">class</span> <span class="nc">FZF</span><span class="p">(</span><span class="n">FzfPrompt</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Wrap FZF together.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.__init__"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fzf_configs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fzf_config</span> <span class="o">=</span> <span class="n">fzf_configs</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_fzf</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sh</span> <span class="o">=</span> <span class="n">Executable</span><span class="p">(</span><span class="s2">&quot;sh&quot;</span><span class="p">)</span>
@@ -270,7 +186,7 @@
                 <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
             <span class="p">)</span>
 
-<div class="viewcode-block" id="FZF.run"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.run"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Running: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
             <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">safe_default_cmd</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">],</span>
@@ -279,14 +195,14 @@
             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.default_cmds">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.default_cmds"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF.default_cmds">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
             <span class="s2">&quot;rg --pretty --hidden --max-columns-preview --no-heading&quot;</span>
             <span class="s2">&quot;--no-messages --no-column --no-line-number -C 0 -e ^ &quot;</span>
             <span class="s2">&quot;| fzf --ansi --multi &quot;</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="FZF.default_cmd"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.default_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF.default_cmd">[docs]</a>    <span class="k">def</span> <span class="nf">default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Define the cmd for FZF.</span>
 
 <span class="sd">        In the sane vein as json.load and json.loads, separate the 2 based on</span>
@@ -311,7 +227,7 @@
             <span class="s2">&quot;--multi&quot;</span><span class="p">,</span>
         <span class="p">]</span></div>
 
-<div class="viewcode-block" id="FZF.safe_default_cmd"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.safe_default_cmd">[docs]</a>    <span class="nd">@contextmanager</span>
+<div class="viewcode-block" id="FZF.safe_default_cmd"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF.safe_default_cmd">[docs]</a>    <span class="nd">@contextmanager</span>
     <span class="k">def</span> <span class="nf">safe_default_cmd</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_cmds</span><span class="p">()))</span></div>
 
@@ -330,7 +246,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">fzf</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-<div class="viewcode-block" id="FZF.prompt"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.FZF.prompt">[docs]</a>    <span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzf_options</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="FZF.prompt"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.FZF.prompt">[docs]</a>    <span class="k">def</span> <span class="nf">prompt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzf_options</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="c1"># convert lists to strings [ 1, 2, 3 ] =&gt; &quot;1\n2\n3&quot;</span>
         <span class="n">choices_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">)</span>
         <span class="n">selection</span> <span class="o">=</span> <span class="p">[]</span>
@@ -351,8 +267,18 @@
         <span class="k">return</span> <span class="n">selection</span></div></div>
 
 
+<div class="viewcode-block" id="is_tmux"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.is_tmux">[docs]</a><span class="k">def</span> <span class="nf">is_tmux</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Check if we&#39;re using tmux or not.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;TMUX&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
 
-<div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+
+<div class="viewcode-block" id="is_rg"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.is_rg">[docs]</a><span class="k">def</span> <span class="nf">is_rg</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns the path to rg.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Use this function along with the keybindings module to effectively use FZF.&quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -368,7 +294,7 @@
         <span class="n">event</span><span class="o">.</span><span class="n">current_buffer</span><span class="o">.</span><span class="n">insert_text</span><span class="p">(</span><span class="n">itext</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="add_fzf_binding"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.add_fzf_binding">[docs]</a><span class="k">def</span> <span class="nf">add_fzf_binding</span><span class="p">():</span>
+<div class="viewcode-block" id="add_fzf_binding"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.add_fzf_binding">[docs]</a><span class="k">def</span> <span class="nf">add_fzf_binding</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Bind `fzf_history` to :kbd:`ControlY`.&quot;&quot;&quot;</span>
     <span class="n">insert_mode</span> <span class="o">=</span> <span class="n">ViInsertMode</span><span class="p">()</span> <span class="o">|</span> <span class="n">EmacsInsertMode</span><span class="p">()</span>
     <span class="n">registry</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">key_bindings</span>
@@ -379,7 +305,7 @@
     <span class="c1"># handle(Keys.ControlT, filter=HasFocus(DEFAULT_BUFFER))(fzf_keys)</span>
 
 
-<div class="viewcode-block" id="fzf_keys"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_keys">[docs]</a><span class="k">def</span> <span class="nf">fzf_keys</span><span class="p">(</span><span class="n">inputted_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="fzf_keys"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.fzf_keys">[docs]</a><span class="k">def</span> <span class="nf">fzf_keys</span><span class="p">(</span><span class="n">inputted_list</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="k">if</span> <span class="n">inputted_list</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -398,7 +324,7 @@
         <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span> <span class="o">=</span> <span class="n">old_stdin</span></div>
 
 
-<div class="viewcode-block" id="run_in_terminal_fzf"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.run_in_terminal_fzf">[docs]</a><span class="k">def</span> <span class="nf">run_in_terminal_fzf</span><span class="p">():</span>
+<div class="viewcode-block" id="run_in_terminal_fzf"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.run_in_terminal_fzf">[docs]</a><span class="k">def</span> <span class="nf">run_in_terminal_fzf</span><span class="p">():</span>
     <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="c1"># not sure how pt wants us to do this part</span>
@@ -411,7 +337,7 @@
         <span class="n">fzf_prompt</span><span class="o">.</span><span class="n">prompt</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="fgs"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fgs">[docs]</a><span class="k">def</span> <span class="nf">fgs</span><span class="p">():</span>
+<div class="viewcode-block" id="fgs"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.fgs">[docs]</a><span class="k">def</span> <span class="nf">fgs</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Return git status!&quot;&quot;&quot;</span>
     <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;bash&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="s1">&#39;source &quot;$HOME/.bashrc.d/fzf_git.bash&quot;</span><span class="se">\n</span><span class="s1">fgh</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
     <span class="k">try</span><span class="p">:</span>
@@ -421,7 +347,7 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="fzf_ctrl_r"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_ctrl_r">[docs]</a><span class="k">def</span> <span class="nf">fzf_ctrl_r</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<div class="viewcode-block" id="fzf_ctrl_r"><a class="viewcode-back" href="../../../startup/fzf.html#default_profile.startup.fzf.fzf_ctrl_r">[docs]</a><span class="k">def</span> <span class="nf">fzf_ctrl_r</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">FzfPrompt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="n">cnx</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">home</span> <span class="o">+</span> <span class="s2">&quot;/.ipython/profile_default/history.sqlite&quot;</span><span class="p">)</span>
@@ -438,7 +364,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 14, 2020.
+      Last updated on Apr 03, 2020.
     </div>
   </body>
 </html>

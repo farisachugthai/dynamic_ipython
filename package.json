@@ -19,9 +19,31 @@
     ],
     "private": true,
     "scripts": {
+        "build": "jlpm run build:dev",
+        "build:dev": "jlpm run integrity && jlpm run build:packages && cd dev_mode && jlpm run build",
+
         "clean": "yarn autoclean --force",
-        "lint": "stylelint",
+				"coverage": "lerna run coverage --scope \"@jupyterlab/test-*\" --stream --concurrency 1",
+				"create:package": "node buildutils/lib/create-package.js",
+				"create:test": "node buildutils/lib/create-test-package.js",
+				"create:theme": "node buildutils/lib/create-theme.js",
+				"deduplicate": "jlpm yarn-deduplicate -s fewer --fail",
+				"docs": "lerna run docs",
+				"eslint": "eslint --fix .",
+				"eslint:check": "eslint .",
+				"get:dependency": "node buildutils/lib/get-dependency.js",
+        "lighthouse": "lighthouse http://localhost:8888/ --chrome-flags=--headless --emulated-form-factor=none --throttling-method=provided --only-categories performance",
+        "lighthouse:compare": "node testutils/lib/compare-lighthouse.js",
+        "lighthouse:throttling:start": "comcast --latency=40 --target-bw=30000 --packet-loss=0.2%",
+        "lighthouse:throttling:stop": "comcast --stop",
+        "lint": "jlpm && jlpm run prettier && jlpm run eslint && jlpm run tslint",
+        "lint:check": "jlpm run prettier:check && jlpm run eslint:check && jlpm run tslint:check",
+        "patch:release": "node buildutils/lib/patch-release.js",
+        "prepublish:check": "node buildutils/lib/prepublish-check.js",
+        "prettier": "prettier --write \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
+        "prettier:check": "prettier --list-different \"**/*{.ts,.tsx,.js,.jsx,.css,.json,.md}\"",
         "pretest": "echo 'Running tests'",
+        "publish:all": "node buildutils/lib/publish.js",
         "start": "jupyter lab"
     },
     "readme": "./docs/source/index.rst",
@@ -33,8 +55,8 @@
         "codemirror": "^5.46.0",
         "jquery": "1.9.1 - 3",
         "popper.js": "1.16.0",
-        "react": "^15",
-        "react-dom": "15"
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1"
     },
     "devDependencies": {
         "@types/node": "^13.9.2",
@@ -49,6 +71,7 @@
         "font-awesome": "4.7.0",
         "marked": "0.7.0",
         "notebook": "^1.0.1",
+        "react": "^16.13.1",
         "typescript": "3.8.3"
     }
 }

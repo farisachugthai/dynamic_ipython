@@ -215,12 +215,9 @@ REQUIRED = [
     "pyfzf",
     "pygments",
     "pyperclip",
-    "pyreadline",
-    "pyzmq",
     "pyzmq",
     "requests",
     "setuptools",
-    "traitlets",
     "traitlets",
     "trio",
 ]
