@@ -3,14 +3,16 @@
 
 Lmao also dude check out what doctest has at the bottom.
 """
-from IPython.core.getipython import get_ipython
-import IPython
 import doctest
 import logging
 import unittest
 import shutil
 import tempfile
+
 import pytest
+
+from IPython.testing.globalipapp import get_ipython
+import IPython
 
 
 def remove_tmpdir(dirname):

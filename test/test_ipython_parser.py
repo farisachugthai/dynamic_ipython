@@ -5,7 +5,6 @@ import unittest
 
 class TokenTests(unittest.TestCase):
     """Tests tokenization. Start off with plain Python interpreter tests."""
-
     def test_backslash(self):
         # Backslash means line continuation:
         x = 1 + 1
@@ -52,6 +51,7 @@ brown fox\n\
 jumps over\n\
 the 'lazy' dog.\n\
 "
+
         self.assertEqual(x, y)
         y = "\n\
 The \"quick\"\n\
@@ -59,6 +59,7 @@ brown fox\n\
 jumps over\n\
 the 'lazy' dog.\n\
 "
+
         self.assertEqual(x, y)
 
     def test_ellipsis(self):

@@ -6,7 +6,7 @@ import tempfile
 from pathlib import Path
 from warnings import simplefilter
 
-from IPython.core.getipython import get_ipython
+from IPython.testing.globalipapp import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
 
 import pytest

@@ -39,6 +39,8 @@ from IPython.terminal.interactiveshell import TerminalInteractiveShell
 from IPython.terminal.ptutils import IPythonPTCompleter
 from IPython.terminal.shortcuts import create_ipython_shortcuts
 
+from default_profile.ipython_config import UsageError
+
 
 class IPD(Pdb):
     """Set up the IPython Debugger.

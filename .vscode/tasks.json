@@ -30,7 +30,10 @@
         },
         {
             "command": "${config:python.pythonPath} -m pytest",
-            "group": "build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "label": "pytest",
             "presentation": {
                 "focus": true,
@@ -42,10 +45,7 @@
         },
         {
             "command": "${config:python.pythonPath} -m unittest",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "build",
             "label": "unittest",
             "presentation": {
                 "focus": true,
@@ -154,12 +154,24 @@
         {
             "type": "npm",
             "script": "run-lab",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "label": "npm: run-lab",
+            "group": "build"
         },
         {
             "type": "npm",
             "script": "lint",
             "problemMatcher": []
+        },
+        {
+            "type": "npm",
+            "script": "coverage",
+            "problemMatcher": [
+                "$tsc-watch"
+            ],
+            "label": "npm: coverage",
+            "detail": "lerna run coverage --scope \"@jupyterlab/test-*\" --stream --concurrency 1",
+            "isBackground": true
         }
     ],
     "version": "2.0.0"
