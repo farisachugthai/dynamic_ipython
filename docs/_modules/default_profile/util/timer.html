@@ -102,7 +102,7 @@
         <span class="n">value</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
         <span class="n">run_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">start_time</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> in </span><span class="si">{</span><span class="n">run_time</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> secs&quot;</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished </span><span class="si">{func.__name__!r}</span><span class="s2"> in </span><span class="si">{run_time:.4f}</span><span class="s2"> secs&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">return</span> <span class="n">wrapper_timer</span></div>
@@ -116,11 +116,11 @@
     <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">wrapper_debug</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">args_repr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">repr</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>  <span class="c1"># 1</span>
-        <span class="n">kwargs_repr</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">!r}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>  <span class="c1"># 2</span>
+        <span class="n">kwargs_repr</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{k}</span><span class="s2">=</span><span class="si">{v!r}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>  <span class="c1"># 2</span>
         <span class="n">signature</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args_repr</span> <span class="o">+</span> <span class="n">kwargs_repr</span><span class="p">)</span>  <span class="c1"># 3</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calling </span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">(</span><span class="si">{</span><span class="n">signature</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calling </span><span class="si">{func.__name__}</span><span class="s2">(</span><span class="si">{signature}</span><span class="s2">)&quot;</span><span class="p">)</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">func</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> returned </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 4</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{func.__name__!r}</span><span class="s2"> returned </span><span class="si">{value!r}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># 4</span>
         <span class="k">return</span> <span class="n">value</span>
 
     <span class="k">return</span> <span class="n">wrapper_debug</span></div>
@@ -166,7 +166,7 @@
             <span class="n">exec</span><span class="p">(</span><span class="nb">compile</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="s2">&quot;timer&quot;</span><span class="p">,</span> <span class="s2">&quot;exec&quot;</span><span class="p">))</span>
             <span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
             <span class="n">diff</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start_time</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">diff</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{diff}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">file</span><span class="p">,</span> <span class="n">diff</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">result</span></div>
@@ -187,7 +187,7 @@
         <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2"> </span><span class="si">{self.start_time}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="LineWatcher.stop"><a class="viewcode-back" href="../../../util/timer.html#default_profile.util.timer.LineWatcher.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Determine the difference between start time and end time.&quot;&quot;&quot;</span>
@@ -228,7 +228,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 15, 2020.
+      Last updated on May 02, 2020.
     </div>
   </body>
 </html>

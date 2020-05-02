@@ -14,7 +14,6 @@ to be quickly and easily understood based on the output of :func:`dir`.
 
 .. todo:: :mod:`pydoc` actually has a giant API so we could also use that.
 
-
 """
 import contextlib
 import io
@@ -25,7 +24,7 @@ import sys
 
 # noinspection PyProtectedMember
 from pydoc import Helper
-from pydoc_data.topics import topics  # idk if this is official API but i like it
+# from pydoc_data.topics import topics  # idk if this is official API but i like it
 from traceback import print_exc
 from typing import Callable
 
@@ -33,11 +32,17 @@ from IPython.core.getipython import get_ipython
 from IPython.core.magic import Magics, magics_class, register_line_magic, line_magic
 from IPython.utils.text import SList
 
+import pygments
+from pygments.lexers.python import PythonLexer, PythonTracebackLexer
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
-class UsageError(Exception):
-    def __init__(self):
-        super().___init__()
+from default_profile.ipython_config import UsageError
 
+
+class HelpHelper(Helper):
+
+    def help(self, request):
+        pass  # todo
 
 @magics_class
 class HelpMagics(Magics):
@@ -53,9 +58,10 @@ class HelpMagics(Magics):
 
     """
 
-    @property
-    def helper(self) -> Callable:
-        return pydoc.Helper()
+    # todo
+    helper = HelpHelper()
+    keywords = helper.keywords
+    topics = helper.topics
 
     @line_magic
     def print_help(self, arg=None):
@@ -185,15 +191,8 @@ def load_ipython_extension(shell=None):
     """Add to the list of extensions used by IPython."""
     if shell is None:
         shell = get_ipython()
-
-    hm = HelpMagics()
-    # todo: unittest that asserts this is in _ip.magics_manager.registry after registering.
-    shell.register_magic_function(hm.grep)
-    shell.register_magic_function(hm.page_help)
-    shell.register_magic_function(hm.save_help)
-    shell.register_magic_function(hm.write_help)
-    shell.register_magic_function(hm.dirip)
-    # shell.register_magics(HelpMagics)
+    shell.register_magics(HelpMagics)
 
 
-# load_ipython_extension()
+if __name__ == "__main__":
+    load_ipython_extension()

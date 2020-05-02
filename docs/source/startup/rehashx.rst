@@ -1,8 +1,8 @@
 ==========================================
-`%rehashx` --- Add executables to $PATH
+:mod:`all_fault_handlers`
 ==========================================
 
-.. currentmodule:: default_profile.startup.01_rehashx
+.. currentmodule:: default_profile.startup.all_fault_handlers
 
 As the first file in startup this file plays an important role in setting
 everything else up. As a result, the first thing done is running the magic
@@ -39,7 +39,7 @@ Aliases are easy to work with as they as composed of simple data structures.
 
 
 Parameters
-----------
+==========
 
 ``magic_name`` : str
     Name of the desired magic function, without :kbd:`%` prefix.
@@ -52,7 +52,7 @@ Parameters
 
 
 Notes
------
+=====
 
 :func:`IPython.core.magic.run_line_magic`
     A method of the |ip| instance to run a specific magic currently in the
@@ -67,7 +67,7 @@ Notes
     shell.run_line_magic('ls', '')
 
 Usage
-------
+======
 
 As the help outlines above, the second required positional argument to
 :func:`IPython.core.TerminalInteractiveShell.run_line_magic` is ``line``.
@@ -78,7 +78,7 @@ an error, so an empty `str` is passed to the function.
 
 
 ``_stack_depth``
-~~~~~~~~~~~~~~~~
+----------------
 
 The ``_stack_depth`` parameter can be understood like so:
 
@@ -89,7 +89,11 @@ If :func:`IPython.core.magics.run_line_magic` is called from
 This is added to ensure backward compatibility for use
 of :func:`IPython.core.magics.get_ipython().magic`
 
-.. automodule:: default_profile.startup.01_rehashx
+
+Fault Handlers API
+===================
+
+.. automodule:: default_profile.startup.all_fault_handlers
    :synopsis: Run the rehashx magic and begin initializing IPython startup.
    :members:
    :undoc-members:

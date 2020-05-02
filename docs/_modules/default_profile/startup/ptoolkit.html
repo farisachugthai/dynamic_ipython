@@ -78,7 +78,9 @@
 <span class="c1"># from prompt_toolkit.key_binding import merge_key_bindings</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.filters</span> <span class="kn">import</span> <span class="n">is_searching</span><span class="p">,</span> <span class="n">ViInsertMode</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.bindings</span> <span class="kn">import</span> <span class="n">search</span>
-<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">ConditionalKeyBindings</span>
+<span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="p">(</span>
+        <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">ConditionalKeyBindings</span><span class="p">,</span><span class="n">_MergedKeyBindings</span>
+    <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.containers</span> <span class="kn">import</span> <span class="n">HSplit</span><span class="p">,</span> <span class="n">Window</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.controls</span> <span class="kn">import</span> <span class="n">BufferControl</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.layout.processors</span> <span class="kn">import</span> <span class="p">(</span>
@@ -152,7 +154,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">get_session</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> with app at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pt_app</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2"> with app at </span><span class="si">{self.pt_app}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="nf">__sizeof__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Unfortunately I&#39;ve added so much to this class that it might be necessary to check</span>
@@ -317,7 +319,7 @@
 <div class="viewcode-block" id="Helpers.validate_validators"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.validate_validators">[docs]</a>    <span class="k">def</span> <span class="nf">validate_validators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># who watches the watchmen?</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Session validator: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Session validator: </span><span class="si">{self.session_validator}</span><span class="s2">.&quot;</span>
             <span class="s2">&quot;Checking if the session validator is a prompt_toolkit.validator.Validator.&quot;</span>
         <span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">session_validator</span><span class="p">,</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">validator</span><span class="o">.</span><span class="n">Validator</span><span class="p">))</span>
@@ -480,7 +482,7 @@
     <span class="c1">#     self.validator.validate(document)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">validator</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">: </span><span class="si">{self.validator}</span><span class="s2">&quot;</span>
 
     <span class="c1"># NOPE. We raise an error because &#39;validator type: str doesn&#39;t have a validate method.</span>
     <span class="c1"># So this class defines validation in terms of `__call__` at some point.</span>
@@ -560,18 +562,23 @@
         <span class="c1"># Here&#39;s one that might blow your mind.</span>
         <span class="k">if</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># also happens in pydevd in pycharm. we gotta fix this though.</span>
-
-            <span class="n">initialize_prompt_toolkit</span><span class="p">()</span>  <span class="c1"># ran into this while running pytest.</span>
-
+            <span class="c1"># ran into this while running pytest.</span>
             <span class="c1"># If you start IPython from something like pytest i guess it starts</span>
             <span class="c1"># the machinery with a few parts missing...I don&#39;t know.</span>
-
-        <span class="k">return</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+            <span class="n">initialize_prompt_toolkit</span><span class="p">()</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">_MergedKeyBindings</span><span class="p">):</span>
+            <span class="c1"># returning _bindings2 returns None omfg</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">bindings</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ret</span><span class="p">,</span> <span class="n">KeyBindings</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">ret</span><span class="o">.</span><span class="n">bindings</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">ipykernel.zmqshell</span> <span class="kn">import</span> <span class="n">ZMQInteractiveShell</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="n">ModuleNotFoundError</span><span class="p">):</span>
             <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Jupyter QTConsole</span>
@@ -594,7 +601,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 15, 2020.
+      Last updated on May 02, 2020.
     </div>
   </body>
 </html>

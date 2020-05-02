@@ -1,10 +1,10 @@
 .. _ipython-logger:
 
 ===========================
-05_log --- IPython logger
+File Logger
 ===========================
 
-.. currentmodule:: default_profile.startup.05_log
+.. currentmodule:: default_profile.startup.file_logger
 
 This uses the IPython core :class:`IPython.core.logger.LoggingConfigurable`
 to create a :class:`logging.handler.FileHandler` that creates one new log
@@ -51,10 +51,10 @@ Let's ignore the direct calls to sys.argv and combine argparse and the
 magic_argparse functions to make something more durable and useful.
 
 
-:mod:`~default_profile.startup.05_log` module
+File Logger API
 ---------------------------------------------
 
-.. automodule:: default_profile.startup.05_log
+.. automodule:: default_profile.startup.file_logger
    :members:
    :undoc-members:
    :show-inheritance:

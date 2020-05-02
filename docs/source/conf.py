@@ -4,6 +4,7 @@
 import asyncio
 import cgitb
 import logging
+import locale
 import math
 import multiprocessing
 import os
@@ -48,6 +49,7 @@ from sphinx import addnodes
 
 # from sphinx.extension import Extension
 from sphinx.ext.autodoc import cut_lines
+from sphinx.ext.autosummary.generate import setup_documenters
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
 from sphinx.util.logging import getLogger
 from sphinx.util.docfields import GroupedField
@@ -191,6 +193,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autodoc.typehints",
     "sphinx.ext.autosectionlabel",
+    "sphinx.ext.autosummary",
     "sphinx.ext.coverage",
     "sphinx.ext.autosummary",
     "sphinx.ext.doctest",
@@ -645,7 +648,27 @@ plot_rcparams = {
 # Not from scpy but mpl related anyway
 plot_html_show_source_link = True
 
+# Autosummary:
+
+def figure_out_why_autosummary_never_works():
+    from sphinx.ext.autosummary.generate import generate_autosummary_docs
+    import glob
+    part = []
+    for i in os.listdir('.'):
+        try:
+            part.append(glob.glob(i + os.pathsep + '**'))
+        except IsADirectoryError:
+            pass
+
+    sphinx.util.parallel.ParallelTasks([
+        generate_autosummary_docs(i) for i in part
+    ])
+
+
 # -- Setup -------------------------------------------------------------------
+
+
+sphinx.locale.setlocale(locale.LC_ALL, '')
 
 
 def parse_event(sig, signode):
@@ -714,6 +737,9 @@ def setup(app):
     app.add_object_type(
         "event", "event", "pair: %s; event", parse_event, doc_field_types=[fdesc]
     )
+
+    # doubt this is necessary but
+    setup_documenters(app)
 
     # app.add_css_file("custom.css")
     # already was added in a template

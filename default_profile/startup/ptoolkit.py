@@ -39,7 +39,9 @@ from prompt_toolkit.document import Document
 # from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.filters import is_searching, ViInsertMode
 from prompt_toolkit.key_binding.bindings import search
-from prompt_toolkit.key_binding.key_bindings import KeyBindings, ConditionalKeyBindings
+from prompt_toolkit.key_binding.key_bindings import (
+        KeyBindings, ConditionalKeyBindings,_MergedKeyBindings
+    )
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
 from prompt_toolkit.layout.processors import (
@@ -521,13 +523,18 @@ def determine_which_pt_attribute():
         # Here's one that might blow your mind.
         if _ip.pt_app is None:
             # also happens in pydevd in pycharm. we gotta fix this though.
-
-            initialize_prompt_toolkit()  # ran into this while running pytest.
-
+            # ran into this while running pytest.
             # If you start IPython from something like pytest i guess it starts
             # the machinery with a few parts missing...I don't know.
-
-        return _ip.pt_app.app.key_bindings
+            initialize_prompt_toolkit()
+        ret = _ip.pt_app.app.key_bindings
+        if isinstance(ret, _MergedKeyBindings):
+            # returning _bindings2 returns None omfg
+            return ret.bindings
+        elif isinstance(ret, KeyBindings):
+            return ret.bindings
+        else:
+            raise TypeError
 
     else:
         try:

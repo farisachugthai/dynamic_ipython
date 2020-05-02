@@ -12,7 +12,10 @@ import sys
 import webbrowser
 from pathlib import Path
 
-import importlib_metadata
+try:
+    from importlib import metadata
+except ImportError:
+    import importlib_metadata as metadata
 
 # from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
 import jinja2
@@ -140,7 +143,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         help="Enable verbose logging and increase level to `debug`.",
     )
 
-    dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
+    dist = metadata.Distribution().from_name("dynamic_ipython")
     __version__ = dist.version
     parser.add_argument("--version", action="version", version=__version__)
 
@@ -330,7 +333,7 @@ def get_jinja_loader(template_path: pathlib.Path) -> jinja2.loaders.FileSystemLo
     if template_path is None:
         template_path = "_templates"
     try:
-        loader = FileSystemLoader(template_path, follow_links=True)
+        loader = FileSystemLoader(template_path)
     except TemplateError:
         return
     return loader

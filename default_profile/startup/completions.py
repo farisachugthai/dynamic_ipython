@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import keyword
 import re
-from typing import Iterable, AsyncGenerator
+from typing import Iterable, AsyncGenerator, Optional, Dict, List, Callable, Pattern
 
 import jedi
 from jedi import Script
@@ -16,13 +16,16 @@ from jedi.api.environment import (
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.ptutils import IPythonPTCompleter
+
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory, ThreadedAutoSuggest
-from prompt_toolkit.completion import CompleteEvent, ThreadedCompleter, WordCompleter
+from prompt_toolkit.completion import CompleteEvent, ThreadedCompleter
 from prompt_toolkit.completion.filesystem import ExecutableCompleter, PathCompleter
 from prompt_toolkit.completion.base import Completion, Completer
 from prompt_toolkit.completion.fuzzy_completer import FuzzyWordCompleter, FuzzyCompleter
+from prompt_toolkit.completion.word_completer import WordCompleter
 from prompt_toolkit.document import Document
 from prompt_toolkit.eventloop import generator_to_async_generator
+from prompt_toolkit.filters import FilterOrBool
 
 
 class SimpleCompleter(Completer):
@@ -36,12 +39,10 @@ class SimpleCompleter(Completer):
 
     def __init__(self, shell=None, completer=None, min_input_len=0, *args, **kwargs):
         self.shell = shell or get_ipython()
-        if not completer:
-            self.completer = WordCompleter(
+        self.completer = WordCompleter(
                 self.user_ns, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
-            )
-        else:
-            self.completer = completer
+            ) if completer is None else completer
+
         self.min_input_len = min_input_len
 
     @property
@@ -100,13 +101,14 @@ class SimpleCompleter(Completer):
 
 
 class PathCallable(PathCompleter):
-    """PathCompleter with ``__call__`` defined.
+    r"""PathCompleter with ``__call__`` defined.
 
-    The superclass :class:`prompt_toolkit.Completion.PathCompleter` is
+    The superclass :class:`~prompt_toolkit.completion.PathCompleter` is
     initialized with a set of parameters, and 'expanduser' defaults to False.
 
-    The 'expanduser' attribute  in this instance  is set to True; however,
-    that can be overridddden in a subclass.
+    The 'expanduser' attribute is set to True in contrast with the 
+    superclass `PathCompleter`\'s default; however, that can be overridden
+    in a subclass.
     """
 
     expanduser = True
@@ -177,20 +179,77 @@ class MergedCompleter(Completer):
         return self.get_completions_async(document, complete_event)
 
 
-class FuzzyCallable(FuzzyCompleter):
+class FuzzyCallable(FuzzyWordCompleter):
     """A FuzzyCompleter with ``__call__`` defined."""
 
-    def __init__(self, words=None, meta_dict=None, WORD=False, *args, **kwargs):
-        """The exact code for FuzzyWordCompleter...except callable."""
-        self.words = words
-        if self.words is None:
-            self.words = keyword.kwlist
-        self.meta_dict = meta_dict or {}
+    def __init__(self,
+        WORD: Optional[bool] = False,
+        pattern: Optional[Pattern[str]] = None,
+        enable_fuzzy: Optional[FilterOrBool] = True,
+        meta_dict: Optional[Dict[str, str]] = None,
+        words: Optional[Union[List[str], Callable[[], List[str]]]] = None,
+        ignore_case: Optional[bool] = False,
+        sentence: Optional[bool] = False,
+        match_middle: Optional[bool] = False):
+        """Mostly FuzzyWordCompleter...except callable.
+
+        And the superclasses are initialized a little better.
+
+        The ``**kwargs`` in this ``__init__`` don't go to the super as is
+        typical.
+        We additionally initialize the superclasses WordCompleter and
+        FuzzyCompleter.
+        Wait hold on.
+
+        Parameters
+        ----------
+        FuzzyCompleter
+
+        :param completer: A :class:`~.Completer` instance.
+        :param WORD: When True, use WORD characters.
+        :param pattern: Regex pattern which selects the characters before the
+            cursor that are considered for the fuzzy matching.
+        :param enable_fuzzy: (bool or `Filter`) Enabled the fuzzy behavior. For
+            easily turning fuzzyness on or off according to a certain condition.
+
+        WordCompleter
+
+        :param words: List of words or callable that returns a list of words.
+        :param ignore_case: If True, case-insensitive completion.
+        :param meta_dict: Optional dict mapping words to their meta-text. (This
+            should map strings to strings or formatted text.)
+        :param WORD: When True, use WORD characters.
+        :param sentence: When True, don't complete by comparing the word before the
+            cursor, but by comparing all the text before the cursor. In this case,
+            the list of words is just a list of strings, where each string can
+            contain spaces. (Can not be used together with the WORD option.)
+        :param match_middle: When True, match not only the start, but also in the
+                            middle of the word.
+
+        """
+        self.words = keyword.kwlist if words is None else words
         self.WORD = WORD
-        self.word_completer = WordCompleter(words=lambda: self.words, WORD=self.WORD)
-        self.fuzzy_completer = FuzzyCompleter(self.word_completer, WORD=self.WORD)
-        self.completer = self.fuzzy_completer
-        super().__init__(completer=self.completer, *args, **kwargs)
+        self.pattern = pattern
+        self.enable_fuzzy = enable_fuzzy
+        self.meta_dict = meta_dict if meta_dict is None else meta_dict
+        # i dont get the lambda
+        self.word_completer = WordCompleter(
+            words=lambda: self.words,
+            ignore_case=ignore_case,
+            meta_dict=self.meta_dict,
+            WORD=self.WORD,
+            sentence=sentence,
+            match_middle=match_middle,
+            pattern=pattern,
+        )
+        self.fuzzy_completer = FuzzyCompleter(
+            self.word_completer,
+            pattern=pattern,
+            WORD=self.WORD,
+            enable_fuzzy=self.enable_fuzzy
+        )
+        self.completer = ThreadedCompleter(self.fuzzy_completer)
+        super().__init__(self.completer)
 
     def get_completions(self, document, complete_event):
         return self.fuzzy_completer.get_completions(document, complete_event)

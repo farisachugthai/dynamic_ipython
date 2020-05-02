@@ -160,16 +160,19 @@ def ipy_execdir(directory):
             get_ipython().run_line_magic("run", "-i", i.name)
 
 
+def pyg_highlight(param, **kwargs):
+    """Run a string through the pygments highlighter."""
+    return pygments.highlight(param, lexer, formatter)
+
+
 if __name__ == "__main__":
     handled = cgitb.Hook(file=sys.stdout, format="text")
-    sys.excepthook = handled
+
+    lexer = PythonLexer()
+    formatter = TerminalTrueColorFormatter()
+    # sys.excepthook = pygments.highlight(handled, lexer, formatter)
 
     _ip = get_ipython()
 
     if _ip is not None:
         _ip.excepthook = handled
-        if platform.platform().startswith("Win") and "Dropbox" in listdir("."):
-            # yeah it executes everything in the dir but checks for permission incorrectly
-            pass
-        else:
-            rehashx_run()

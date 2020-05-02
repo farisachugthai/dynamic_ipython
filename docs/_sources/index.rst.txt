@@ -162,12 +162,11 @@ Startup API Docs
    IPython Logger <startup/ipython-logger>
    Clipboard <startup/clipboard>
    Aliases <startup/aliases>
-   Setup Readline <startup/setup_readline>
+   Setup Readline <startup/readline>
    prompt_toolkit <startup/prompt_toolkit>
    Completions <startup/completions>
    Toolbar <startup/toolbar>
    Lexer <startup/lexer>
-   Numpy <startup/41_numpy>
    Eventloops <startup/eventloops>
 
 

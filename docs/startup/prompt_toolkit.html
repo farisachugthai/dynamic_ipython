@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="completions" href="completions.html" />
-    <link rel="prev" title="Setting up readline" href="setup_readline.html" />
+    <link rel="prev" title="Setting up readline" href="readline.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
 
   </head><body>
@@ -32,7 +32,7 @@
           title="back to the documentation overview"><span>Prompt Toolkit</span></a></h1>
       </div>
       <div class="relnav" role="navigation" aria-label="related navigation">
-        <a href="setup_readline.html">&laquo; Setting up readline</a> |
+        <a href="readline.html">&laquo; Setting up <code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code></a> |
         <a href="#">Prompt Toolkit</a>
         | <a href="completions.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">completions</span></code> &raquo;</a>
       </div>
@@ -60,9 +60,27 @@
 <div class="section" id="module-default_profile.startup.kb">
 <span id="kb"></span><h2><a class="reference internal" href="#module-default_profile.startup.kb" title="default_profile.startup.kb: Begin reworking prompt_toolkit's keybindings."><code class="xref py py-mod docutils literal notranslate"><span class="pre">kb</span></code></a><a class="headerlink" href="#module-default_profile.startup.kb" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
+<dt id="default_profile.startup.kb.BindingPP">
+<em class="property">class </em><code class="sig-name descname">BindingPP</code><span class="sig-paren">(</span><em class="sig-param">keys: Tuple[Union[prompt_toolkit.keys.Keys, str], ...], handler: Callable[[KeyPressEvent], None], filter: Union[prompt_toolkit.filters.base.Filter, bool] = True, eager: Union[prompt_toolkit.filters.base.Filter, bool] = False, is_global: Union[prompt_toolkit.filters.base.Filter, bool] = False, save_before: Callable[[KeyPressEvent], bool] = &lt;function Binding.&lt;lambda&gt;&gt;, record_in_macro: Union[prompt_toolkit.filters.base.Filter, bool] = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#BindingPP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.BindingPP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.key_binding.key_bindings.Binding</span></code></p>
+<p>Fix the prompt_toolkit binding.</p>
+<p>Allow them to compared, called, hashed or evaluated for truthiness.
+As <em>none</em> of this is originally available.</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>__lt__ so we can sort</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="default_profile.startup.kb.convert_bindings">
+<code class="sig-name descname">convert_bindings</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bindings</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#convert_bindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.convert_bindings" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
 <dt id="default_profile.startup.kb.KeyBindingsManager">
-<em class="property">class </em><code class="sig-name descname">KeyBindingsManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kb</span><span class="p">:</span> <span class="n">prompt_toolkit.key_binding.key_bindings.KeyBindings</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shell</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)">IPython.core.interactiveshell.InteractiveShell</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/collections.html#collections.UserList" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">collections.UserList</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">KeyBindingsManager</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kb</span><span class="p">:</span> <span class="n">prompt_toolkit.key_binding.key_bindings.KeyBindings</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shell</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.14.0)">IPython.core.interactiveshell.InteractiveShell</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">prompt_toolkit.key_binding.key_bindings.KeyBindingsBase</span></code></p>
 <p>An object to make working with keybindings easier.</p>
 <p>Subclasses UserList with a list of Keys and their handlers.
 By defining dunders, the collection of keybindings are much
@@ -73,24 +91,22 @@ easier to work with.</p>
 <dd><p>Initialize the class.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul>
-<li><p><strong>kb</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyBindings</span></code>) – Any KeyBindings you wanna throw us right off the bat.
-Handling this is gonna be hard unfortunately.</p></li>
-<li><p><strong>kwargs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – kwargs passed to UserList</p></li>
-</ul>
+<dd class="field-odd"><p><strong>kb</strong> (<code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyBindings</span></code>, optional) – KeyBindings to initialize with.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt id="default_profile.startup.kb.KeyBindingsManager.add">
-<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">another_one</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.add" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">another_one</em>, <em class="sig-param">\*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.add" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add another binding.</p>
+<p>Takes same parameters as <code class="xref py py-obj docutils literal notranslate"><span class="pre">Binding</span></code> <code class="docutils literal notranslate"><span class="pre">__init__</span></code>
+and <strong>not</strong> the same bindings as <code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyBindings.add</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="default_profile.startup.kb.KeyBindingsManager.len">
-<code class="sig-name descname">len</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.len"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.len" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.kb.KeyBindingsManager.kb">
+<em class="property">property </em><code class="sig-name descname">kb</code><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.kb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -100,10 +116,31 @@ Handling this is gonna be hard unfortunately.</p></li>
 </dd></dl>
 
 <dl class="py method">
-<dt id="default_profile.startup.kb.KeyBindingsManager.call_iadd">
-<em class="property">property </em><code class="sig-name descname">call_iadd</code><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.call_iadd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.call_iadd" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.kb.KeyBindingsManager.bindings_setter">
+<em class="property">property </em><code class="sig-name descname">bindings_setter</code><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.bindings_setter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.bindings_setter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the <em>kb</em> attributes bindings visible at the top level.</p>
 </dd></dl>
+
+<dl class="py method">
+<dt id="default_profile.startup.kb.KeyBindingsManager.add_binding">
+<code class="sig-name descname">add_binding</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">another_one</em>, <em class="sig-param">\*args</em><span class="sig-paren">)</span><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.add_binding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add another binding.</p>
+<p>Takes same parameters as <code class="xref py py-obj docutils literal notranslate"><span class="pre">Binding</span></code> <code class="docutils literal notranslate"><span class="pre">__init__</span></code>
+and <strong>not</strong> the same bindings as <code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyBindings.add</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="default_profile.startup.kb.KeyBindingsManager.insert">
+<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">another_one</em>, <em class="sig-param">\*args</em><span class="sig-paren">)</span><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.insert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add another binding.</p>
+<p>Takes same parameters as <code class="xref py py-obj docutils literal notranslate"><span class="pre">Binding</span></code> <code class="docutils literal notranslate"><span class="pre">__init__</span></code>
+and <strong>not</strong> the same bindings as <code class="xref py py-obj docutils literal notranslate"><span class="pre">KeyBindings.add</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="default_profile.startup.kb.KeyBindingsManager.len">
+<code class="sig-name descname">len</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.len"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.len" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt id="default_profile.startup.kb.KeyBindingsManager.get_keys">
@@ -154,33 +191,9 @@ inactive bindings.)</p>
 <code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">keys</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.get" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="py class">
-<dt id="default_profile.startup.kb.ApplicationKB">
-<em class="property">class </em><code class="sig-name descname">ApplicationKB</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kb</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#ApplicationKB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.ApplicationKB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#default_profile.startup.kb.KeyBindingsManager" title="default_profile.startup.kb.KeyBindingsManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.kb.KeyBindingsManager</span></code></a></p>
-<p>Functionally the exact same thing except now we’re bound to _ip.pt_app.</p>
 <dl class="py method">
-<dt id="default_profile.startup.kb.ApplicationKB.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kb=None</em>, <em class="sig-param">shell=None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#ApplicationKB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.ApplicationKB.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt id="default_profile.startup.kb.HandlesMergedKB">
-<em class="property">class </em><code class="sig-name descname">HandlesMergedKB</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">kb</span><span class="p">:</span> <span class="n">prompt_toolkit.key_binding.key_bindings.KeyBindings</span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shell</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.13.0)">IPython.core.interactiveshell.InteractiveShell</a></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#HandlesMergedKB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.HandlesMergedKB" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#default_profile.startup.kb.KeyBindingsManager" title="default_profile.startup.kb.KeyBindingsManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">default_profile.startup.kb.KeyBindingsManager</span></code></a></p>
-<p>It might be easier to handle the insufferable discrepencies in implementation
-between _MergedKeyBindings and ConditionalKeyBindings through class attributes.</p>
-<div class="admonition-todo admonition" id="id1">
-<p class="admonition-title">Todo</p>
-<p>Unpacking the KeyBindings registry attribute.</p>
-</div>
-<dl class="py method">
-<dt id="default_profile.startup.kb.HandlesMergedKB.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">kb: prompt_toolkit.key_binding.key_bindings.KeyBindings = None</em>, <em class="sig-param">shell: IPython.core.interactiveshell.InteractiveShell = None</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#HandlesMergedKB.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.HandlesMergedKB.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.kb.KeyBindingsManager.init_kb">
+<code class="sig-name descname">init_kb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">kb</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#KeyBindingsManager.init_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.KeyBindingsManager.init_kb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -195,18 +208,18 @@ between _MergedKeyBindings and ConditionalKeyBindings through class attributes.<
 </dd></dl>
 
 <dl class="py function">
-<dt id="default_profile.startup.kb.custom_keybindings">
-<code class="sig-name descname">custom_keybindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; prompt_toolkit.key_binding.key_bindings.ConditionalKeyBindings<a class="reference internal" href="../_modules/default_profile/startup/kb.html#custom_keybindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.custom_keybindings" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.kb.create_vi_insert_keybindings">
+<code class="sig-name descname">create_vi_insert_keybindings</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; prompt_toolkit.key_binding.key_bindings.ConditionalKeyBindings<a class="reference internal" href="../_modules/default_profile/startup/kb.html#create_vi_insert_keybindings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.create_vi_insert_keybindings" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="default_profile.startup.kb.create_kb">
-<code class="sig-name descname">create_kb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#create_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.create_kb" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_kb</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; [&lt;class ‘prompt_toolkit.key_binding.key_bindings.Binding’&gt;]<a class="reference internal" href="../_modules/default_profile/startup/kb.html#create_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.create_kb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt id="default_profile.startup.kb.flatten_kb">
-<code class="sig-name descname">flatten_kb</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">merge</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#flatten_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.flatten_kb" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">flatten_kb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/kb.html#flatten_kb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.kb.flatten_kb" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -215,7 +228,7 @@ between _MergedKeyBindings and ConditionalKeyBindings through class attributes.<
 <p>Create classes used to enhance the prompt_toolkit objects
 bound to the running IPython interpreter.</p>
 <p>Provides utilities functions and classes to work with both <code class="xref py py-obj docutils literal notranslate"><span class="pre">prompt_toolkit</span></code>
-and <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.13.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a>. The APIs of both libraries can be individually quite
+and <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.14.0)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython</span></code></a>. The APIs of both libraries can be individually quite
 overwhelming, and the combination and interaction of the 2 can prove difficult
 to stay on top of.</p>
 <p>The <a class="reference internal" href="#default_profile.startup.ptoolkit.Helpers" title="default_profile.startup.ptoolkit.Helpers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Helpers</span></code></a> class defined here gives a useful reference as to the
@@ -540,7 +553,7 @@ persistent info.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 15, 2020.
+      Last updated on May 02, 2020.
     </div>
   </body>
 </html>
