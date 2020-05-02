@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.05_log &#8212; Dynamic IPython</title>
+    <title>default_profile.startup.file_logger &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/05_log.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/file_logger.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
@@ -27,16 +27,16 @@
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
-          title="back to the documentation overview"><span>default_profile.startup.05_log</span></a></h1>
+          title="back to the documentation overview"><span>default_profile.startup.file_logger</span></a></h1>
       </div>
       <div class="relnav" role="navigation" aria-label="related navigation">
-        <a href="#">default_profile.startup.05_log</a>
+        <a href="#">default_profile.startup.file_logger</a>
       </div>
       <div id="contentwrapper">
         <div role="main">
         
 
-<h1>Source code for default_profile.startup.05_log</h1><div class="highlight"><pre>
+<h1>Source code for default_profile.startup.file_logger</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Establish a file-logger for IPython.</span>
@@ -99,7 +99,7 @@
 <span class="kn">from</span> <span class="nn">default_profile.ipython_config</span> <span class="kn">import</span> <span class="n">UsageError</span>
 
 
-<div class="viewcode-block" id="print_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.print_history">[docs]</a><span class="k">def</span> <span class="nf">print_history</span><span class="p">(</span><span class="n">hist_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="print_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.print_history">[docs]</a><span class="k">def</span> <span class="nf">print_history</span><span class="p">(</span><span class="n">hist_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Write the contents of the running shell&#39;s :mod:`sqlite` history.</span>
 
 <span class="sd">    Parameters</span>
@@ -109,7 +109,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">hist_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">get_ipython_dir</span><span class="p">()</span><span class="si">}</span><span class="s2">/profile_default/history.sqlite&quot;</span>
+        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;{get_ipython_dir()}/profile_default/history.sqlite&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hist_file</span><span class="p">):</span>
             <span class="k">return</span>
@@ -129,7 +129,7 @@
 
 
 <span class="c1"># TODO: isn&#39;t working</span>
-<div class="viewcode-block" id="get_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.get_history">[docs]</a><span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="n">session_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="get_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.get_history">[docs]</a><span class="k">def</span> <span class="nf">get_history</span><span class="p">(</span><span class="n">session_number</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">profile</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">profile</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# coding: utf-8</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -148,7 +148,7 @@
     <span class="k">return</span> <span class="n">running_tally</span></div>
 
 
-<div class="viewcode-block" id="betterConfig"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.betterConfig">[docs]</a><span class="k">def</span> <span class="nf">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="betterConfig"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.betterConfig">[docs]</a><span class="k">def</span> <span class="nf">betterConfig</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Similar to :func:`logging.basicConfig`.</span>
 
 <span class="sd">    Parameters</span>
@@ -211,16 +211,16 @@
     <span class="k">return</span> <span class="n">better_logger</span></div>
 
 
-<div class="viewcode-block" id="ConfigurableLogger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger">[docs]</a><span class="k">class</span> <span class="nc">ConfigurableLogger</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigurableLogger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.ConfigurableLogger">[docs]</a><span class="k">class</span> <span class="nc">ConfigurableLogger</span><span class="p">(</span><span class="n">LoggingConfigurable</span><span class="p">,</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
     <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span>
     <span class="n">name</span> <span class="o">=</span> <span class="vm">__name__</span>
     <span class="n">level</span> <span class="o">=</span> <span class="mi">30</span>
 
-<div class="viewcode-block" id="ConfigurableLogger.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigurableLogger.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.ConfigurableLogger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span></div>
 
-<div class="viewcode-block" id="ConfigurableLogger.log"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ConfigurableLogger.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigurableLogger.log"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.ConfigurableLogger.log">[docs]</a>    <span class="k">def</span> <span class="nf">log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Override the superclasses implementation of log.</span>
 
 <span class="sd">        Allow level to be a keyword argument.</span>
@@ -238,10 +238,10 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pretty print the truncated results of :meth:`traits`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt; </span><span class="si">{</span><span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">traits</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt; {reprlib.Repr().repr(self.traits())}&quot;</span></div>
 
 
-<div class="viewcode-block" id="logging_decorator"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.logging_decorator">[docs]</a><span class="k">def</span> <span class="nf">logging_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="logging_decorator"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.logging_decorator">[docs]</a><span class="k">def</span> <span class="nf">logging_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create a decorator to be used around functions that need to be debugged.</span>
 
 <span class="sd">    Parameters</span>
@@ -266,7 +266,7 @@
     <span class="k">return</span> <span class="n">wrapper</span></div>
 
 
-<div class="viewcode-block" id="ipython_logger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.ipython_logger">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger</span><span class="p">():</span>
+<div class="viewcode-block" id="ipython_logger"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.ipython_logger">[docs]</a><span class="k">def</span> <span class="nf">ipython_logger</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Saves all commands run in the interactive namespace as valid IPython code.</span>
 
 <span class="sd">    .. warning:: This is not necessarily valid python code.</span>
@@ -328,10 +328,10 @@
     <span class="k">return</span> <span class="n">logger</span></div>
 
 
-<div class="viewcode-block" id="MyHistoryAccessor"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.MyHistoryAccessor">[docs]</a><span class="k">class</span> <span class="nc">MyHistoryAccessor</span><span class="p">(</span><span class="n">HistoryAccessor</span><span class="p">):</span>
+<div class="viewcode-block" id="MyHistoryAccessor"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.MyHistoryAccessor">[docs]</a><span class="k">class</span> <span class="nc">MyHistoryAccessor</span><span class="p">(</span><span class="n">HistoryAccessor</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Modified HistoryAccessor to fetch the whole ipython history across all sessions &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="MyHistoryAccessor.get_tail"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.MyHistoryAccessor.get_tail">[docs]</a>    <span class="k">def</span> <span class="nf">get_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_latest</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="MyHistoryAccessor.get_tail"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.MyHistoryAccessor.get_tail">[docs]</a>    <span class="k">def</span> <span class="nf">get_tail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_latest</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get the last n lines from the history database.</span>
 
 <span class="sd">        Parameters</span>
@@ -366,12 +366,12 @@
         <span class="k">return</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">cur</span><span class="p">))</span></div></div>
 
 
-<div class="viewcode-block" id="rem_dups"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.rem_dups">[docs]</a><span class="k">def</span> <span class="nf">rem_dups</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
+<div class="viewcode-block" id="rem_dups"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.rem_dups">[docs]</a><span class="k">def</span> <span class="nf">rem_dups</span><span class="p">(</span><span class="n">lst</span><span class="p">):</span>
     <span class="c1"># OrderedSet would be nicer, but for simplicity we use this approach</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">groupby</span><span class="p">(</span><span class="n">lst</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="access_all_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.05_log.access_all_history">[docs]</a><span class="k">def</span> <span class="nf">access_all_history</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="access_all_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.access_all_history">[docs]</a><span class="k">def</span> <span class="nf">access_all_history</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
     <span class="c1"># Syntax: ipythonhist [LAST X ITEMS]</span>
     <span class="n">hist</span> <span class="o">=</span> <span class="n">MyHistoryAccessor</span><span class="p">()</span>
     <span class="n">history</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">hist</span><span class="o">.</span><span class="n">get_tail</span><span class="p">())</span>
@@ -407,7 +407,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 15, 2020.
+      Last updated on May 02, 2020.
     </div>
   </body>
 </html>

@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>default_profile.startup.01_rehashx &#8212; Dynamic IPython</title>
+    <title>default_profile.startup.all_fault_handlers &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -16,7 +16,7 @@
     <script src="../../../_static/doctools.js"></script>
     <script src="../../../_static/language_data.js"></script>
     <script src="../../../_static/theme_extras.js"></script>
-    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/01_rehashx.html" />
+    <link rel="canonical" href="https://farisachugthai.github.io/dynamic-ipython/_modules/default_profile/startup/all_fault_handlers.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
@@ -27,16 +27,16 @@
     <div id="content">
       <div class="header">
         <h1 class="heading"><a href="../../../index.html"
-          title="back to the documentation overview"><span>default_profile.startup.01_rehashx</span></a></h1>
+          title="back to the documentation overview"><span>default_profile.startup.all_fault_handlers</span></a></h1>
       </div>
       <div class="relnav" role="navigation" aria-label="related navigation">
-        <a href="#">default_profile.startup.01_rehashx</a>
+        <a href="#">default_profile.startup.all_fault_handlers</a>
       </div>
       <div id="contentwrapper">
         <div role="main">
         
 
-<h1>Source code for default_profile.startup.01_rehashx</h1><div class="highlight"><pre>
+<h1>Source code for default_profile.startup.all_fault_handlers</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Initialize exception handlers and run `%rehashx`.</span>
@@ -87,7 +87,7 @@
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
+<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a str of the last exception.</span>
 
 <span class="sd">    Returns</span>
@@ -98,17 +98,17 @@
     <span class="k">return</span> <span class="n">format_tb</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
+<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return `format_exc`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">format_exc</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.&quot;&quot;&quot;</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
+<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns IPython&#39;s profile_dir.startup_dir. If that can&#39;t be determined, return CWD.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -118,7 +118,7 @@
     <span class="k">return</span> <span class="n">exec_dir</span></div>
 
 
-<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File to execute is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">)</span>
@@ -138,7 +138,7 @@
         <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="rerun_startup"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.rerun_startup">[docs]</a><span class="k">def</span> <span class="nf">rerun_startup</span><span class="p">():</span>
+<div class="viewcode-block" id="rerun_startup"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.rerun_startup">[docs]</a><span class="k">def</span> <span class="nf">rerun_startup</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Rerun the files in the startup directory.</span>
 
 <span class="sd">    Returns</span>
@@ -162,7 +162,7 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Python3 doesn&#39;t have this but it&#39;d be nice to have a utility to exec a file at once.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">global_namespace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>  <span class="c1"># catch both None and any wrong formats</span>
         <span class="n">global_namespace</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
@@ -174,12 +174,12 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ipy_execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ipy_execfile">[docs]</a><span class="k">def</span> <span class="nf">ipy_execfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="ipy_execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.ipy_execfile">[docs]</a><span class="k">def</span> <span class="nf">ipy_execfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run the IPython `%run` -i on a file.&quot;&quot;&quot;</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ipy_execdir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.01_rehashx.ipy_execdir">[docs]</a><span class="k">def</span> <span class="nf">ipy_execdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+<div class="viewcode-block" id="ipy_execdir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.ipy_execdir">[docs]</a><span class="k">def</span> <span class="nf">ipy_execdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Execute the python files in `directory`.</span>
 
 <span class="sd">    The idea was to create a function that actually does what</span>
@@ -199,19 +199,22 @@
             <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="pyg_highlight"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.pyg_highlight">[docs]</a><span class="k">def</span> <span class="nf">pyg_highlight</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a string through the pygments highlighter.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">pygments</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">lexer</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">handled</span> <span class="o">=</span> <span class="n">cgitb</span><span class="o">.</span><span class="n">Hook</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
+
+    <span class="n">lexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
+    <span class="n">formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span>
+    <span class="c1"># sys.excepthook = pygments.highlight(handled, lexer, formatter)</span>
 
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">_ip</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">handled</span>
-        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">platform</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Win&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;Dropbox&quot;</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
-            <span class="c1"># yeah it executes everything in the dir but checks for permission incorrectly</span>
-            <span class="k">pass</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">rehashx_run</span><span class="p">()</span>
 </pre></div>
 
         </div>
@@ -219,7 +222,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Apr 15, 2020.
+      Last updated on May 02, 2020.
     </div>
   </body>
 </html>
