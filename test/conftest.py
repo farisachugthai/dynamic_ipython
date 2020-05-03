@@ -14,6 +14,7 @@ from pytest import set_trace
 
 from _pytest.nose import *
 from _pytest.unittest import *
+import sys
 
 try:
     import default_profile

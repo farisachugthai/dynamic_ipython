@@ -74,16 +74,18 @@ class Alias(UserDict):
 
     Instances are registered as magic functions to allow use of aliases.
 
-    .. todo::
-        More dunders.
-        It would be sweet if we had a container we could ``+`` and ``-`` to.
-
     Methods
     -------
     blacklist : method
         Previously a class attribute, the blacklist is now a property of an Alias.
 
     """
+
+    # For as many dunder as this whole module has i barely use any if at all
+    # However you gotta debug something related to the reflection of this class
+    # `ls??` just raised. The stack trace was in IPython.core.oinspect
+    # class Inspector method _get_info. Or possibly that append_field closure.
+    # which contains a call to _mime_format so somewhere around there though
 
     def __init__(self, name, cmd, **kwargs: dict):
         """Validate the alias, and return the number of arguments."""
@@ -286,7 +288,7 @@ class CommonAliases(UserDict):
     def __add__(self, other, name=None, cmd=None, *args):
         """Allow instances to be added."""
         if hasattr(other, "dict_aliases"):
-            self.update(other.dict_aliases,)
+            self.update(other.dict_aliases)
         if name is None and cmd is None:
             if len(args) == 2:
                 name, cmd = args
@@ -326,10 +328,6 @@ class CommonAliases(UserDict):
 
     def len(self):
         return self.__len__()
-
-    def add(self, aliases):
-        for i in aliases:
-            self.__add__(i)
 
     def __getattr__(self, attr):
         try:
@@ -505,7 +503,10 @@ class CommonAliases(UserDict):
         )
 
     def ls_patch(self):
-        shoddy_hack_for_aliases = [
+        self.dict_aliases.update(
+            self.tuple_to_dict(
+                [
+                # shoddy_hack_for_aliases = [
             ("l", "ls -CF '--hide=NTUSER.*' --color=always %l"),
             ("la", "ls -AF '--hide=NTUSER.*' --color=always %l"),
             ("ldir", "ls -Apo '--hide=NTUSER.*'  --color=always %l | grep /$"),
@@ -520,12 +521,12 @@ class CommonAliases(UserDict):
             ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
             # ('lt' ,          'ls -Altc --color=always %l'),
             # ('lr' ,         'ls -Altcr --color=always %l')
-        ]
-        for i in shoddy_hack_for_aliases:
-            try:
-                self.add(*i)
-            except InvalidAliasError:
-                raise
+        ]))
+        # for i in shoddy_hack_for_aliases:
+        #     try:
+        #         self + i
+        #     except InvalidAliasError:
+        #         raise
 
 
 class LinuxAliases(CommonAliases):
@@ -638,12 +639,12 @@ class WindowsAliases(CommonAliases):
     """
 
     def __init__(self, dict_aliases=None, *args, **kwargs):
-        super().__init__(*args)
         # if you don't give **kwargs to dict_aliases, then by giving *args as
         # it's definition it ends up becoming a list which will immediately
         # screw everything up.
         self.dict_aliases = dict_aliases if dict_aliases is not None else kwargs
         self.cmd_aliases()
+        super().__init__(user_aliases=self.dict_aliases)
 
     def __repr__(self):
         return "Windows Aliases: {!r}".format(len(self.dict_aliases))
@@ -682,17 +683,20 @@ class WindowsAliases(CommonAliases):
                     ("cpanel", "control %l"),
                     ("cygpath", "cygpath %l"),
                     ("del", "del %l"),
-                    ("dism", "dism"),
+                    ("dism", "dism %l"),
                     ("ddir", "dir /ad /on %l"),
                     ("echo", "echo %l"),
                     ("erase", "erase %l"),
                     ("find", "find %l"),
                     ("findstr", "findstr %l"),
-                    ("finger", "finger"),
+                    ("finger", "finger %l"),
+                    # Probably the closest reasonable alternative to ls that i've found
+                    ("l", "dir /d %l"),
+                    # Actual ls isn't aliases since git on windows provides it
                     ("ldir", "dir /ad /on %l"),
                     ("ll", "dir /Q %l"),
                     # I know this really isn't the same but I need it
-                    ("ln", "mklink %s %s"),
+                    # ("ln", "mklink %s %s"),
                     ("make", "make.bat %l"),  # Useful when we're building docs
                     ("md", "md %l"),
                     ("mk", "mkdir %s & cd %s"),
@@ -700,7 +704,7 @@ class WindowsAliases(CommonAliases):
                     ("mklink", "mklink %s %s"),
                     ("move", "move %s %s"),
                     ("msbuild", "msbuild %l"),
-                    ("mv", "move %s %s"),
+                    # ("mv", "move %s %s"),
                     ("net", "net %l"),
                     ("path", "path %l"),
                     ("rd", "rd %l"),
@@ -722,8 +726,9 @@ class WindowsAliases(CommonAliases):
                     ("tasklist", "tasklist %l"),
                     ("taskkill", "taskkill %l"),
                     ("title", "title %l"),
-                    ("tree", "tree /A /F %l"),
-                    ("type", "type"),
+                    ("tre", "tree /A /F %l"),
+                    ("tree", "tree %l"),
+                    ("type", "type %l"),
                     ("ver", "ver %l"),
                     ("verify", "verify %l"),
                     ("vol", "vol %l"),
@@ -845,8 +850,8 @@ def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
         aliases = WindowsAliases()
     else:
         raise AliasError
-    # isn't working
-    # aliases.ls_patch()
+    # isn't working. yeah fuck this is still raising we need to do something about this.
+    aliases.ls_patch()
 
     return aliases
 

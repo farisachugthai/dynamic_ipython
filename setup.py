@@ -203,15 +203,15 @@ REQUIRED = [
     "curio",
     "docutils",
     "importlib_metadata",
-    "ipykernel",
-    "ipyparallel",
+    # "ipykernel",
+    # "ipyparallel",
     "jedi",
     "jinja2",
     "nbformat",
-    "py",
-    "pyfzf",
+    # "py",
+    # "pyfzf",
     "pygments",
-    "pyperclip",
+    # "pyperclip",
     "pyzmq",
     "requests",
     "setuptools",
@@ -416,6 +416,7 @@ try:
             "Programming Language :: Python :: Implementation :: CPython",
         ],
         # $ setup.py publish support.
+        cmdclass={"upload": UploadCommand},
         cmdclass={"upload": UploadCommand},
         # project home page, if any
         project_urls={

@@ -175,11 +175,6 @@ class DocBuilder:
     def __call__(self, kind):
         return self.run(kind)
 
-    @property
-    def kinds(self):
-        """Allowable sphinx-build outputs."""
-        return ["html", "singlehtml", "text", "linkcheck", "doctest"]
-
     @staticmethod
     def status(output):
         """Print output in bold. Emits ANSI escape sequences to sys.stdout"""
@@ -259,8 +254,16 @@ class DocBuilder:
 class Runner:
     """Initializes a `DocBuilder` and proxies sphinx-build subcommands."""
 
-    def __init__(self, **kwargs):
-        self.builder = DocBuilder(**kwargs)
+    def __init__(self, *args, **kwargs):
+        """Initialized with the same args as `DocBuilder`."""
+        self._builder = DocBuilder(*args, **kwargs)
+
+    @property
+    def builder(self):
+        return self._builder
+
+    def __repr__(self):
+        return self.__class__.__name__
 
     def html(self):
         return self.builder.run("html")
@@ -274,6 +277,32 @@ class Runner:
     def texinfo(self):
         return self.builder.run("texinfo")
 
+    def singlehtml(self):
+        return self.builder.run("singlehtml")
+
+    def text(self):
+        return self.builder.run("text")
+
+    def linkcheck(self):
+        return self.builder.run("linkcheck")
+
+    def doctest(self):
+        return self.builder.run("doctest")
+
+    def _run(self, kind):
+        """Proxy to `DocBuilder.run`.
+
+        Conventionally, methods beginning with :kbd:`_` are module private.
+        This method is not. It's prefixed with a :kbd:`_` to avoid showing
+        up in the epilog of the `argparse.ArgumentParser`.
+
+        .. seealso:: `_parse_arguments`
+
+        """
+        return self.builder.run(kind)
+
+    def __call__(self, kind):
+        return self.run(kind)
 
 def generate_autosummary(**kwargs):
     from sphinx.ext.autosummary.generate import generate_autosummary_docs
@@ -359,7 +388,7 @@ def setup_jinja(path_to_template: pathlib.Path) -> jinja2.environment.Environmen
 
 
 class Maker(Make):
-    def __init__(self, source_dir, build_dir, *args, **kwargs):
+    def __init__(self, source_dir: pathlib.Path, build_dir: pathlib.Path, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.source_dir = source_dir
         self.build_dir = build_dir

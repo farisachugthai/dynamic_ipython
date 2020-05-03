@@ -28,25 +28,34 @@ should be discouraged here.
     possibly be :func:`dis.distb`.
 
 """
-import cgitb
 import code
 import logging
+import os
 import platform
 import sys
 import threading
 import traceback
+
+from cgitb import Hook
 from os import scandir, listdir
 from pathlib import Path
 from traceback import format_exc, format_tb
 from runpy import run_path
 
-from typing import Any, Callable, Iterable, List, Mapping, Optional, AnyStr, Union
+from typing import Any, Callable, Iterable, List, Mapping, Optional, Union, AnyStr
 from types import TracebackType
 
 from IPython.core.getipython import get_ipython
+from pygments.lexers.python import PythonLexer
+from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
 logging.basicConfig(level=logging.WARNING)
 
+
+logger = logging.getLogger(name=__name__)
+logger.addHandler(logging.StreamHandler())
+logger.addFilter(logging.Filter())
+logger.setLevel(logging.WARNING)
 
 def formatted_tb() -> TracebackType:
     """Return a str of the last exception.
@@ -79,7 +88,10 @@ def get_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
     return exec_dir
 
 
-def safe_run_path(fileobj, logger=None) -> Mapping:
+def safe_run_path(
+        fileobj : Union[Path],
+        logger: Optional[logging.Logger] = None,
+    ) -> Mapping:
     if logger is None:
         logger = logging.getLogger(name=__name__)
     logger.debug("File to execute is: %s", fileobj)
@@ -110,10 +122,6 @@ def rerun_startup():
     """
     ret = {}
     exec_dir = get_exec_dir()
-    logger = logging.getLogger(name=__name__)
-    logger.addHandler(logging.StreamHandler())
-    logger.addFilter(logging.Filter())
-    logger.setLevel(logging.WARNING)
     for i in scandir(exec_dir):
         if i.name.endswith(".py"):
             try:
@@ -124,7 +132,34 @@ def rerun_startup():
 
 
 def execfile(filename, global_namespace=None, local_namespace=None):
-    """Python3 doesn't have this but it'd be nice to have a utility to exec a file at once."""
+    """Bring execfile back from python2.
+
+    This function is similar to the :keyword:`exec` statement, but parses a file
+    instead of a string.  It is different from the :keyword:`import` statement in
+    that it does not use the module administration --- it reads the file
+    unconditionally and does not create a new module.
+
+    The arguments are a file name and two optional dictionaries.  The file is parsed
+    and evaluated as a sequence of Python statements (similarly to a module) using
+    the *globals* and *locals* dictionaries as global and local namespace. If
+    provided, *locals* can be any mapping object.  Remember that at module level,
+    globals and locals are the same dictionary. If two separate objects are
+    passed as *globals* and *locals*, the code will be executed as if it were
+    embedded in a class definition.
+
+    If the *locals* dictionary is omitted it defaults to the *globals* dictionary.
+    If both dictionaries are omitted, the expression is executed in the environment
+    where :func:`execfile` is called.  The return value is ``None``.
+
+    .. note::
+
+        The default *locals* act as described for function :func:`locals` below:
+        modifications to the default *locals* dictionary should not be attempted.  Pass
+        an explicit *locals* dictionary if you need to see effects of the code on
+        *locals* after function :func:`execfile` returns.  :func:`execfile` cannot be
+        used reliably to modify a function's locals.
+
+    """
     if global_namespace is not dict:  # catch both None and any wrong formats
         global_namespace = globals()
     if local_namespace is not dict:  # catch both None and any wrong formats
@@ -166,7 +201,7 @@ def pyg_highlight(param, **kwargs):
 
 
 if __name__ == "__main__":
-    handled = cgitb.Hook(file=sys.stdout, format="text")
+    handled = Hook(file=sys.stdout, format="text")
 
     lexer = PythonLexer()
     formatter = TerminalTrueColorFormatter()
