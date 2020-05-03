@@ -17,9 +17,8 @@ This script adds the following things:
   (in a pager, with Pygments highlighting)
 
 
-Cython's site-customize.
+Cython's site-customize
 ------------------------
-
 Cython is a compiler. Therefore it is natural that people tend to go
 through an edit/compile/test cycle with Cython modules. But my personal
 opinion is that one of the deep insights in Python's implementation is
@@ -114,7 +113,7 @@ def _pythonrc_enable_readline():
     """Enable readline, tab completion, and history"""
     readline.set_history_length(-1)
     readline.parse_and_bind("tab: complete")
-    readline.parse_and_bind("\\C-Space: _complete")
+    readline.parse_and_bind('"\\C-Space": menu-complete')
     readline.parse_and_bind('"\\C-a": beginning-of-line')
     readline.parse_and_bind('"\\C-b": backward-char')
     readline.parse_and_bind('"\\C-e": end-of-line')
@@ -302,9 +301,10 @@ if __name__ == "__main__":
     history_path = Path("~/.python_history").expanduser()
     atexit.register(write_history, history_path)
     try:
-        sys.excepthook = excepthook
-        _pythonrc_enable_readline()
+        # sys.excepthook = excepthook
+        if readline is not None:
+            _pythonrc_enable_readline()
         _pythonrc_enable_history()
-        sys.displayhook = pprinthook
+        # sys.displayhook = pprinthook
     except Exception as e:
         print(e)

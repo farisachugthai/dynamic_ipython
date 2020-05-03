@@ -36,11 +36,7 @@ from pygments.token import Token
 try:
     from gruvbox import GruvboxStyle
 except ImportError:
-    # actually we can't do this. he requires that styles have an invalidationhash
-
     from pygments.styles.inkpot import InkPotStyle
-
-    # pygments_style = default_pygments_style()
     pygments_style = InkPotStyle
 else:
     pygments_style = GruvboxStyle

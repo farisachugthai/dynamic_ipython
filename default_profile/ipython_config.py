@@ -497,7 +497,7 @@ c.TerminalInteractiveShell.extra_open_editor_shortcuts = True
 # https://github.com/farisachugthai/Gruvbox_IPython
 
 try:
-    from gruvbox import GruvboxStyle
+    from gruvbox.gruvbox import GruvboxStyle
 except (ImportError, ModuleNotFoundError):
     from pygments.styles import inkpot
 

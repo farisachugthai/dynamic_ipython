@@ -238,7 +238,46 @@ EXTRAS = {
 
 # }}}
 
-class UploadCommand(Command):  # {{{
+# setuptools.Command: {{{
+try:
+    from flake8.main.setuptools_command import Flake8
+except ImportError:
+    Flake8 = None
+else:
+    # Could reasonably update cmdclass but haven't seen that work yet.
+    other_cmdclass = {"flake8": Flake8}
+
+# signature: BuildDoc(dist)
+# Docstring:
+# Distutils command to build Sphinx documentation.
+# The Sphinx build can then be triggered from distutils, and some Sphinx
+# options can be set in ``setup.py`` or ``setup.cfg`` instead of Sphinx own
+# configuration file.
+# For instance, from `setup.py`:
+# this is only necessary when not using setuptools/distribute
+try:
+    from sphinx.setup_command import BuildDoc
+except ImportError:
+    BuildDoc = None
+else:
+    other_cmdclass.update({'build_sphinx': BuildDoc})
+    # name = 'My project'
+    # version = '1.2'
+    # release = '1.2.0'
+    # setup(
+    #         name=name,
+    #         author='Bernard Montgomery',
+    #         version=release,
+    #         cmdclass=cmdclass,
+    #         # these are optional and override conf.py settings
+    #         command_options={
+    #         'build_sphinx': {
+    #         'project': ('setup.py', name),
+    #         'version': ('setup.py', version),
+    #         'release': ('setup.py', release)}},                             )
+
+
+class UploadCommand(Command):
     """Support setup.py upload."""
 
     description = "Build and publish the package."
@@ -377,7 +416,7 @@ try:
             "Programming Language :: Python :: Implementation :: CPython",
         ],
         # $ setup.py publish support.
-        cmdclass={"upload": UploadCommand, },
+        cmdclass={"upload": UploadCommand},
         # project home page, if any
         project_urls={
             "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",

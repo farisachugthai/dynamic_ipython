@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import keyword
 import re
-from typing import Iterable, AsyncGenerator, Optional, Dict, List, Callable, Pattern
+from typing import Iterable, AsyncGenerator, Optional, Dict, List, Callable, Pattern, Union
 
 import jedi
 from jedi import Script

@@ -40,7 +40,7 @@ from pathlib import Path
 from traceback import format_exc, format_tb
 from runpy import run_path
 
-from typing import Any, Callable, Iterable, List, Mapping, Optional, AnyStr
+from typing import Any, Callable, Iterable, List, Mapping, Optional, AnyStr, Union
 from types import TracebackType
 
 from IPython.core.getipython import get_ipython
@@ -69,7 +69,7 @@ def rehashx_run() -> None:
     get_ipython().run_line_magic("rehashx", "")
 
 
-def get_exec_dir() -> AnyStr:
+def get_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
     """Returns IPython's profile_dir.startup_dir. If that can't be determined, return CWD."""
     _ip = get_ipython()
     if _ip is not None:

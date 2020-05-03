@@ -51,23 +51,24 @@ from IPython.core.interactiveshell import InteractiveShellABC
 from IPython.terminal.ptutils import IPythonPTLexer
 
 try:
-    from gruvbox.ptgruvbox import Gruvbox
+    from gruvbox.gruvbox import GruvboxStyle
 except ImportError:
     from pygments.styles.inkpot import InkPotStyle
-
-    Gruvbox = InkPotStyle  # surprise!
+    _style = InkPotStyle  # surprise!
+else:
+    _style = GruvboxStyle
 
 
 def our_style():
     return merge_styles(
         [
-            style_from_pygments_cls(Gruvbox),
+            style_from_pygments_cls(_style),
             default_pygments_style(),
             #  Style.from_dict({'':''})
         ]
     )  # TODO
     return merge_styles(
-        [style_from_pygments_cls(Gruvbox), default_pygments_style(),]
+        [style_from_pygments_cls(_style), default_pygments_style(),]
     )  # TODO
 
 
@@ -78,7 +79,7 @@ def get_lexer():
 
 def pygments_tokens():
     """A  list of Pygments style tokens. In case you need that."""
-    return PygmentsTokens(Gruvbox.styles)
+    return PygmentsTokens(_style.styles)
 
 
 class IPythonConfigurableLexer(LoggingConfigurable):

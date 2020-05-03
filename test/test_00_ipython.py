@@ -26,8 +26,7 @@ def remove_tmpdir(dirname):
 
 
 class _TestClass:
-    """
-    A pointless class, for sanity-checking of docstring testing.
+    """A pointless class, for sanity-checking of docstring testing.
 
     Methods:
         square()
@@ -120,7 +119,6 @@ __test__ = {
 
 class FixturesTest(unittest.TestCase):
     def setUp(self):
-        super().setUp()
         self.tmpdir = tempfile.mkdtemp()
         self.addCleanup(remove_tmpdir, self.tmpdir)
 

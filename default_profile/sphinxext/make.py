@@ -5,6 +5,7 @@ import codecs
 import locale
 import os
 import pathlib
+import pdb
 import pprint
 import shutil
 import subprocess
@@ -35,8 +36,9 @@ from sphinx.application import Sphinx
 # from sphinx.builders.html import StandAloneHTMLBuilder
 # And we'll have repieced together sphinx to an order of magnitude
 from sphinx.cmd.make_mode import Make
-from sphinx.errors import ApplicationError
-
+from sphinx.config import Config
+from sphinx.errors import ApplicationError, ConfigError
+# , ExtensionError
 # from sphinx.cmd.build import build_main
 # from sphinx.cmd.build import handle_exception
 # from sphinx.jinja2glue import SphinxFileSystemLoader
@@ -44,8 +46,10 @@ from sphinx.errors import ApplicationError
 #   colorize, color_terminal
 # )
 from sphinx.util.docutils import patch_docutils, docutils_namespace
+# this is good to be aware of
+# from sphinx.util.inspect import getdoc
 from sphinx.util.logging import getLogger
-
+from sphinx.util.tags import Tags
 # from sphinx.ext.apidoc import create
 # from sphinx.ext.autosummary.generate import
 
@@ -368,13 +372,19 @@ class Maker(Make):
         return self.__class__.__name__
 
 
-def main(repo_root=None):
+def create_sphinx_config(confdir):
+    tags = Tags()
+    try:
+        return Config.read(confdir, tags)
+    except ConfigError:
+        pdb.set_trace()  # did i do this right?
+
+
+def main(repo_root):
     """Create the required objects to simulate the sphinx make-main command.
 
     Create a `jinja2.Environment`, a `sphinx.project.Project`,
     `sphinx.jinja2glue.SphinxFileSystemLoader`.
-
-    .. todo:: Need to create tags for use in `sphinx.config.eval_config_file`.
 
     """
     # Probably should initialize in a different/ better way but eh
@@ -382,8 +392,14 @@ def main(repo_root=None):
     user_parser = _parse_arguments()
     user_args = user_parser.parse_args()
     doc_root = Path(repo_root).joinpath("docs")
+    conf_path = doc_root.joinpath("source")
+    config = create_sphinx_config(conf_path)
+
     template_path = doc_root.joinpath("source/_templates")
     env = setup_jinja(template_path)
+
+    sphinx.locale.setlocale(locale.LC_ALL, '')
+    # sphinx.locale.init_console(os.path.join(package_dir, 'locale'), 'sphinx')
 
     if user_args.log:
         logger.setLevel(30)
@@ -405,5 +421,4 @@ def get_git_root():
 
 if __name__ == "__main__":
     git_root = get_git_root()
-    locale.setlocale(locale.LC_ALL, "")
     sys.exit(main(git_root))

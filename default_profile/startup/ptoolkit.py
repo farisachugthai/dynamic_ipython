@@ -59,7 +59,15 @@ from prompt_toolkit.validation import (
     DummyValidator,
 )
 from prompt_toolkit.widgets.toolbars import SearchToolbar
-from pygments.styles.inkpot import InkPotStyle
+
+try:
+    from gruvbox import GruvboxStyle
+except ImportError:
+    from pygments.styles.inkpot import InkPotStyle
+    pygments_style = InkPotStyle
+else:
+    pygments_style = GruvboxStyle
+
 
 DEDENT_TOKENS = frozenset(["raise", "return", "pass", "break", "continue"])
 
@@ -383,7 +391,7 @@ def search_layout():
         include_default_input_processors=False,
         input_processors=all_input_processors,
     )
-    style = style_from_pygments_cls(InkPotStyle)
+    style = style_from_pygments_cls(pygments_style)
     # Apparently theres something wrong with the style other put it in the
     # HSplit constructor
     buf_container = Window(control, style=style)
