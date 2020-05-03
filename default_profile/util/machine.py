@@ -105,7 +105,7 @@ class Shell(Platform):
 if __name__ == "__main__":
     # put the import in the if main so that we can still doc this without
     # installing it
-    from default_profile.util.module_log import stream_logger
+    from default_profile.startup.file_logger import stream_logger
 
     MACHINE_LOGGER = stream_logger(
         logger="default_profile.util.machine",

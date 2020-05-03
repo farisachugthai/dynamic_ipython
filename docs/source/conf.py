@@ -194,7 +194,6 @@ extensions = [
     "sphinx.ext.autodoc.typehints",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.autosummary",
-    "sphinx.ext.autosummary.generate",
     "sphinx.ext.coverage",
     "sphinx.ext.doctest",
     "sphinx.ext.duration",

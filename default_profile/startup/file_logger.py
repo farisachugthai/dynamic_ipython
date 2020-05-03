@@ -383,7 +383,7 @@ def stream_logger(logger, log_level=logging.INFO, msg_format=None):
     Examples
     --------
     >>> import logging
-    >>> from default_profile.util.module_log import stream_logger
+    >>> from default_profile.startup.file_logger import stream_logger
     >>> LOGGER = stream_logger(logging.getLogger(name=__name__))
 
     """

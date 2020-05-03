@@ -175,13 +175,13 @@ possibly be <a class="reference external" href="https://docs.python.org/3/librar
 
 <dl class="py function">
 <dt id="default_profile.startup.all_fault_handlers.get_exec_dir">
-<code class="sig-name descname">get_exec_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; ~AnyStr<a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#get_exec_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.get_exec_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_exec_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Union[~AnyStr, os.PathLike, pathlib.Path]<a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#get_exec_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.get_exec_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns IPython’s profile_dir.startup_dir. If that can’t be determined, return CWD.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt id="default_profile.startup.all_fault_handlers.safe_run_path">
-<code class="sig-name descname">safe_run_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fileobj</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Mapping<a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#safe_run_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.safe_run_path" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">safe_run_path</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fileobj</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.8)">pathlib.Path</a></span></em>, <em class="sig-param"><span class="n">logger</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)">logging.Logger</a><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span> &#x2192; Mapping<a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#safe_run_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.safe_run_path" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
@@ -201,7 +201,29 @@ possibly be <a class="reference external" href="https://docs.python.org/3/librar
 <dl class="py function">
 <dt id="default_profile.startup.all_fault_handlers.execfile">
 <code class="sig-name descname">execfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">global_namespace</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">local_namespace</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#execfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.execfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Python3 doesn’t have this but it’d be nice to have a utility to exec a file at once.</p>
+<dd><p>Bring execfile back from python2.</p>
+<p>This function is similar to the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">exec</span></code> statement, but parses a file
+instead of a string.  It is different from the <a class="reference external" href="https://docs.python.org/3/reference/simple_stmts.html#import" title="(in Python v3.8)"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a> statement in
+that it does not use the module administration — it reads the file
+unconditionally and does not create a new module.</p>
+<p>The arguments are a file name and two optional dictionaries.  The file is parsed
+and evaluated as a sequence of Python statements (similarly to a module) using
+the <em>globals</em> and <em>locals</em> dictionaries as global and local namespace. If
+provided, <em>locals</em> can be any mapping object.  Remember that at module level,
+globals and locals are the same dictionary. If two separate objects are
+passed as <em>globals</em> and <em>locals</em>, the code will be executed as if it were
+embedded in a class definition.</p>
+<p>If the <em>locals</em> dictionary is omitted it defaults to the <em>globals</em> dictionary.
+If both dictionaries are omitted, the expression is executed in the environment
+where <a class="reference internal" href="#default_profile.startup.all_fault_handlers.execfile" title="default_profile.startup.all_fault_handlers.execfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code></a> is called.  The return value is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The default <em>locals</em> act as described for function <a class="reference external" href="https://docs.python.org/3/library/functions.html#locals" title="(in Python v3.8)"><code class="xref py py-func docutils literal notranslate"><span class="pre">locals()</span></code></a> below:
+modifications to the default <em>locals</em> dictionary should not be attempted.  Pass
+an explicit <em>locals</em> dictionary if you need to see effects of the code on
+<em>locals</em> after function <a class="reference internal" href="#default_profile.startup.all_fault_handlers.execfile" title="default_profile.startup.all_fault_handlers.execfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code></a> returns.  <a class="reference internal" href="#default_profile.startup.all_fault_handlers.execfile" title="default_profile.startup.all_fault_handlers.execfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">execfile()</span></code></a> cannot be
+used reliably to modify a function’s locals.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -242,7 +264,7 @@ pointless for interactive use.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 02, 2020.
+      Last updated on May 03, 2020.
     </div>
   </body>
 </html>

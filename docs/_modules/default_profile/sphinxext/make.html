@@ -214,11 +214,6 @@
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DocBuilder.kinds"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.kinds">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">kinds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Allowable sphinx-build outputs.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;singlehtml&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;linkcheck&quot;</span><span class="p">,</span> <span class="s2">&quot;doctest&quot;</span><span class="p">]</span></div>
-
 <div class="viewcode-block" id="DocBuilder.status"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.status">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Print output in bold. Emits ANSI escape sequences to sys.stdout&quot;&quot;&quot;</span>
@@ -298,8 +293,16 @@
 <div class="viewcode-block" id="Runner"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner">[docs]</a><span class="k">class</span> <span class="nc">Runner</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Initializes a `DocBuilder` and proxies sphinx-build subcommands.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Runner.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">builder</span> <span class="o">=</span> <span class="n">DocBuilder</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Runner.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialized with the same args as `DocBuilder`.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_builder</span> <span class="o">=</span> <span class="n">DocBuilder</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.builder"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.builder">[docs]</a>    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_builder</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
 <div class="viewcode-block" id="Runner.html"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)</span></div>
@@ -307,12 +310,38 @@
 <div class="viewcode-block" id="Runner.man"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.man">[docs]</a>    <span class="k">def</span> <span class="nf">man</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;man&quot;</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">doctest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;doctest&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Runner.texinfo"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.texinfo">[docs]</a>    <span class="k">def</span> <span class="nf">texinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;texinfo&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.singlehtml"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.singlehtml">[docs]</a>    <span class="k">def</span> <span class="nf">singlehtml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;singlehtml&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.text"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.text">[docs]</a>    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.linkcheck"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.linkcheck">[docs]</a>    <span class="k">def</span> <span class="nf">linkcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;linkcheck&quot;</span><span class="p">)</span></div>
+
 <div class="viewcode-block" id="Runner.doctest"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.doctest">[docs]</a>    <span class="k">def</span> <span class="nf">doctest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;doctest&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Runner.texinfo"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.texinfo">[docs]</a>    <span class="k">def</span> <span class="nf">texinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;texinfo&quot;</span><span class="p">)</span></div></div>
+    <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Proxy to `DocBuilder.run`.</span>
 
+<span class="sd">        Conventionally, methods beginning with :kbd:`_` are module private.</span>
+<span class="sd">        This method is not. It&#39;s prefixed with a :kbd:`_` to avoid showing</span>
+<span class="sd">        up in the epilog of the `argparse.ArgumentParser`.</span>
+
+<span class="sd">        .. seealso:: `_parse_arguments`</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="generate_autosummary"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_autosummary">[docs]</a><span class="k">def</span> <span class="nf">generate_autosummary</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">sphinx.ext.autosummary.generate</span> <span class="kn">import</span> <span class="n">generate_autosummary_docs</span>
@@ -398,7 +427,7 @@
 
 
 <div class="viewcode-block" id="Maker"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker">[docs]</a><span class="k">class</span> <span class="nc">Maker</span><span class="p">(</span><span class="n">Make</span><span class="p">):</span>
-<div class="viewcode-block" id="Maker.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_dir</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="Maker.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_dir</span> <span class="o">=</span> <span class="n">source_dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">build_dir</span> <span class="o">=</span> <span class="n">build_dir</span></div>
@@ -468,7 +497,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 02, 2020.
+      Last updated on May 03, 2020.
     </div>
   </body>
 </html>

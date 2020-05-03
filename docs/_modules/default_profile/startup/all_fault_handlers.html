@@ -67,25 +67,34 @@
 <span class="sd">    possibly be :func:`dis.distb`.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">cgitb</span>
 <span class="kn">import</span> <span class="nn">code</span>
 <span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">threading</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="kn">from</span> <span class="nn">cgitb</span> <span class="kn">import</span> <span class="n">Hook</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">scandir</span><span class="p">,</span> <span class="n">listdir</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">traceback</span> <span class="kn">import</span> <span class="n">format_exc</span><span class="p">,</span> <span class="n">format_tb</span>
 <span class="kn">from</span> <span class="nn">runpy</span> <span class="kn">import</span> <span class="n">run_path</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">AnyStr</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">AnyStr</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
+<span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
+<span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">())</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 <div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a str of the last exception.</span>
@@ -108,7 +117,7 @@
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
+<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns IPython&#39;s profile_dir.startup_dir. If that can&#39;t be determined, return CWD.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -118,7 +127,10 @@
     <span class="k">return</span> <span class="n">exec_dir</span></div>
 
 
-<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span><span class="n">fileobj</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span>
+        <span class="n">fileobj</span> <span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+        <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File to execute is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">)</span>
@@ -149,10 +161,6 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ret</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">exec_dir</span> <span class="o">=</span> <span class="n">get_exec_dir</span><span class="p">()</span>
-    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">())</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">scandir</span><span class="p">(</span><span class="n">exec_dir</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.py&quot;</span><span class="p">):</span>
             <span class="k">try</span><span class="p">:</span>
@@ -163,7 +171,34 @@
 
 
 <div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Python3 doesn&#39;t have this but it&#39;d be nice to have a utility to exec a file at once.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Bring execfile back from python2.</span>
+
+<span class="sd">    This function is similar to the :keyword:`exec` statement, but parses a file</span>
+<span class="sd">    instead of a string.  It is different from the :keyword:`import` statement in</span>
+<span class="sd">    that it does not use the module administration --- it reads the file</span>
+<span class="sd">    unconditionally and does not create a new module.</span>
+
+<span class="sd">    The arguments are a file name and two optional dictionaries.  The file is parsed</span>
+<span class="sd">    and evaluated as a sequence of Python statements (similarly to a module) using</span>
+<span class="sd">    the *globals* and *locals* dictionaries as global and local namespace. If</span>
+<span class="sd">    provided, *locals* can be any mapping object.  Remember that at module level,</span>
+<span class="sd">    globals and locals are the same dictionary. If two separate objects are</span>
+<span class="sd">    passed as *globals* and *locals*, the code will be executed as if it were</span>
+<span class="sd">    embedded in a class definition.</span>
+
+<span class="sd">    If the *locals* dictionary is omitted it defaults to the *globals* dictionary.</span>
+<span class="sd">    If both dictionaries are omitted, the expression is executed in the environment</span>
+<span class="sd">    where :func:`execfile` is called.  The return value is ``None``.</span>
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">        The default *locals* act as described for function :func:`locals` below:</span>
+<span class="sd">        modifications to the default *locals* dictionary should not be attempted.  Pass</span>
+<span class="sd">        an explicit *locals* dictionary if you need to see effects of the code on</span>
+<span class="sd">        *locals* after function :func:`execfile` returns.  :func:`execfile` cannot be</span>
+<span class="sd">        used reliably to modify a function&#39;s locals.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">global_namespace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>  <span class="c1"># catch both None and any wrong formats</span>
         <span class="n">global_namespace</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">local_namespace</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">dict</span><span class="p">:</span>  <span class="c1"># catch both None and any wrong formats</span>
@@ -205,7 +240,7 @@
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">handled</span> <span class="o">=</span> <span class="n">cgitb</span><span class="o">.</span><span class="n">Hook</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+    <span class="n">handled</span> <span class="o">=</span> <span class="n">Hook</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
 
     <span class="n">lexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
     <span class="n">formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span>
@@ -222,7 +257,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 02, 2020.
+      Last updated on May 03, 2020.
     </div>
   </body>
 </html>

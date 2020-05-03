@@ -32,18 +32,6 @@ Stream Logging
    Returns a fully functional Logger instance for ready use.
 
 
-Stream Logging Examples
--------------------------
-.. testsetup::
-
-    >>> import logging
-    >>> import default_profile
-
-.. doctest::
-
-    >>> from default_profile.util import module_log
-    >>> module_log.stream_logger(logging.getLogger(__name__))
-
 File Logging
 ================
 .. function:: file_logger(filename, logger=None, shell=None, log_level=None, msg_format=None
@@ -96,17 +84,6 @@ Returns
 -------
 root_logger : :class:`logging.Logger`
    Instance of a :class:`logging.Logger()`.
-
-
-File Logger Examples
---------------------
-.. doctest::
-
-   >>> import logging
-   >>> from default_profile.util.module_log import json_logger, JsonFormatter
-   >>> root_logger = json_logger(JsonFormatter=JsonFormatter())
-   >>> root_logger.warn('this is a test message')
-   >>> root_logger.debug('this request_id=%d name=%s', 1, 'John')
 
 
 Remainder

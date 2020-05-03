@@ -95,7 +95,7 @@ formatter = TerminalTrueColorFormatter()
 # }}}
 
 
-def pyg_highlight(param, **kwargs):
+def pyg_highlight(*param):
     """Run a string through the pygments highlighter."""
     return pygments.highlight(param, lexer, formatter)
 
@@ -125,7 +125,7 @@ def _pythonrc_enable_readline():
     readline.parse_and_bind('"\\C-l": clear-screen')
     readline.parse_and_bind('"\\C-m": accept-line')
     if rlcompleter is not None:
-        readline.set_completer(rlcompleter.Completer)
+        readline.set_completer(rlcompleter.Completer.complete)
 
 
 def write_history(history_path=None):

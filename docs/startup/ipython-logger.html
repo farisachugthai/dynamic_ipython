@@ -41,13 +41,23 @@
           <h3>Table of Contents</h3>
           <ul>
 <li><a class="reference internal" href="#">File Logger</a><ul>
+<li><a class="reference internal" href="#summary">Summary</a></li>
+<li><a class="reference internal" href="#exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#stream-logging">Stream Logging</a></li>
+<li><a class="reference internal" href="#file-logging">File Logging</a></li>
+<li><a class="reference internal" href="#json-logger">JSON logger</a><ul>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+<li><a class="reference internal" href="#returns">Returns</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#remainder">Remainder</a></li>
 <li><a class="reference internal" href="#get-history">get_history</a><ul>
 <li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#examples">Examples</a></li>
 <li><a class="reference internal" href="#summary-for-logger">Summary for Logger</a></li>
-<li><a class="reference internal" href="#module-default_profile.startup.file_logger">File Logger API</a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#module-default_profile.startup.file_logger">File Logger API</a></li>
 </ul>
 </li>
 </ul>
@@ -58,6 +68,97 @@
 
 <div class="section" id="file-logger">
 <span id="ipython-logger"></span><h1>File Logger<a class="headerlink" href="#file-logger" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Set up easily instantiated <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> instances.</p>
+<p>Create a few formatters and logging instances that can be easily
+imported and utilized across the package.</p>
+<p>Currently <a class="reference internal" href="#default_profile.startup.file_logger.stream_logger" title="default_profile.startup.file_logger.stream_logger"><code class="xref py py-func docutils literal notranslate"><span class="pre">stream_logger()</span></code></a> is the easiest and most oft used entry point
+in this module.</p>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="simple">
+<dt><a class="reference internal" href="#default_profile.startup.file_logger.NoUnNamedLoggers" title="default_profile.startup.file_logger.NoUnNamedLoggers"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NoUnNamedLoggers</span></code></a></dt><dd><p>Exception raised when a function in this module is called without a
+name argument for the logger.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="stream-logging">
+<h2>Stream Logging<a class="headerlink" href="#stream-logging" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt>
+<code class="sig-name descname">stream_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logger</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">logging.INFO</span></em>, <em class="sig-param"><span class="n">msg_format</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#stream_logger"><span class="viewcode-link">[source]</span></a></dt>
+<dd><p>Returns a fully functional Logger instance for ready use.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="file-logging">
+<h2>File Logging<a class="headerlink" href="#file-logging" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt>
+<code class="sig-name descname">file_logger(filename, logger=None, shell=None, log_level=None, msg_format=None</code></dt>
+<dd><p>Logging function that emits a <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.LogRecord" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LogRecord</span></code></a> to <code class="docutils literal notranslate"><span class="pre">filename</span></code>.
+Logger uses the following formatting by default.:</p>
+<blockquote>
+<div><p>%(asctime)s : %(levelname)s : %(message)s</p>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>filename</strong> – str
+File to log a <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.LogRecord" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LogRecord</span></code></a> to.</p></li>
+<li><p><strong>logger</strong> – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a>, optional
+A <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> instantiated in the calling module.</p></li>
+</ul>
+</dd>
+</dl>
+<dl>
+<dt>shell<span class="classifier"><a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>, optional</span></dt><dd><p>Global instance of IPython. Can be <strong>None</strong> if not run in
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.html#module-IPython" title="(in IPython v7.14.0)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">IPython</span></code></a> though this hasn’t been tested.</p>
+</dd>
+<dt>log_level<span class="classifier">int, optional</span></dt><dd><p>Level of log records.</p>
+</dd>
+<dt>msg_format<span class="classifier">str, optional</span></dt><dd><p>Representation of logging messages using parameters accepted by
+<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></a>. Uses standard <kbd class="kbd docutils literal notranslate">%</kbd> style
+string formatting.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>logger</strong> – <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> instance</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#AssertionError" title="(in Python v3.8)"><strong>AssertionError</strong></a> – <em>shell</em> is not <a class="reference external" href="https://docs.python.org/3/library/functions.html#isinstance" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isinstance</span></code></a> <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="json-logger">
+<h2>JSON logger<a class="headerlink" href="#json-logger" title="Permalink to this headline">¶</a></h2>
+<p>Set up a logger that returns properly formatted JSON.</p>
+<div class="section" id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h3>
+<dl>
+<dt>logger<span class="classifier">str or <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a>, optional</span></dt><dd><p>Either a named Logger instance or the string representing the desired instance</p>
+</dd>
+<dt>json_formatter<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></a>, optional <code class="xref py py-obj docutils literal notranslate"><span class="pre">JSONFormatter</span></code> instance.</span></dt><dd><p>Included in the listed parameters to be explicit; however, it’s
+probably easier to not include the parameter as one is configured
+in the function anyway.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Permalink to this headline">¶</a></h3>
+<dl>
+<dt>root_logger<span class="classifier"><a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a></span></dt><dd><p>Instance of a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code>.</p>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="remainder">
+<h2>Remainder<a class="headerlink" href="#remainder" title="Permalink to this headline">¶</a></h2>
 <p>This uses the IPython core <code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.logger.LoggingConfigurable</span></code>
 to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.handler.FileHandler</span></code> that creates one new log
 file for every calendar day of the year.</p>
@@ -65,6 +166,7 @@ file for every calendar day of the year.</p>
 session continues after the point when the logfile rolls over.</p>
 <p>If multiple sessions are started, the new instances will append onto the same
 file as the older ones.</p>
+</div>
 <div class="section" id="get-history">
 <h2>get_history<a class="headerlink" href="#get-history" title="Permalink to this headline">¶</a></h2>
 <p>Extract a session from the IPython input history.</p>
@@ -86,16 +188,16 @@ file as the older ones.</p>
 <div class="section" id="summary-for-logger">
 <h3>Summary for Logger<a class="headerlink" href="#summary-for-logger" title="Permalink to this headline">¶</a></h3>
 <p>This script is a simple demonstration of
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.history.html#IPython.core.history.HistoryAccessor" title="(in IPython v7.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.history.HistoryAccessor</span></code></a>. It should be possible
-to build much more flexible and powerful tools to browse and pull from the
-history database.</p>
-<p>So this is a rewrite of that history accessor since IPython’s handling of
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.history.html#IPython.core.history.HistoryAccessor" title="(in IPython v7.14.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.history.HistoryAccessor</span></code></a>. It should be possible to build
+much more flexible and powerful tools to browse and pull from the history
+database. This is a rewrite of that history accessor since IPython’s handling of
 history sessions out of the box is oddly limited.</p>
 <p>Let’s ignore the direct calls to sys.argv and combine argparse and the
 magic_argparse functions to make something more durable and useful.</p>
 </div>
+</div>
 <div class="section" id="module-default_profile.startup.file_logger">
-<span id="file-logger-api"></span><h3>File Logger API<a class="headerlink" href="#module-default_profile.startup.file_logger" title="Permalink to this headline">¶</a></h3>
+<span id="file-logger-api"></span><h2>File Logger API<a class="headerlink" href="#module-default_profile.startup.file_logger" title="Permalink to this headline">¶</a></h2>
 <p>output to a file.</p>
 <div class="admonition-todo admonition" id="id1">
 <p class="admonition-title">Todo</p>
@@ -125,6 +227,18 @@ conda, any of the 1000000 things you could add.</p></li>
 <span class="x">&#39;C:\\Users\\fac\\.ipython\\profile_default\\log\\log-2020-02-26.py.001~&#39;</span>
 </pre></div>
 </div>
+<dl class="py exception">
+<dt id="default_profile.startup.file_logger.NoUnNamedLoggers">
+<em class="property">exception </em><code class="sig-name descname">NoUnNamedLoggers</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#NoUnNamedLoggers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.NoUnNamedLoggers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#NotImplementedError" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a></p>
+<p>Raise this error if the logger a function was called with was anonymous.</p>
+<dl class="py method">
+<dt id="default_profile.startup.file_logger.NoUnNamedLoggers.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">\*args</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#NoUnNamedLoggers.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.NoUnNamedLoggers.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py function">
 <dt id="default_profile.startup.file_logger.print_history">
 <code class="sig-name descname">print_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hist_file</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#print_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.print_history" title="Permalink to this definition">¶</a></dt>
@@ -148,8 +262,10 @@ conda, any of the 1000000 things you could add.</p></li>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul>
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the logger</p></li>
-<li><p><strong>parent</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the parent logger. Defaults to None</p></li>
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the logger to return.</p></li>
+<li><p><strong>parent</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Name of the parent logger. I.E. One can provide an already
+initialized logger to this function and it will create a child logger.
+Defaults to None.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -279,7 +395,59 @@ is called by a user command, which it should not return.</p></li>
 <code class="sig-name descname">access_all_history</code><span class="sig-paren">(</span><em class="sig-param">\*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#access_all_history"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.access_all_history" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="py function">
+<dt id="default_profile.startup.file_logger.stream_logger">
+<code class="sig-name descname">stream_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logger</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">msg_format</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#stream_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.stream_logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up a <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Logger" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger</span></code></a> instance, add a stream handler.</p>
+<p>Should do some validation on the log level there. There’s a really
+useful block of code in the tutorial.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>logger</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a>) – Configure a passed logger. See example below.</p></li>
+<li><p><strong>log_level</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.8)"><em>int</em></a><em>, </em><em>optional</em>) – Level of log records. Defaults to 20.</p></li>
+<li><p><strong>msg_format</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><em>str</em></a><em>, </em><em>optional</em>) – Representation of logging messages. Uses standard <kbd class="kbd docutils literal notranslate">%</kbd> style string
+formatting. Defaults to <code class="docutils literal notranslate"><span class="pre">%(asctime)s</span> <span class="pre">%(levelname)s</span> <span class="pre">%(message)s</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>logger</strong> – Defaults to <code class="docutils literal notranslate"><span class="pre">logging.INFO</span></code> and ‘%(asctime)s : %(levelname)s : %(message)s : ‘</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Logger()</span></code> instance</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">default_profile.startup.file_logger</span> <span class="kn">import</span> <span class="n">stream_logger</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LOGGER</span> <span class="o">=</span> <span class="n">stream_logger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">))</span>
+</pre></div>
 </div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="default_profile.startup.file_logger.file_logger">
+<code class="sig-name descname">file_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em>, <em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">shell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">log_level</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">msg_format</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#file_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.file_logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="default_profile.startup.file_logger.json_logger">
+<code class="sig-name descname">json_logger</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">logger</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">json_formatter</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#json_logger"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.json_logger" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt id="default_profile.startup.file_logger.JsonFormatter">
+<em class="property">class </em><code class="sig-name descname">JsonFormatter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fmt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">datefmt</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">style</span><span class="o">=</span><span class="default_value">'%'</span></em>, <em class="sig-param"><span class="n">validate</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#JsonFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.JsonFormatter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.Formatter" title="(in Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">logging.Formatter</span></code></a></p>
+<p>Return valid <a class="reference external" href="https://docs.python.org/3/library/json.html#module-json" title="(in Python v3.8)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code></a> for a configured handler.</p>
+<dl class="py method">
+<dt id="default_profile.startup.file_logger.JsonFormatter.format">
+<code class="sig-name descname">format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">record</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/file_logger.html#JsonFormatter.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.file_logger.JsonFormatter.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format a <code class="xref py py-class docutils literal notranslate"><span class="pre">logging.LogRecord()</span></code> from an :exc:Exception.</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -289,7 +457,7 @@ is called by a user command, which it should not return.</p></li>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 02, 2020.
+      Last updated on May 03, 2020.
     </div>
   </body>
 </html>

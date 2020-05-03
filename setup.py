@@ -417,7 +417,6 @@ try:
         ],
         # $ setup.py publish support.
         cmdclass={"upload": UploadCommand},
-        cmdclass={"upload": UploadCommand},
         # project home page, if any
         project_urls={
             "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
