@@ -22,15 +22,16 @@ from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_search_bindings,
 )
 from prompt_toolkit.key_binding.key_bindings import (
-        KeyBindings, ConditionalKeyBindings, _MergedKeyBindings,
-        Binding, KeyBindingsBase
-    )
+    KeyBindings, ConditionalKeyBindings, _MergedKeyBindings,
+    Binding, KeyBindingsBase
+)
 from prompt_toolkit.key_binding.key_processor import KeyPress
 from prompt_toolkit.keys import Keys
 
 from default_profile.startup.ptoolkit import create_searching_keybindings, determine_which_pt_attribute
 
 logging.basicConfig(level=logging.WARNING)
+
 
 class BindingPP(Binding):
     """Fix the prompt_toolkit binding.
@@ -67,6 +68,7 @@ class BindingPP(Binding):
 
     def __call__(self, event: "KeyPressEvent") -> None:
         return self.call(event)
+
 
 def convert_bindings(bindings):
     for b in _ip.pt_app.app.key_bindings.bindings:
@@ -204,7 +206,7 @@ class KeyBindingsManager(KeyBindingsBase):
 
     @_version.setter
     def _set_cache(self, value=None):
-        self._version = value if value is not None else self._version+1
+        self._version = value if value is not None else self._version + 1
         self._get_bindings_for_keys_cache.clear()
         self._get_bindings_starting_with_keys_cache.clear()
 
@@ -322,8 +324,6 @@ class KeyBindingsManager(KeyBindingsBase):
             self.kb = load_key_bindings()
 
 
-
-
 class Documented(Document):
     """I'll admit this subclass doesn't exist for much of a reason.
 
@@ -337,6 +337,7 @@ class Documented(Document):
 
     def __iter__(self):
         return iter(self.text)
+
 
 def create_vi_insert_keybindings() -> ConditionalKeyBindings:
     kb = KeyBindings()
@@ -393,21 +394,23 @@ def create_kb() -> list([Binding]):
         print('pre_existing_keys is 0')
         return
     _all_kb = pre_existing_keys.extend([*load_vi_bindings().bindings,
-            *load_vi_search_bindings().bindings,
-            *load_auto_suggest_bindings().bindings,  # these stopped getting added when i did this
-            # create_searching_keybindings().bindings,
-            *create_vi_insert_keybindings().bindings,
-        ])
+                                        *load_vi_search_bindings().bindings,
+                                        *load_auto_suggest_bindings().bindings,  # these stopped getting added when i did this
+                                        # create_searching_keybindings().bindings,
+                                        *create_vi_insert_keybindings().bindings,
+                                        ])
     all_kb = KeyBindings()
     # we cant assign to bindings as its a property
     all_kb._bindings = _all_kb
     return all_kb
+
 
 def flatten_kb():
     if hasattr(get_ipython().pt_app.app.key_bindings, '_bindings2'):
         # fucking _MergedKeyBindings
         get_ipython().pt_app.app.key_bindings = get_ipython().pt_app.app.key_bindings._bindings2
         logging.warning(len(get_ipython().pt_app.app.key_bindings.bindings))
+
 
 if __name__ == "__main__":
     merged_kb = create_kb()
@@ -422,4 +425,3 @@ if __name__ == "__main__":
         # print(dir(merged_kb))
     else:
         print('fuck')
-

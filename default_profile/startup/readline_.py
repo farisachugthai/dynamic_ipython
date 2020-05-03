@@ -214,7 +214,6 @@ def input_loop():
         print("Dispatch {}".format(line))
 
 
-
 # Readline Config
 
 def gnu_readline_config():

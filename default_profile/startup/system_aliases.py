@@ -506,22 +506,22 @@ class CommonAliases(UserDict):
         self.dict_aliases.update(
             self.tuple_to_dict(
                 [
-                # shoddy_hack_for_aliases = [
-            ("l", "ls -CF '--hide=NTUSER.*' --color=always %l"),
-            ("la", "ls -AF '--hide=NTUSER.*' --color=always %l"),
-            ("ldir", "ls -Apo '--hide=NTUSER.*'  --color=always %l | grep /$"),
-            # ('lf' ,     'ls -Fo --color=always | grep ^-'),
-            # ('ll' ,          'ls -AFho --color=always %l'),
-            ("ls", "ls -F '--hide=NTUSER.*' --color=always %l"),
-            ("lr", "ls -AgFhtr '--hide=NTUSER.*'  --color=always %l"),
-            ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
-            ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
-            # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
-            ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
-            ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
-            # ('lt' ,          'ls -Altc --color=always %l'),
-            # ('lr' ,         'ls -Altcr --color=always %l')
-        ]))
+                    # shoddy_hack_for_aliases = [
+                    ("l", "ls -CF '--hide=NTUSER.*' --color=always %l"),
+                    ("la", "ls -AF '--hide=NTUSER.*' --color=always %l"),
+                    ("ldir", "ls -Apo '--hide=NTUSER.*'  --color=always %l | grep /$"),
+                    # ('lf' ,     'ls -Fo --color=always | grep ^-'),
+                    # ('ll' ,          'ls -AFho --color=always %l'),
+                    ("ls", "ls -F '--hide=NTUSER.*' --color=always %l"),
+                    ("lr", "ls -AgFhtr '--hide=NTUSER.*'  --color=always %l"),
+                    ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
+                    ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
+                    # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
+                    ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
+                    ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
+                    # ('lt' ,          'ls -Altc --color=always %l'),
+                    # ('lr' ,         'ls -Altcr --color=always %l')
+                ]))
         # for i in shoddy_hack_for_aliases:
         #     try:
         #         self + i

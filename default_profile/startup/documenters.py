@@ -44,6 +44,7 @@ class HelpHelper(Helper):
     def help(self, request):
         pass  # todo
 
+
 @magics_class
 class HelpMagics(Magics):
     """Useful magics for when you're introspecting things.

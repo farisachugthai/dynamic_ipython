@@ -68,7 +68,7 @@ def our_style():
         ]
     )  # TODO
     return merge_styles(
-        [style_from_pygments_cls(_style), default_pygments_style(),]
+        [style_from_pygments_cls(_style), default_pygments_style(), ]
     )  # TODO
 
 

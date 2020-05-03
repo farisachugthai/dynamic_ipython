@@ -32,8 +32,8 @@ def _ofind(obj):
 
 def _bool_globals_locals_check(index):
     return any(*[
-            [item for item in globals().keys() if item == index],
-            [item for item in locala().keys() if item == index],
+        [item for item in globals().keys() if item == index],
+        [item for item in locals().keys() if item == index],
     ])
 
 
@@ -198,7 +198,7 @@ class PagerMagics(Magics):
         oname = args and args or '_'
         info = self.shell._ofind(oname)
         if info['found']:
-            txt = (raw and str or pformat)( info['obj'] )
+            txt = (raw and str or pformat)(info['obj'])
             if 'o' in opts:
                 logging.warning('Second')
                 self.blocking_pager(txt, cmd='bat --page never ')
@@ -207,7 +207,6 @@ class PagerMagics(Magics):
             self.blocking_pager(txt)
         else:
             logging.warning('Object `%s` not found' % oname)
-
 
 
 if __name__ == "__main__":

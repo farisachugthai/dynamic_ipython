@@ -47,7 +47,6 @@ else:
 
 if TYPE_CHECKING:
     from IPython.core.interactiveshell import InteractiveShellABC
-from IPython.core.getipython import get_ipython
 
 
 @contextmanager
@@ -142,7 +141,6 @@ def is_tmux():
 def is_rg():
     """Returns the path to rg."""
     return shutil.which("rg")
-
 
 
 class CommandChainDispatcherRepr(Struct):
@@ -310,7 +308,6 @@ class FZF(FzfPrompt):
                     for line in f:
                         selection.append(line.strip("\n"))
         return selection
-
 
 
 def fzf_history(event):

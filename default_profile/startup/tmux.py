@@ -13,6 +13,7 @@ def tmux_new_window():
         shell=True,
     )
 
+
 def garbage_collection():
     # random but last script
     ret = gc.collect()
@@ -22,6 +23,7 @@ def garbage_collection():
         ret = gc.collect()
         counter += 1
     print(counter)
+
 
 if __name__ == "__main__":
     garbage_collection()

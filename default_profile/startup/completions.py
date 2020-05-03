@@ -40,8 +40,8 @@ class SimpleCompleter(Completer):
     def __init__(self, shell=None, completer=None, min_input_len=0, *args, **kwargs):
         self.shell = shell or get_ipython()
         self.completer = WordCompleter(
-                self.user_ns, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
-            ) if completer is None else completer
+            self.user_ns, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
+        ) if completer is None else completer
 
         self.min_input_len = min_input_len
 
@@ -183,14 +183,14 @@ class FuzzyCallable(FuzzyWordCompleter):
     """A FuzzyCompleter with ``__call__`` defined."""
 
     def __init__(self,
-        WORD: Optional[bool] = False,
-        pattern: Optional[Pattern[str]] = None,
-        enable_fuzzy: Optional[FilterOrBool] = True,
-        meta_dict: Optional[Dict[str, str]] = None,
-        words: Optional[Union[List[str], Callable[[], List[str]]]] = None,
-        ignore_case: Optional[bool] = False,
-        sentence: Optional[bool] = False,
-        match_middle: Optional[bool] = False):
+                 WORD: Optional[bool] = False,
+                 pattern: Optional[Pattern[str]] = None,
+                 enable_fuzzy: Optional[FilterOrBool] = True,
+                 meta_dict: Optional[Dict[str, str]] = None,
+                 words: Optional[Union[List[str], Callable[[], List[str]]]] = None,
+                 ignore_case: Optional[bool] = False,
+                 sentence: Optional[bool] = False,
+                 match_middle: Optional[bool] = False):
         """Mostly FuzzyWordCompleter...except callable.
 
         And the superclasses are initialized a little better.

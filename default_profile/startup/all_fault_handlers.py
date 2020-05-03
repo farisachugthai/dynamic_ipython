@@ -57,6 +57,7 @@ logger.addHandler(logging.StreamHandler())
 logger.addFilter(logging.Filter())
 logger.setLevel(logging.WARNING)
 
+
 def formatted_tb() -> TracebackType:
     """Return a str of the last exception.
 
@@ -89,9 +90,9 @@ def get_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
 
 
 def safe_run_path(
-        fileobj : Union[Path],
-        logger: Optional[logging.Logger] = None,
-    ) -> Mapping:
+    fileobj: Union[Path],
+    logger: Optional[logging.Logger] = None,
+) -> Mapping:
     if logger is None:
         logger = logging.getLogger(name=__name__)
     logger.debug("File to execute is: %s", fileobj)

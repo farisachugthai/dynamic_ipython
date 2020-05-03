@@ -59,6 +59,7 @@ from traitlets.traitlets import Instance
 
 from default_profile.ipython_config import UsageError
 
+
 class NoUnNamedLoggers(NotImplementedError):
     """Raise this error if the logger a function was called with was anonymous."""
 
@@ -67,8 +68,6 @@ class NoUnNamedLoggers(NotImplementedError):
 
     def __call__(self):
         return "".format("You did not provide a name for the logger.")
-
-
 
 
 def print_history(hist_file=None):
@@ -189,7 +188,7 @@ class ConfigurableLogger(LoggingConfigurable, logging.Logger):
     name = __name__
     level = 30
 
-    def __init__(self, logger = None, **kwargs):
+    def __init__(self, logger=None, **kwargs):
         super().__init__(**kwargs)
         self.logger = logger
 
@@ -490,6 +489,7 @@ class JsonFormatter(logging.Formatter):
                 "exception": exc,
             }
         )
+
 
 if __name__ == "__main__":
 

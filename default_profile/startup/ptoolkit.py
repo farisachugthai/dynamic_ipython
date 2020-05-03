@@ -40,8 +40,8 @@ from prompt_toolkit.document import Document
 from prompt_toolkit.filters import is_searching, ViInsertMode
 from prompt_toolkit.key_binding.bindings import search
 from prompt_toolkit.key_binding.key_bindings import (
-        KeyBindings, ConditionalKeyBindings,_MergedKeyBindings
-    )
+    KeyBindings, ConditionalKeyBindings, _MergedKeyBindings
+)
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
 from prompt_toolkit.layout.processors import (
@@ -563,4 +563,3 @@ if __name__ == "__main__":
 
     pt = determine_which_pt_attribute()
     get_ipython().pt_app.validator = pt_validator()
-
