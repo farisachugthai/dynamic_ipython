@@ -36,13 +36,18 @@ from sphinx.application import Sphinx
 # Then make this
 # from sphinx.builders.html import StandAloneHTMLBuilder
 # And we'll have repieced together sphinx to an order of magnitude
+
+# from sphinx.cmd.build import build_main
+# from sphinx.cmd.build import handle_exception
+
 from sphinx.cmd.make_mode import Make
 from sphinx.config import Config
 from sphinx.errors import ApplicationError, ConfigError
 # , ExtensionError
-# from sphinx.cmd.build import build_main
-# from sphinx.cmd.build import handle_exception
+from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
 # from sphinx.jinja2glue import SphinxFileSystemLoader
+
+# from sphinx.registry
 # from sphinx.util.console import (  # type: ignore
 #   colorize, color_terminal
 # )
@@ -85,11 +90,11 @@ def _parse_arguments() -> argparse.ArgumentParser:
     parser.add_argument(
         "builder",
         nargs="?",
-        default="html",
         # ugh this shouldn't be independent of DocBuilder.kinds
         choices=[cmds],
-        # "html", "singlehtml", "text", "linkcheck", "doctest"],
-        metavar="builder: ",
+        type=str,
+        # choices=["html", "singlehtml", "text", "linkcheck", "doctest"],
+        metavar="builder",
         help="command to run: {}".format(",\t ".join(cmds)),
     )
 
@@ -98,7 +103,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
     )
 
     parser.add_argument(
-        "-d", "--destdir", default=None, help="Destination to pass to Sphinx",
+        "-d", "--destdir", default=None, help="Sphinx Build Dir",
     )
 
     parser.add_argument(
@@ -114,12 +119,12 @@ def _parse_arguments() -> argparse.ArgumentParser:
     parser.add_argument(
         "-b",
         "--open_browser",
-        metavar="BROWSER",
+        metavar="browser",
         type=bool,
         default=False,
         dest="open_browser",
         help="Toggle opening the docs in the default"
-        " browser after a successful build.",
+        " browser after a successful build. (boolean)",
     )
 
     parser.add_argument(
@@ -127,7 +132,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
         "--log",
         default=sys.stdout,
         type=argparse.FileType("w"),
-        help="Where to write log records to. Defaults to" " stdout.",
+        help="Where to write log records to. Defaults to stdout.",
     )
 
     parser.add_argument(
@@ -136,12 +141,12 @@ def _parse_arguments() -> argparse.ArgumentParser:
         dest="log_level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
-        help="Log level. Defaults to INFO. Implies logging.",
+        help="Log level. If logging is specified, defaults to INFO.",
     )
     # reasonably should mention what the purpose of some of these are.
     # they primarily seem like toggles since they don't provide much else
     parser.add_argument(
-        "-V",
+        "-v",
         "--verbose",
         nargs="?",
         const=True,
@@ -261,35 +266,35 @@ class Runner:
         self._builder = DocBuilder(*args, **kwargs)
 
     @property
-    def builder(self):
+    def __builder(self):
         return self._builder
 
     def __repr__(self):
         return self.__class__.__name__
 
     def html(self):
-        return self.builder.run("html")
+        return self.__builder.run("html")
 
     def man(self):
-        return self.builder.run("man")
+        return self.__builder.run("man")
 
     def doctest(self):
-        return self.builder.run("doctest")
+        return self.__builder.run("doctest")
 
     def texinfo(self):
-        return self.builder.run("texinfo")
+        return self.__builder.run("texinfo")
 
     def singlehtml(self):
-        return self.builder.run("singlehtml")
+        return self.__builder.run("singlehtml")
 
     def text(self):
-        return self.builder.run("text")
+        return self.__builder.run("text")
 
     def linkcheck(self):
-        return self.builder.run("linkcheck")
+        return self.__builder.run("linkcheck")
 
     def doctest(self):
-        return self.builder.run("doctest")
+        return self.__builder.run("doctest")
 
     def _run(self, kind):
         """Proxy to `DocBuilder.run`.
@@ -301,10 +306,11 @@ class Runner:
         .. seealso:: `_parse_arguments`
 
         """
-        return self.builder.run(kind)
+        return self.__builder.run(kind)
 
     def __call__(self, kind):
         return self.run(kind)
+
 
 def generate_autosummary(**kwargs):
     from sphinx.ext.autosummary.generate import generate_autosummary_docs
@@ -367,8 +373,10 @@ def generate_sphinx_app(root: Path, namespace: argparse.Namespace = None):
 def get_jinja_loader(template_path: pathlib.Path) -> jinja2.loaders.FileSystemLoader:
     if template_path is None:
         template_path = "_templates"
+    elif isinstance(template_path, Path):
+        template_path = [template_path.iterdir()]
     try:
-        loader = FileSystemLoader(template_path)
+        loader = FileSystemLoader(template_path, followlinks=True)
     except TemplateError:
         return
     return loader
@@ -390,25 +398,28 @@ def setup_jinja(path_to_template: pathlib.Path) -> jinja2.environment.Environmen
 
 
 class Maker(Make):
-    def __init__(self, source_dir: pathlib.Path, build_dir: pathlib.Path, *args : List, **kwargs):
-        super().__init__(source_dir, build_dir, *args)
+    def __init__(self, source_dir: pathlib.Path, build_dir: pathlib.Path, builder: List, *args: List, **kwargs):
+        super().__init__(source_dir, build_dir, builder, *args)
         self.source_dir = source_dir
         self.build_dir = build_dir
 
-    def run_generic_build(self, **kwargs):
-        # TODO
-        pass
+    def run(self, **kwargs):
+        super().run(kwargs)
 
     def __repr__(self):
         return self.__class__.__name__
 
 
 def create_sphinx_config(confdir):
+    """Create a sphinx.config.Config object which isn't utilized currently.
+
+    Simply here as a thorough method to check for syntax errors.
+    """
     tags = Tags()
     try:
         return Config.read(confdir, tags)
     except ConfigError:
-        pdb.set_trace()  # did i do this right?
+        print(*sys.exc_info())
 
 
 def main(repo_root):

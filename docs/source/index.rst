@@ -130,8 +130,6 @@ The IPython team cleverly remembers to also check the environment variable
 files are executable without requiring the typical Unix file permissions
 system.
 
-.. Continue reading on at :doc:`rehashx`.
-
 Before delving into the startup files, the API for the main IPython config file
 will be discussed.
 
@@ -158,7 +156,7 @@ Startup API Docs
    :maxdepth: 2
    :caption: IPython Startup
 
-   rehashx <startup/rehashx>
+   Fault Handlers <startup/all_fault_handlers.rst>
    IPython Logger <startup/ipython-logger>
    Clipboard <startup/clipboard>
    Aliases <startup/aliases>

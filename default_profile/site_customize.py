@@ -63,7 +63,12 @@ try:
     from pygments.lexers.python import PythonLexer, PythonTracebackLexer
     from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 except ImportError:
-    pass
+    lexer = None
+    formatter = None
+else:
+    lexer = PythonLexer()
+    formatter = TerminalTrueColorFormatter()
+
 
 try:
     import readline
@@ -90,9 +95,6 @@ else:
 site.enablerlcompleter()
 site.ENABLE_USER_SITE = True
 site.check_enableusersite()
-
-lexer = PythonLexer()
-formatter = TerminalTrueColorFormatter()
 
 
 # }}}

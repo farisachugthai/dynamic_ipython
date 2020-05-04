@@ -27,15 +27,15 @@ def test_get_jinja_loader():
 def test_setup_jinja():
     assert isinstance(setup_jinja(templates), jinja2.environment.Environment)
 
+
 # Does a 'skipIf' not running locally mark exist because this is about to flaky as hell
 # awh goddamn. this failed on WSL
 def test_get_git_root():
     assert isinstance(get_git_root(), Path)
     assert get_git_root().exists()
 
-
 # def test_generate_sphinx_app():
 #     assert False
 
-def test_maker():
-    assert make.Maker(source, build)
+# def test_maker():
+#     assert make.Maker(source, build)

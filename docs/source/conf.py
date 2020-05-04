@@ -22,7 +22,6 @@ from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError, TemplateSyntaxError
 from jinja2.ext import autoescape, do, with_, ExtensionRegistry
-from jinja2.ext import DebugExtension
 from jinja2.loaders import ChoiceLoader, ModuleLoader, FileSystemLoader
 from jinja2.lexer import get_lexer
 
@@ -137,6 +136,20 @@ jinja_loader = instantiate_jinja_loader()
 
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
+    jinja_extensions=[
+        "jinja2.ext.i18n",
+        autoescape,
+        do,
+        with_,
+        "jinja2.ext.loopcontrols",
+    ]
+    try:
+        from jinja2.ext import DebugExtension
+    except ImportError:
+        pass
+    else:
+        jinja_extensions.append(DebugExtension)
+
     env = Environment(
         trim_blocks=True,
         lstrip_blocks=True,
@@ -146,15 +159,7 @@ def create_jinja_env():
         autoescape=jinja2.select_autoescape(
             enabled_extensions=("html", "xml"), default_for_string=True, default=True,
         ),
-        extensions=[
-            "jinja2.ext.i18n",
-            autoescape,
-            do,
-            with_,
-            "jinja2.ext.loopcontrols",
-            DebugExtension,
-            "jinja2.ext.debug",
-        ],
+        extensions=jinja_extensions,
         enable_async=True,
         bytecode_cache=jinja_templates,
         loader=jinja_loader,
