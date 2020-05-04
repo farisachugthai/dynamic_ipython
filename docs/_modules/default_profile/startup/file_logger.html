@@ -98,6 +98,7 @@
 
 <span class="kn">from</span> <span class="nn">default_profile.ipython_config</span> <span class="kn">import</span> <span class="n">UsageError</span>
 
+
 <div class="viewcode-block" id="NoUnNamedLoggers"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.NoUnNamedLoggers">[docs]</a><span class="k">class</span> <span class="nc">NoUnNamedLoggers</span><span class="p">(</span><span class="ne">NotImplementedError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Raise this error if the logger a function was called with was anonymous.&quot;&quot;&quot;</span>
 
@@ -106,8 +107,6 @@
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;You did not provide a name for the logger.&quot;</span><span class="p">)</span></div>
-
-
 
 
 <div class="viewcode-block" id="print_history"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.print_history">[docs]</a><span class="k">def</span> <span class="nf">print_history</span><span class="p">(</span><span class="n">hist_file</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -120,7 +119,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">hist_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;{get_ipython_dir()}/profile_default/history.sqlite&quot;</span>
+        <span class="n">hist_file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">get_ipython_dir</span><span class="p">()</span><span class="si">}</span><span class="s2">/profile_default/history.sqlite&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hist_file</span><span class="p">):</span>
             <span class="k">return</span>
@@ -228,7 +227,7 @@
     <span class="n">name</span> <span class="o">=</span> <span class="vm">__name__</span>
     <span class="n">level</span> <span class="o">=</span> <span class="mi">30</span>
 
-<div class="viewcode-block" id="ConfigurableLogger.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.ConfigurableLogger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="ConfigurableLogger.__init__"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.ConfigurableLogger.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logger</span></div>
 
@@ -250,7 +249,7 @@
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Pretty print the truncated results of :meth:`traits`.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt; {reprlib.Repr().repr(self.traits())}&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt; </span><span class="si">{</span><span class="n">reprlib</span><span class="o">.</span><span class="n">Repr</span><span class="p">()</span><span class="o">.</span><span class="n">repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">traits</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 
 <div class="viewcode-block" id="logging_decorator"><a class="viewcode-back" href="../../../startup/ipython-logger.html#default_profile.startup.file_logger.logging_decorator">[docs]</a><span class="k">def</span> <span class="nf">logging_decorator</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
@@ -422,7 +421,7 @@
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import logging</span>
-<span class="sd">    &gt;&gt;&gt; from default_profile.util.module_log import stream_logger</span>
+<span class="sd">    &gt;&gt;&gt; from default_profile.startup.file_logger import stream_logger</span>
 <span class="sd">    &gt;&gt;&gt; LOGGER = stream_logger(logging.getLogger(name=__name__))</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -530,6 +529,7 @@
             <span class="p">}</span>
         <span class="p">)</span></div></div>
 
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
     <span class="n">ipy_logger</span> <span class="o">=</span> <span class="n">ipython_logger</span><span class="p">()</span>
@@ -551,7 +551,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 03, 2020.
+      Last updated on May 04, 2020.
     </div>
   </body>
 </html>

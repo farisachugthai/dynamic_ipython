@@ -61,15 +61,16 @@
     <span class="n">load_vi_search_bindings</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_bindings</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">ConditionalKeyBindings</span><span class="p">,</span> <span class="n">_MergedKeyBindings</span><span class="p">,</span>
-        <span class="n">Binding</span><span class="p">,</span> <span class="n">KeyBindingsBase</span>
-    <span class="p">)</span>
+    <span class="n">KeyBindings</span><span class="p">,</span> <span class="n">ConditionalKeyBindings</span><span class="p">,</span> <span class="n">_MergedKeyBindings</span><span class="p">,</span>
+    <span class="n">Binding</span><span class="p">,</span> <span class="n">KeyBindingsBase</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.key_binding.key_processor</span> <span class="kn">import</span> <span class="n">KeyPress</span>
 <span class="kn">from</span> <span class="nn">prompt_toolkit.keys</span> <span class="kn">import</span> <span class="n">Keys</span>
 
 <span class="kn">from</span> <span class="nn">default_profile.startup.ptoolkit</span> <span class="kn">import</span> <span class="n">create_searching_keybindings</span><span class="p">,</span> <span class="n">determine_which_pt_attribute</span>
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="BindingPP"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.kb.BindingPP">[docs]</a><span class="k">class</span> <span class="nc">BindingPP</span><span class="p">(</span><span class="n">Binding</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Fix the prompt_toolkit binding.</span>
@@ -106,6 +107,7 @@
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="s2">&quot;KeyPressEvent&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="convert_bindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.kb.convert_bindings">[docs]</a><span class="k">def</span> <span class="nf">convert_bindings</span><span class="p">(</span><span class="n">bindings</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">_ip</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">:</span>
@@ -149,7 +151,7 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt;: Bindings {len(self.bindings)} KB: {len(self.kb.bindings)} &quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt;: Bindings </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span><span class="si">}</span><span class="s2"> KB: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span><span class="si">}</span><span class="s2"> &quot;</span>
 
     <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">another_one</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">another_one</span><span class="p">,</span> <span class="n">Binding</span><span class="p">):</span>
@@ -213,7 +215,7 @@
     <span class="k">def</span> <span class="nf">__repr_pretty</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">cycle</span><span class="p">):</span>
         <span class="c1"># I don&#39;t know why it has that call signature</span>
         <span class="k">return</span> <span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt; - {reprlib.recursive_repr(self.kb.bindings)}&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:&gt; - </span><span class="si">{</span><span class="n">reprlib</span><span class="o">.</span><span class="n">recursive_repr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">bindings</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
@@ -243,7 +245,7 @@
 
     <span class="nd">@_version</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">_set_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span><span class="o">+</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="n">value</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_for_keys_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_get_bindings_starting_with_keys_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
 
@@ -361,8 +363,6 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">kb</span> <span class="o">=</span> <span class="n">load_key_bindings</span><span class="p">()</span></div></div>
 
 
-
-
 <div class="viewcode-block" id="Documented"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.kb.Documented">[docs]</a><span class="k">class</span> <span class="nc">Documented</span><span class="p">(</span><span class="n">Document</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;I&#39;ll admit this subclass doesn&#39;t exist for much of a reason.</span>
 
@@ -376,6 +376,7 @@
 
     <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="create_vi_insert_keybindings"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.kb.create_vi_insert_keybindings">[docs]</a><span class="k">def</span> <span class="nf">create_vi_insert_keybindings</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">ConditionalKeyBindings</span><span class="p">:</span>
     <span class="n">kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
@@ -432,21 +433,23 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pre_existing_keys is 0&#39;</span><span class="p">)</span>
         <span class="k">return</span>
     <span class="n">_all_kb</span> <span class="o">=</span> <span class="n">pre_existing_keys</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="o">*</span><span class="n">load_vi_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>
-            <span class="o">*</span><span class="n">load_vi_search_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>
-            <span class="o">*</span><span class="n">load_auto_suggest_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>  <span class="c1"># these stopped getting added when i did this</span>
-            <span class="c1"># create_searching_keybindings().bindings,</span>
-            <span class="o">*</span><span class="n">create_vi_insert_keybindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>
-        <span class="p">])</span>
+                                        <span class="o">*</span><span class="n">load_vi_search_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>
+                                        <span class="o">*</span><span class="n">load_auto_suggest_bindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>  <span class="c1"># these stopped getting added when i did this</span>
+                                        <span class="c1"># create_searching_keybindings().bindings,</span>
+                                        <span class="o">*</span><span class="n">create_vi_insert_keybindings</span><span class="p">()</span><span class="o">.</span><span class="n">bindings</span><span class="p">,</span>
+                                        <span class="p">])</span>
     <span class="n">all_kb</span> <span class="o">=</span> <span class="n">KeyBindings</span><span class="p">()</span>
     <span class="c1"># we cant assign to bindings as its a property</span>
     <span class="n">all_kb</span><span class="o">.</span><span class="n">_bindings</span> <span class="o">=</span> <span class="n">_all_kb</span>
     <span class="k">return</span> <span class="n">all_kb</span></div>
+
 
 <div class="viewcode-block" id="flatten_kb"><a class="viewcode-back" href="../../../startup/prompt_toolkit.html#default_profile.startup.kb.flatten_kb">[docs]</a><span class="k">def</span> <span class="nf">flatten_kb</span><span class="p">():</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="p">,</span> <span class="s1">&#39;_bindings2&#39;</span><span class="p">):</span>
         <span class="c1"># fucking _MergedKeyBindings</span>
         <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">_bindings2</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">key_bindings</span><span class="o">.</span><span class="n">bindings</span><span class="p">))</span></div>
+
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">merged_kb</span> <span class="o">=</span> <span class="n">create_kb</span><span class="p">()</span>
@@ -468,7 +471,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 03, 2020.
+      Last updated on May 04, 2020.
     </div>
   </body>
 </html>

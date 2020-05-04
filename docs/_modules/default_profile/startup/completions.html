@@ -70,17 +70,16 @@
 <div class="viewcode-block" id="SimpleCompleter"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.SimpleCompleter">[docs]</a><span class="k">class</span> <span class="nc">SimpleCompleter</span><span class="p">(</span><span class="n">Completer</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Building up a customized Completer using the prompt_toolkit API.</span>
 
-<span class="sd">    Utilizes the *min_input_len* of the PathCompleter along with</span>
-<span class="sd">    adding more necessary dunders and functionally useful</span>
-<span class="sd">    fallbacks in case of being called incorrectly, rather adding</span>
-<span class="sd">    dozens of assert statements.</span>
+<span class="sd">    Utilizes the *min_input_len* of the PathCompleter along with adding more</span>
+<span class="sd">    necessary dunders and functionally useful fallbacks in case of being called</span>
+<span class="sd">    incorrectly, rather adding dozens of assert statements.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SimpleCompleter.__init__"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.SimpleCompleter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">completer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_input_len</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="ow">or</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">completer</span> <span class="o">=</span> <span class="n">WordCompleter</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)&quot;</span><span class="p">)</span>
-            <span class="p">)</span> <span class="k">if</span> <span class="n">completer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">completer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)&quot;</span><span class="p">)</span>
+        <span class="p">)</span> <span class="k">if</span> <span class="n">completer</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">completer</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">min_input_len</span> <span class="o">=</span> <span class="n">min_input_len</span></div>
 
@@ -91,7 +90,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">user_ns</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">:&gt; </span><span class="si">{self.completer}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="SimpleCompleter.document"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.SimpleCompleter.document">[docs]</a>    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">document</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -153,7 +152,7 @@
     <span class="n">expanduser</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">:</span> <span class="n">Document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">:</span> <span class="n">CompleteEvent</span>
@@ -212,7 +211,7 @@
                     <span class="k">yield</span> <span class="n">item</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{self.__class__.__name__}</span><span class="s2">: </span><span class="si">{self.completers}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">completers</span><span class="si">}</span><span class="s2">&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_completions_async</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span></div>
@@ -222,48 +221,39 @@
     <span class="sd">&quot;&quot;&quot;A FuzzyCompleter with ``__call__`` defined.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="FuzzyCallable.__init__"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.FuzzyCallable.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-        <span class="n">WORD</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">pattern</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">enable_fuzzy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FilterOrBool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="n">meta_dict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">words</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">ignore_case</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">sentence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">match_middle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+                 <span class="n">WORD</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">pattern</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">enable_fuzzy</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FilterOrBool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+                 <span class="n">meta_dict</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">words</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="n">ignore_case</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">sentence</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+                 <span class="n">match_middle</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Mostly FuzzyWordCompleter...except callable.</span>
 
 <span class="sd">        And the superclasses are initialized a little better.</span>
 
-<span class="sd">        The ``**kwargs`` in this ``__init__`` don&#39;t go to the super as is</span>
-<span class="sd">        typical.</span>
-<span class="sd">        We additionally initialize the superclasses WordCompleter and</span>
-<span class="sd">        FuzzyCompleter.</span>
-<span class="sd">        Wait hold on.</span>
-
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        FuzzyCompleter</span>
-
 <span class="sd">        :param completer: A :class:`~.Completer` instance.</span>
 <span class="sd">        :param WORD: When True, use WORD characters.</span>
 <span class="sd">        :param pattern: Regex pattern which selects the characters before the</span>
 <span class="sd">            cursor that are considered for the fuzzy matching.</span>
 <span class="sd">        :param enable_fuzzy: (bool or `Filter`) Enabled the fuzzy behavior. For</span>
 <span class="sd">            easily turning fuzzyness on or off according to a certain condition.</span>
-
-<span class="sd">        WordCompleter</span>
-
 <span class="sd">        :param words: List of words or callable that returns a list of words.</span>
 <span class="sd">        :param ignore_case: If True, case-insensitive completion.</span>
 <span class="sd">        :param meta_dict: Optional dict mapping words to their meta-text. (This</span>
 <span class="sd">            should map strings to strings or formatted text.)</span>
 <span class="sd">        :param WORD: When True, use WORD characters.</span>
+
 <span class="sd">        :param sentence: When True, don&#39;t complete by comparing the word before the</span>
 <span class="sd">            cursor, but by comparing all the text before the cursor. In this case,</span>
 <span class="sd">            the list of words is just a list of strings, where each string can</span>
 <span class="sd">            contain spaces. (Can not be used together with the WORD option.)</span>
+
 <span class="sd">        :param match_middle: When True, match not only the start, but also in the</span>
-<span class="sd">                            middle of the word.</span>
+<span class="sd">            middle of the word.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">words</span> <span class="o">=</span> <span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span> <span class="k">if</span> <span class="n">words</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">words</span>
@@ -291,13 +281,13 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FuzzyCallable.get_completions"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.FuzzyCallable.get_completions">[docs]</a>    <span class="k">def</span> <span class="nf">get_completions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fuzzy_completer</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">completer</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{self.__class__.__name__}</span><span class="s2">&gt;:&quot;</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt;:&quot;</span></div>
 
 
 <div class="viewcode-block" id="create_jedi_script"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.create_jedi_script">[docs]</a><span class="k">def</span> <span class="nf">create_jedi_script</span><span class="p">():</span>
@@ -367,7 +357,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 03, 2020.
+      Last updated on May 04, 2020.
     </div>
   </body>
 </html>

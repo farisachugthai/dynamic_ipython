@@ -41,8 +41,8 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Initialize exception handlers and run `%rehashx`.</span>
 
-<span class="sd">rehashx magic</span>
-<span class="sd">-------------</span>
+<span class="sd">`%rehashx` magic</span>
+<span class="sd">----------------</span>
 
 <span class="sd">This is an incredible little gem that&#39;s hugely useful for</span>
 <span class="sd">making IPython work as a more versatile system shell.</span>
@@ -62,7 +62,6 @@
 <span class="sd">should be discouraged here.</span>
 
 <span class="sd">.. tip::</span>
-
 <span class="sd">    A possible alternative to get_ipython().showsyntaxerror might</span>
 <span class="sd">    possibly be :func:`dis.distb`.</span>
 
@@ -90,11 +89,11 @@
 
 <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
-
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">())</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">addFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">())</span>
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a str of the last exception.</span>
@@ -128,9 +127,10 @@
 
 
 <div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span>
-        <span class="n">fileobj</span> <span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
-        <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+    <span class="n">fileobj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
+    <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Run a file with runpy.run_path and try to catch everything.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File to execute is: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="p">)</span>
@@ -173,7 +173,7 @@
 <div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Bring execfile back from python2.</span>
 
-<span class="sd">    This function is similar to the :keyword:`exec` statement, but parses a file</span>
+<span class="sd">    This function is similar to the `exec` statement, but parses a file</span>
 <span class="sd">    instead of a string.  It is different from the :keyword:`import` statement in</span>
 <span class="sd">    that it does not use the module administration --- it reads the file</span>
 <span class="sd">    unconditionally and does not create a new module.</span>
@@ -257,7 +257,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 03, 2020.
+      Last updated on May 04, 2020.
     </div>
   </body>
 </html>

@@ -86,7 +86,6 @@
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">IPython.core.interactiveshell</span> <span class="kn">import</span> <span class="n">InteractiveShellABC</span>
-<span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
 
 <div class="viewcode-block" id="inside_dir"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.inside_dir">[docs]</a><span class="nd">@contextmanager</span>
@@ -181,7 +180,6 @@
 <div class="viewcode-block" id="is_rg"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.is_rg">[docs]</a><span class="k">def</span> <span class="nf">is_rg</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Returns the path to rg.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">shutil</span><span class="o">.</span><span class="n">which</span><span class="p">(</span><span class="s2">&quot;rg&quot;</span><span class="p">)</span></div>
-
 
 
 <div class="viewcode-block" id="CommandChainDispatcherRepr"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.CommandChainDispatcherRepr">[docs]</a><span class="k">class</span> <span class="nc">CommandChainDispatcherRepr</span><span class="p">(</span><span class="n">Struct</span><span class="p">):</span>
@@ -342,14 +340,13 @@
                 <span class="c1"># Invoke fzf externally and write to output file</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">sh</span><span class="p">[</span>
                     <span class="s2">&quot;-c&quot;</span><span class="p">,</span>
-                    <span class="sa">f</span><span class="s2">&quot;cat </span><span class="si">{input_file.name}</span><span class="s2"> | fzf </span><span class="si">{fzf_options}</span><span class="s2"> &gt; </span><span class="si">{output_file.name}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;cat </span><span class="si">{</span><span class="n">input_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> | fzf </span><span class="si">{</span><span class="n">fzf_options</span><span class="si">}</span><span class="s2"> &gt; </span><span class="si">{</span><span class="n">output_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="p">]</span>
                 <span class="c1"># get selected options</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">output_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                         <span class="n">selection</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">selection</span></div></div>
-
 
 
 <div class="viewcode-block" id="fzf_history"><a class="viewcode-back" href="../../../util/command_chain.html#default_profile.util.command_chain.fzf_history">[docs]</a><span class="k">def</span> <span class="nf">fzf_history</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
@@ -438,7 +435,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 03, 2020.
+      Last updated on May 04, 2020.
     </div>
   </body>
 </html>

@@ -134,7 +134,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">blacklist</span><span class="p">:</span>
             <span class="c1"># Wait can we note that we didn&#39;t checkout the keyword list though.</span>
             <span class="k">raise</span> <span class="n">InvalidAliasError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{self.name}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;The name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> can&#39;t be aliased because it is a keyword or builtin.&quot;</span>
             <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nargs</span> <span class="o">=</span> <span class="n">validate_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
@@ -155,7 +155,7 @@
         <span class="k">return</span> <span class="n">blacklist</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{self.name!r}</span><span class="s2"> for </span><span class="si">{self.cmd!r}</span><span class="s2">&gt;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Alias: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">!r}</span><span class="s2"> for </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cmd</span><span class="si">!r}</span><span class="s2">&gt;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rest</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;If an Alias is called, run it with the shell&#39;s system function.</span>
@@ -545,22 +545,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dict_aliases</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tuple_to_dict</span><span class="p">(</span>
                 <span class="p">[</span>
-                <span class="c1"># shoddy_hack_for_aliases = [</span>
-            <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo &#39;--hide=NTUSER.*&#39;  --color=always %l | grep /$&quot;</span><span class="p">),</span>
-            <span class="c1"># (&#39;lf&#39; ,     &#39;ls -Fo --color=always | grep ^-&#39;),</span>
-            <span class="c1"># (&#39;ll&#39; ,          &#39;ls -AFho --color=always %l&#39;),</span>
-            <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr &#39;--hide=NTUSER.*&#39;  --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --hide=NTUSER.* --color=always | grep ^-..x&quot;</span><span class="p">),</span>
-            <span class="c1"># (&#39;ldir&#39; ,               &#39;ls -Fhpo | grep /$ %l&#39;),</span>
-            <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --hide=NTUSER.* --color=always | grep ^- %l&quot;</span><span class="p">),</span>
-            <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
-            <span class="c1"># (&#39;lt&#39; ,          &#39;ls -Altc --color=always %l&#39;),</span>
-            <span class="c1"># (&#39;lr&#39; ,         &#39;ls -Altcr --color=always %l&#39;)</span>
-        <span class="p">]))</span></div></div>
+                    <span class="c1"># shoddy_hack_for_aliases = [</span>
+                    <span class="p">(</span><span class="s2">&quot;l&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -CF &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;la&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AF &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;ldir&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Apo &#39;--hide=NTUSER.*&#39;  --color=always %l | grep /$&quot;</span><span class="p">),</span>
+                    <span class="c1"># (&#39;lf&#39; ,     &#39;ls -Fo --color=always | grep ^-&#39;),</span>
+                    <span class="c1"># (&#39;ll&#39; ,          &#39;ls -AFho --color=always %l&#39;),</span>
+                    <span class="p">(</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -F &#39;--hide=NTUSER.*&#39; --color=always %l&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;lr&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFhtr &#39;--hide=NTUSER.*&#39;  --color=always %l&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;lt&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFht --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;lx&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Fo --hide=NTUSER.* --color=always | grep ^-..x&quot;</span><span class="p">),</span>
+                    <span class="c1"># (&#39;ldir&#39; ,               &#39;ls -Fhpo | grep /$ %l&#39;),</span>
+                    <span class="p">(</span><span class="s2">&quot;lf&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -Foh --hide=NTUSER.* --color=always | grep ^- %l&quot;</span><span class="p">),</span>
+                    <span class="p">(</span><span class="s2">&quot;ll&quot;</span><span class="p">,</span> <span class="s2">&quot;ls -AgFh --hide=NTUSER.* --color=always %l&quot;</span><span class="p">),</span>
+                    <span class="c1"># (&#39;lt&#39; ,          &#39;ls -Altc --color=always %l&#39;),</span>
+                    <span class="c1"># (&#39;lr&#39; ,         &#39;ls -Altcr --color=always %l&#39;)</span>
+                <span class="p">]))</span></div></div>
         <span class="c1"># for i in shoddy_hack_for_aliases:</span>
         <span class="c1">#     try:</span>
         <span class="c1">#         self + i</span>
@@ -918,7 +918,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 03, 2020.
+      Last updated on May 04, 2020.
     </div>
   </body>
 </html>
