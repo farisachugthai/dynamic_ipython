@@ -12,6 +12,7 @@ import subprocess
 import sys
 import webbrowser
 from pathlib import Path
+from typing import List
 
 try:
     from importlib import metadata
@@ -86,7 +87,8 @@ def _parse_arguments() -> argparse.ArgumentParser:
         nargs="?",
         default="html",
         # ugh this shouldn't be independent of DocBuilder.kinds
-        choices=["html", "singlehtml", "text", "linkcheck", "doctest"],
+        choices=[cmds],
+        # "html", "singlehtml", "text", "linkcheck", "doctest"],
         metavar="builder: ",
         help="command to run: {}".format(",\t ".join(cmds)),
     )
@@ -388,8 +390,8 @@ def setup_jinja(path_to_template: pathlib.Path) -> jinja2.environment.Environmen
 
 
 class Maker(Make):
-    def __init__(self, source_dir: pathlib.Path, build_dir: pathlib.Path, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, source_dir: pathlib.Path, build_dir: pathlib.Path, *args : List, **kwargs):
+        super().__init__(source_dir, build_dir, *args)
         self.source_dir = source_dir
         self.build_dir = build_dir
 

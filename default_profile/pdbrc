@@ -9,33 +9,28 @@ import rlcompleter
 import traceback
 from inspect import getmembers
 
-try:
-    from default_profile.pdbrc import *
-except ImportError:
-    pass
-
-from IPython.core.magics.namespace import NamespaceMagics
+from default_profile.pdbrc import *
 
 # dude this evaluates to the file that pdb is execing not this directory omfg
-here = os.path.abspath(os.path.dirname(__file__))
 
-exec(compile(open(os.path.join(here, "", "pdbrc.py").read(), '<pdbrc>', 'exec'), globals(), locals())
+# exec(compile(open(os.path.join(os.path.abspath(os.path.dirname(__file__))), "", "pdbrc.py").read(), '<pdbrc>', 'exec'), globals(), locals())
 
 # in the do_alias() function it mentions some examples and they sounded like
 # useful alias to tack on!
 
 # Print instance variables (usage "pi classInst")
-alias pdict {i:j for i,j in sorted(%1.__dict__.items(), key=lambda i: i[0])}
+alias pdict pp {i:j for i,j in sorted(%1.__dict__.items(), key=lambda i: i[0])}
 
 alias inspect_dict for k in %1.__dict__.keys(): print("%1.", k, "=", %1.__dict__[k])  # noqa
+
 # Print instance variables in self
 alias ps pprint.pprint(inspect.getsourcelines(%1))
 
 # Apr 07, 2019
 # How in the world have I gone this long without noticing this isn't set up
-alias ? NamespaceMagics().pinfo
+# alias ? NamespaceMagics().pinfo
 # Kinda sucks now only ?func is valid not func?
-alias ?? NamespaceMagics().pinfo2
+# alias ?? NamespaceMagics().pinfo2
 
 # Been reading through the inspect docs a little
 
@@ -46,10 +41,10 @@ alias piter pp {k: v for k, v in sorted(dict(%*).items(), key=lambda i: i[0])}
 alias pv pp vars(%*)
 
 # Print the member variables of a thing.
-alias members pdict %*.__dict__
+# alias members pdict %*.__dict__
 
 # invalid syntax?
-alias getmembers pdict dict(inspect.getmembers(%1))
+# alias getmembers pdict dict(inspect.getmembers(%1))
 
 # Print the member variables of self.
 alias ps pi self
@@ -61,11 +56,14 @@ alias pg pdict globals()
 # Next and list, and step and list.
 alias nll n;;ll
 alias nl n;;l
+
 alias sl s;;l
+alias sll s;;ll
 
 # Oh i want up and down too
 alias ul u;;l
 alias dl d;;l
+
 alias ull u;;ll
 alias dll d;;ll
 

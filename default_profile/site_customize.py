@@ -33,6 +33,7 @@ Pyximport you can import it in a regular Python module like this::
 """
 import atexit
 import cgitb
+import gc
 import inspect
 import linecache
 import logging
@@ -45,13 +46,15 @@ import site
 import sys
 import types
 
-from inspect import findsource, getmodule, getsource, getsourcefile
+from inspect import findsource, getmodule, getsource, getsourcefile, getsourcelines
 from io import StringIO
 from linecache import cache
 from pathlib import Path
 from pydoc import pager, safeimport
+from typing import Optional, AnyStr
 
 logging.basicConfig(level=logging.WARNING)
+logger = logging.getLogger(name=__name__)
 
 parso = safeimport('parso')
 
@@ -112,23 +115,23 @@ def _complete(text, state):
 def _pythonrc_enable_readline():
     """Enable readline, tab completion, and history"""
     readline.set_history_length(-1)
-    readline.parse_and_bind("tab: complete")
-    readline.parse_and_bind('"\\C-Space": menu-complete')
-    readline.parse_and_bind('"\\C-a": beginning-of-line')
-    readline.parse_and_bind('"\\C-b": backward-char')
-    readline.parse_and_bind('"\\C-e": end-of-line')
-    readline.parse_and_bind('"\\C-f": forward-char')
-    readline.parse_and_bind('"\\C-h": backward-delete-char')
-    readline.parse_and_bind('"\\C-i": complete')
-    readline.parse_and_bind('"\\C-j": accept-line')
-    readline.parse_and_bind('"\\C-k": "kill-whole-line"')
-    readline.parse_and_bind('"\\C-l": clear-screen')
-    readline.parse_and_bind('"\\C-m": accept-line')
+    readline.parse_and_bind('"Tab":complete')
+    readline.parse_and_bind('"\\C-Space":menu-complete')
+    readline.parse_and_bind('"\\C-a":beginning-of-line')
+    readline.parse_and_bind('"\\C-b":backward-char')
+    readline.parse_and_bind('"\\C-e":end-of-line')
+    readline.parse_and_bind('"\\C-f":forward-char')
+    readline.parse_and_bind('"\\C-h":backward-delete-char')
+    readline.parse_and_bind('"\\C-i":complete')
+    readline.parse_and_bind('"\\C-j":accept-line')
+    readline.parse_and_bind('"\\C-k":kill-whole-line')
+    readline.parse_and_bind('"\\C-l":clear-screen')
+    readline.parse_and_bind('"\\C-m":accept-line')
     if rlcompleter is not None:
         readline.set_completer(rlcompleter.Completer.complete)
 
 
-def write_history(history_path=None):
+def write_history(history_path : Optional[AnyStr] = None):
     if readline is None:
         return
     if history_path is None:
@@ -192,6 +195,16 @@ def excepthook(exctype, value, traceback):
         sys.stderr = old_stderr
 
 
+def exception_hook(etype=None, value=None, tb=None):
+    """Return to debugger after fatal exception (Python cookbook 14.5)."""
+    if etype or value or tb is None:
+        etype, value, tb = sys.exc_info()
+    if hasattr(sys, "ps1") or not sys.stderr.isatty():
+        sys.__excepthook__(etype, value, tb)
+    traceback.print_exception(etype, value, tb)
+    pdb.pm()
+
+
 def format_callable(value):
     """Use either inspect.getfullargspec or getargpspec to format a callable."""
     if hasattr(inspect, "getfullargspec"):
@@ -244,7 +257,7 @@ def get_help_types():
     return help_types
 
 
-def source(obj):
+def pf(obj):
     """Display the source code of an object.
 
     Applies syntax highlighting if Pygments is available.
@@ -291,6 +304,10 @@ def source(obj):
             os.environ.pop("LESS", None)
 
 
+def ps(obj):
+    return pprint.pprint(getsourcelines(obj))
+
+
 if __name__ == "__main__":
     sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
@@ -300,6 +317,9 @@ if __name__ == "__main__":
     # Run installation functions and don't taint the global namespace
     history_path = Path("~/.python_history").expanduser()
     atexit.register(write_history, history_path)
+    cgitb.enable(format="text")
+
+    # todo: wrap cgitb.Hook with our new exception_hook
     try:
         # sys.excepthook = excepthook
         if readline is not None:

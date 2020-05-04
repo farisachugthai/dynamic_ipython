@@ -293,7 +293,7 @@ class MyPdb(pdb.Pdb):
     formatter = TerminalTrueColorFormatter()
 
     def __init__(
-        self, completekey="tab", skip="traitlets", _shell=None, *args, **kwargs,
+        self, completekey="Tab", skip="traitlets", _shell=None, *args, **kwargs,
     ):
         """
         To explain all the keyword arguments, pdb inherits from both
@@ -396,6 +396,20 @@ class MyPdb(pdb.Pdb):
 
     def do_import(self, mod):
         return importlib.import_module(mod)
+
+    def do_p(self, *args, sep=' ', end='\n', file=sys.stdout, flush=False):
+        """Correctly emulate the print signature and allow for no args."""
+        if len(args)==0:
+            print(sep=sep, end=end, file=file, flush=flush)
+        else:
+            return super().do_p(*args)
+
+    def do_pp(self, *args, stream=None, indent=1, width=80, depth=None, compact=False, sort_dicts=True):
+        """Correctly emulate the pprint.pprint signature and allow for no args."""
+        if len(args)==0:
+            pprint.pprint(stream=stream, indent=indent, width=width, depth=depth, compact=compact, sort_dicts=sort_dicts)
+        else:
+            return super().do_pp(*args)
 
 
 debugger = MyPdb(_shell=get_ipython())  # }}}

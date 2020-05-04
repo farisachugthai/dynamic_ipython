@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Initialize exception handlers and run `%rehashx`.
 
-rehashx magic
--------------
+`%rehashx` magic
+----------------
 
 This is an incredible little gem that's hugely useful for
 making IPython work as a more versatile system shell.
@@ -23,7 +23,6 @@ As a result, local imports or any imports not in the standard library
 should be discouraged here.
 
 .. tip::
-
     A possible alternative to get_ipython().showsyntaxerror might
     possibly be :func:`dis.distb`.
 
@@ -50,7 +49,6 @@ from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
 logging.basicConfig(level=logging.WARNING)
-
 
 logger = logging.getLogger(name=__name__)
 logger.addHandler(logging.StreamHandler())
@@ -93,6 +91,7 @@ def safe_run_path(
     fileobj: Union[Path],
     logger: Optional[logging.Logger] = None,
 ) -> Mapping:
+    """Run a file with runpy.run_path and try to catch everything."""
     if logger is None:
         logger = logging.getLogger(name=__name__)
     logger.debug("File to execute is: %s", fileobj)
@@ -135,7 +134,7 @@ def rerun_startup():
 def execfile(filename, global_namespace=None, local_namespace=None):
     """Bring execfile back from python2.
 
-    This function is similar to the :keyword:`exec` statement, but parses a file
+    This function is similar to the `exec` statement, but parses a file
     instead of a string.  It is different from the :keyword:`import` statement in
     that it does not use the module administration --- it reads the file
     unconditionally and does not create a new module.

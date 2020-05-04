@@ -22,13 +22,13 @@ class FixturesTest(unittest.TestCase):
         self.tmpdir = tempfile.mkdtemp()
         self.addCleanup(remove_tmpdir, self.tmpdir)
 
-    def test_rehashx_does_not_raise(self):
+    # def test_rehashx_does_not_raise(self):
         # are you allowed to do this?
         # would something like this work
         # with self.assertRaises(None):
         # Wait this isn't a context manager??? hold the fuck up.
-        with not self.assertRaises(Exception):
-            get_ipython().run_line_magic('rehashx')
+        # with not self.assertRaises(Exception):
+            # get_ipython().run_line_magic('rehashx')
 
 
 if __name__ == "__main__":

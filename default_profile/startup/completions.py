@@ -31,10 +31,9 @@ from prompt_toolkit.filters import FilterOrBool
 class SimpleCompleter(Completer):
     """Building up a customized Completer using the prompt_toolkit API.
 
-    Utilizes the *min_input_len* of the PathCompleter along with
-    adding more necessary dunders and functionally useful
-    fallbacks in case of being called incorrectly, rather adding
-    dozens of assert statements.
+    Utilizes the *min_input_len* of the PathCompleter along with adding more
+    necessary dunders and functionally useful fallbacks in case of being called
+    incorrectly, rather adding dozens of assert statements.
     """
 
     def __init__(self, shell=None, completer=None, min_input_len=0, *args, **kwargs):
@@ -195,36 +194,27 @@ class FuzzyCallable(FuzzyWordCompleter):
 
         And the superclasses are initialized a little better.
 
-        The ``**kwargs`` in this ``__init__`` don't go to the super as is
-        typical.
-        We additionally initialize the superclasses WordCompleter and
-        FuzzyCompleter.
-        Wait hold on.
-
         Parameters
         ----------
-        FuzzyCompleter
-
         :param completer: A :class:`~.Completer` instance.
         :param WORD: When True, use WORD characters.
         :param pattern: Regex pattern which selects the characters before the
             cursor that are considered for the fuzzy matching.
         :param enable_fuzzy: (bool or `Filter`) Enabled the fuzzy behavior. For
             easily turning fuzzyness on or off according to a certain condition.
-
-        WordCompleter
-
         :param words: List of words or callable that returns a list of words.
         :param ignore_case: If True, case-insensitive completion.
         :param meta_dict: Optional dict mapping words to their meta-text. (This
             should map strings to strings or formatted text.)
         :param WORD: When True, use WORD characters.
+
         :param sentence: When True, don't complete by comparing the word before the
             cursor, but by comparing all the text before the cursor. In this case,
             the list of words is just a list of strings, where each string can
             contain spaces. (Can not be used together with the WORD option.)
+
         :param match_middle: When True, match not only the start, but also in the
-                            middle of the word.
+            middle of the word.
 
         """
         self.words = keyword.kwlist if words is None else words
@@ -252,7 +242,7 @@ class FuzzyCallable(FuzzyWordCompleter):
         super().__init__(self.completer)
 
     def get_completions(self, document, complete_event):
-        return self.fuzzy_completer.get_completions(document, complete_event)
+        return self.completer.get_completions(document, complete_event)
 
     def __call__(self, document, complete_event):
         return self.get_completions(document, complete_event)

@@ -4,14 +4,12 @@
 
 Summary
 -------
-
-In tandem with :file:`../pyreadlineconfig.ini`_, keybindings
+In tandem with :file:`../pyreadlineconfig.ini`, keybindings
 are set up to attempt adding the standard readline bindings
 to Vim insert mode.
 
 Extended Summary
 ----------------
-
 The keybindings that prompt_toolkit provides are more powerful;
 however they're substantially more complicated and for simple
 modifications of how to work with a line-editor buffer, this proves
@@ -20,7 +18,6 @@ terminal in an unusuable state.
 
 See Also
 --------
-
 `Tim Pope's RSI Vim plugin <https://github.com/tpope/vim-rsi>`_.
 
 """

@@ -20,6 +20,10 @@ templates = source.joinpath('_templates')
 static = source.joinpath('_templates')
 
 
+def test_get_jinja_loader():
+    assert isinstance(make.get_jinja_loader(templates), jinja2.loaders.FileSystemLoader)
+
+
 def test_setup_jinja():
     assert isinstance(setup_jinja(templates), jinja2.environment.Environment)
 
@@ -32,3 +36,6 @@ def test_get_git_root():
 
 # def test_generate_sphinx_app():
 #     assert False
+
+def test_maker():
+    assert make.Maker(source, build)
