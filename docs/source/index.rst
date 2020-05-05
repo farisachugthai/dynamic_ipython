@@ -8,6 +8,8 @@ Welcome to Dynamic IPython's documentation!
 
 .. moduleauthor:: Faris Chugthai
 
+.. _introduction:
+
 Startup Scripts
 ================
 
@@ -270,10 +272,10 @@ Utilities Submodules
    Developers Notes <dev>
 
 
-
 Indices and tables
 ==================
 
+* `Go to top <introduction>`_
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
