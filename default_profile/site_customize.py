@@ -32,7 +32,7 @@ Pyximport you can import it in a regular Python module like this::
 
 """
 import atexit
-import cgitb
+import contextlib
 import gc
 import inspect
 import linecache
@@ -45,6 +45,7 @@ import shutil
 import site
 import sys
 import types
+import threading
 
 from inspect import findsource, getmodule, getsource, getsourcefile, getsourcelines
 from io import StringIO
@@ -55,8 +56,6 @@ from typing import Optional, AnyStr
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(name=__name__)
-
-parso = safeimport('parso')
 
 try:
     import pygments
@@ -84,13 +83,6 @@ except ImportError:
 else:
     rlcompleter = None
 
-try:
-    import jedi
-except ImportError:
-    jedi = None
-else:
-    from jedi.api import replstartup
-
 # Globals: {{{
 site.enablerlcompleter()
 site.ENABLE_USER_SITE = True
@@ -98,6 +90,17 @@ site.check_enableusersite()
 
 
 # }}}
+
+
+def install_jedi():
+    try:
+        import jedi
+    except ImportError:
+        jedi = None
+    else:
+        from jedi.api import replstartup
+    if jedi is not None:
+        jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
 
 
 def pyg_highlight(*param):
@@ -132,14 +135,39 @@ def _pythonrc_enable_readline():
     if rlcompleter is not None:
         readline.set_completer(rlcompleter.Completer.complete)
 
-
 def write_history(history_path : Optional[AnyStr] = None):
+    """If readline was correctly imported, append to the history_path.
+
+    .. currentmodule:: readline
+
+    .. function:: append_history_file(nelements[, filename])
+
+    Append the last *nelements* items of history to a file.  The default filename is
+    :file:`~/.history`.  The file must already exist.  This calls
+    :c:func:`append_history` in the underlying library.  This function
+    only exists if Python was compiled for a version of the library
+    that supports it.
+
+    .. versionadded:: 3.5
+
+
+    .. function:: get_history_length()
+                  set_history_length(length)
+
+    Set or return the desired number of lines to save in the history file.
+    The :func:`write_history_file` function uses this value to truncate
+    the history file, by calling :c:func:`history_truncate_file` in
+    the underlying library.  Negative values imply
+    unlimited history file size.
+
+    """
     if readline is None:
         return
     if history_path is None:
         history_path = Path("~/.python_history").expanduser()
-    readline.write_history_file(history_path)
-    logging.info("Written history to %s" % history_path)
+    length = readline.get_current_history_length()
+    readline.append_history_file(length, history_path)
+    logger.info("Written history to %s" % history_path)
 
 
 def _pythonrc_enable_history():
@@ -174,7 +202,7 @@ def get_width():
     return shutil.get_terminal_size()[1]
 
 
-def excepthook(exctype, value, traceback):
+def excepthook_(exctype, value, traceback):
     """Prints exceptions to sys.stderr and colorizes them.
 
     Notes
@@ -184,8 +212,6 @@ def excepthook(exctype, value, traceback):
     """
     old_stderr = sys.stderr
     sys.stderr = StringIO()
-
-    our_hook = cgitb.Hook(format="text", **kwargs)
 
     try:
         our_hook(exctype, value, traceback)
@@ -201,8 +227,8 @@ def exception_hook(etype=None, value=None, tb=None):
     """Return to debugger after fatal exception (Python cookbook 14.5)."""
     if etype or value or tb is None:
         etype, value, tb = sys.exc_info()
-    if hasattr(sys, "ps1") or not sys.stderr.isatty():
-        sys.__excepthook__(etype, value, tb)
+    # if hasattr(sys, "ps1") or not sys.stderr.isatty():
+    #     sys.__excepthook__(etype, value, tb)
     traceback.print_exception(etype, value, tb)
     pdb.pm()
 
@@ -271,7 +297,7 @@ def pf(obj):
             raise TypeError
         s = getsource(obj)
     except TypeError:
-        sys.stderr.write(
+        logger.exception(
             "Source code unavailable (maybe it's part of " "a C extension?)\n"
         )
         return
@@ -310,22 +336,32 @@ def ps(obj):
     return pprint.pprint(getsourcelines(obj))
 
 
+@contextlib.contextmanager
+def as_cwd(new_dir, *args, **kwargs):
+    old_cwd = Path.cwd()
+    try:
+        os.chdir(new_dir)
+        yield
+    finally:
+        os.chdir(old_dir)
+
+
+
 if __name__ == "__main__":
     sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
-    if jedi is not None:
-        jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
     # Run installation functions and don't taint the global namespace
     history_path = Path("~/.python_history").expanduser()
     atexit.register(write_history, history_path)
-    cgitb.enable(format="text")
 
     # todo: wrap cgitb.Hook with our new exception_hook
     try:
-        # sys.excepthook = excepthook
+        sys.excepthook = (threading.excepthook)
         if readline is not None:
             _pythonrc_enable_readline()
+            if hasattr(readline, "read_init_file"):
+                readline.read_init_file(os.environ.get("INPUTRC"))
         _pythonrc_enable_history()
         # sys.displayhook = pprinthook
     except Exception as e:

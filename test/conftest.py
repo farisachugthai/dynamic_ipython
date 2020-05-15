@@ -2,11 +2,13 @@
 import importlib
 import multiprocessing
 import os
+import sys
 import tempfile
 from pathlib import Path
 from warnings import simplefilter
 
-from IPython.testing.globalipapp import get_ipython
+import IPython
+from IPython.testing.globalipapp import get_ipython, start_ipython
 from IPython.core.interactiveshell import InteractiveShell
 
 import pytest
@@ -14,7 +16,10 @@ from pytest import set_trace
 
 from _pytest.nose import *
 from _pytest.unittest import *
-import sys
+
+# NOTE: marker
+# pytest.mark.skipif
+# skipif('sys.platform == "win32"'
 
 try:
     import default_profile
@@ -23,6 +28,10 @@ except ImportError:
 
 simplefilter("ignore", category=DeprecationWarning)
 simplefilter("ignore", category=PendingDeprecationWarning)
+
+
+def setup_module():
+    start_ipython()
 
 
 def pytest_load_initial_conftests(args):
@@ -35,7 +44,8 @@ def pytest_load_initial_conftests(args):
 
 @pytest.fixture(scope="session", autouse=True)
 def _ip():
-    return InteractiveShell()
+    # return InteractiveShell()
+    return get_ipython()
 
 
 @pytest.fixture(scope="session")
@@ -53,6 +63,26 @@ def pytest_addoption(parser):
     parser.addoption(
         "--slow", action="store_true", default=False, help="run slow tests"
     )
+    # juat nabbed a whole bunch of stuff from numpy
+    parser.addoption(
+        "--available-memory",
+        action="store",
+        default=None,
+        help=(
+            "Set amount of memory available for running the "
+            "test suite. This can result to tests requiring "
+            "especially large amounts of memory to be skipped. "
+            "Equivalent to setting environment variable "
+            "NPY_AVAILABLE_MEM. Default: determined"
+            "automatically."
+        ),
+    )
+
+
+def pytest_sessionstart(session):
+    available_mem = session.config.getoption("available_memory")
+    if available_mem is not None:
+        os.environ["NPY_AVAILABLE_MEM"] = available_mem
 
 
 # def pytest_cmdline_preparse(config, args):
@@ -60,6 +90,12 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "valgrind_error: Tests that are known to error under valgrind."
+    )
+    config.addinivalue_line(
+        "markers", "leaks_references: Tests that are known to leak references."
+    )
     config.addinivalue_line("markers", "slow: mark test as slow to run")
 
 
@@ -75,10 +111,6 @@ def pytest_collection_modifyitems(config, items):
 
 def pytest_report_header():
     """Try to imitate the nosetests header."""
-    # return f"\nMatplotlib:\n {matplotlib in sys.modules}\nPygments:\n {pygments in sys.modules}\nSQLite3:\n {sqlite3 in sys.modules}\n"
-    # crashes
-    import IPython
-
     print("IPython %s" % IPython.__version__)
 
     ret = []
@@ -163,3 +195,9 @@ def test_foo(pytestconfig):
     """Session-scoped fixture that returns the :class:`_pytest.config.Config` object."""
     if pytestconfig.getoption("verbose") > 0:
         pass
+
+
+@pytest.fixture(autouse=True)
+def add_np(doctest_namespace):
+    # doctest_namespace['np'] = numpy
+    doctest_namespace["_ip"] = get_ipython()

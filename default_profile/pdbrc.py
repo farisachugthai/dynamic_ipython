@@ -35,7 +35,6 @@ from pdb import Pdb, Restart
 from textwrap import dedent
 from typing import Any, AnyStr, Union
 
-import ipdb
 import pygments
 from IPython.core.getipython import get_ipython
 from IPython.core.magics.namespace import NamespaceMagics
@@ -54,7 +53,6 @@ if platform.platform().startswith("Win"):
 else:
     Windows10_Output = None
 
-from ipykernel.zmqshell import ZMQInteractiveShell
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 from pygments.lexers.python import PythonLexer
 from pygments.token import Token
@@ -201,6 +199,7 @@ class DebuggerPrompt(Prompts):
     def __init__(self, shell=None, **kwargs):
         self.shell = shell or get_ipython()
         if self.shell is not None:
+            from ipykernel.zmqshell import ZMQInteractiveShell
             if not isinstance(self.shell, ZMQInteractiveShell):
                 self.old_prompt = self.shell.prompts
                 super().__init__(self.shell, **kwargs)
@@ -250,12 +249,7 @@ class DebuggerPrompt(Prompts):
 def _init_pdb(context=3, commands=None, debugger_kls=None):  # {{{
     """Needed to add a debugger_cls param to this."""
     if debugger_kls is None:
-        if MyPdb is not None:
-            debugger_kls = MyPdb
-        elif ipdb is not None:
-            debugger_kls = ipdb
-        else:
-            debugger_kls = Pdb
+        debugger_kls = MyPdb
     if commands is None:
         commands = []
     try:
@@ -545,9 +539,6 @@ def debug_script(namespace, script=None):
 
 def get_or_start_ipython():
     """Returns the global IPython instance.
-
-    Summary
-    -------
 
     Extended Summary
     ----------------

@@ -4,15 +4,13 @@ import argparse
 import codecs
 import locale
 import os
-import pathlib
-import pdb
 import pprint
 import shutil
 import subprocess
 import sys
 import webbrowser
 from pathlib import Path
-from typing import List
+from typing import List, Any, Union, Callable, AnyStr, Optional
 
 try:
     from importlib import metadata
@@ -168,7 +166,8 @@ def _parse_arguments() -> argparse.ArgumentParser:
 
 
 class DocBuilder:
-    def __init__(self, kind=None, num_jobs=1, verbosity=0, root=None):
+    def __init__(self, kind=None, num_jobs=1, verbosity=0, root:
+            Optional[os.PathLike] =None):
         if kind is None:
             kind = "html"
         self.kind = kind
@@ -195,7 +194,7 @@ class DocBuilder:
         except OSError as e:
             logger.error(e)
 
-    def sphinx_build(self, kind, BUILD_PATH=None):
+    def sphinx_build(self, kind, BUILD_PATH: Optional[os.PathLike] =None):
         """Build docs.
 
         Examples
@@ -245,7 +244,7 @@ class DocBuilder:
             ).strip(),
         )
 
-    def open_browser(self, doc=None):
+    def open_browser(self, doc: Optional[os.PathLike] =None):
         """Open a browser tab to the provided document.
 
         :param doc: path to index.html
@@ -293,9 +292,6 @@ class Runner:
     def linkcheck(self):
         return self.__builder.run("linkcheck")
 
-    def doctest(self):
-        return self.__builder.run("doctest")
-
     def _run(self, kind):
         """Proxy to `DocBuilder.run`.
 
@@ -318,7 +314,7 @@ def generate_autosummary(**kwargs):
     generate_autosummary_docs(**kwargs)
 
 
-def generate_sphinx_app(root: Path, namespace: argparse.Namespace = None):
+def generate_sphinx_app(root: os.PathLike, namespace: Optional[argparse.Namespace] = None):
     """Generate the primary Sphinx application object that drives the project.
 
     Parameters
@@ -370,7 +366,7 @@ def generate_sphinx_app(root: Path, namespace: argparse.Namespace = None):
         return 2
 
 
-def get_jinja_loader(template_path: pathlib.Path) -> jinja2.loaders.FileSystemLoader:
+def get_jinja_loader(template_path: os.PathLike) -> jinja2.loaders.FileSystemLoader:
     if template_path is None:
         template_path = "_templates"
     elif isinstance(template_path, Path):
@@ -382,7 +378,7 @@ def get_jinja_loader(template_path: pathlib.Path) -> jinja2.loaders.FileSystemLo
     return loader
 
 
-def setup_jinja(path_to_template: pathlib.Path) -> jinja2.environment.Environment:
+def setup_jinja(path_to_template: os.PathLike) -> jinja2.environment.Environment:
     """Use jinja to set up the Sphinx environment."""
     TRIM_BLOCKS = True
     LSTRIP_BLOCKS = True
@@ -398,7 +394,7 @@ def setup_jinja(path_to_template: pathlib.Path) -> jinja2.environment.Environmen
 
 
 class Maker(Make):
-    def __init__(self, source_dir: pathlib.Path, build_dir: pathlib.Path, builder: List, *args: List, **kwargs):
+    def __init__(self, source_dir: os.PathLike, build_dir: os.PathLike, builder: List, *args: List, **kwargs):
         super().__init__(source_dir, build_dir, builder, *args)
         self.source_dir = source_dir
         self.build_dir = build_dir
@@ -410,7 +406,7 @@ class Maker(Make):
         return self.__class__.__name__
 
 
-def create_sphinx_config(confdir):
+def create_sphinx_config(confdir: os.PathLike) -> Config:
     """Create a sphinx.config.Config object which isn't utilized currently.
 
     Simply here as a thorough method to check for syntax errors.
@@ -422,7 +418,7 @@ def create_sphinx_config(confdir):
         print(*sys.exc_info())
 
 
-def main(repo_root):
+def main(repo_root: os.PathLike):
     """Create the required objects to simulate the sphinx make-main command.
 
     Create a `jinja2.Environment`, a `sphinx.project.Project`,
@@ -450,7 +446,7 @@ def main(repo_root):
     generate_sphinx_app(doc_root, user_args)
 
 
-def get_git_root():
+def get_git_root() -> Path:
     try:
         almost = codecs.decode(
             subprocess.check_output(["git", "rev-parse", "--show-toplevel"]), "utf-8"
@@ -458,7 +454,7 @@ def get_git_root():
         return Path(almost.rstrip())
     except subprocess.CalledProcessError as e:
         print(e)
-        return os.getcwd()
+        return Path.cwd()
 
 
 if __name__ == "__main__":

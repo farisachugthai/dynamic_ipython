@@ -35,8 +35,5 @@ def test_get_git_root():
     assert isinstance(get_git_root(), Path)
     assert get_git_root().exists()
 
-# def test_generate_sphinx_app():
-#     assert False
-
 # def test_maker():
-#     assert make.Maker(source, build)
+#     assert make.Maker(source, build, ['html'])

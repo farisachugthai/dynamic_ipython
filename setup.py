@@ -4,11 +4,9 @@
 
 Notes
 ------
-
 .. envvar:: PIP_VERBOSE
 
     Who knew that this was a recognized thing? As is PIP_QUIET!
-
 
 .. tip::
     Always have a fallback for determining version.
@@ -39,8 +37,10 @@ from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentI
 try:
     import pkg_resources
 except ImportError:
-    sys.exit('pkg_resources not found but is a hard requirement. Please install with.:'
-             '`python3.8 -m pip install -U pkg_resources`.')
+    sys.exit(
+        "pkg_resources not found but is a hard requirement. Please install with.:"
+        "`python3.8 -m pip install -U pkg_resources`."
+    )
 
 logging.basicConfig()
 dist = Distribution()
@@ -54,12 +54,12 @@ if len(sys.argv) == 1:
 
 
 def parse_command_line():
-    """Process features after parsing command line options"""
+    """Process features after parsing command line options."""
     _Distribution = setuptools.monkey.get_unpatched(distutils.core.Distribution)
     _distribution: setuptools.Distribution = _Distribution()
     result = dist.parse_command_line()
     # if dist.features: dist._finalize_features()
-    print('\n\n\n****')
+    print("\n\n\n****")
     print(result)
     return _distribution
 
@@ -112,6 +112,7 @@ else:
 
 # Wrangling with Setuptools: {{{
 
+
 def check_installed_modules(requirement):
     try:
         return pkg_resources.get_distribution(requirement)
@@ -142,13 +143,14 @@ def install(wheel_dirs=None):
     all_wheels = []
     for d in wheel_dirs:
         for w in os.listdir(d):
-            if w.endswith('.whl'):
+            if w.endswith(".whl"):
                 # XXX: is this necessary?
                 # from setuptools.wheel import Wheel might work
-                wheel = check_installed_modules('wheel')
+                wheel = check_installed_modules("wheel")
                 if wheel is None:
                     return
                 from wheel.wheelfile import WheelFile
+
                 wf = WheelFile(os.path.join(d, w))
                 if wf.compatible:
                     all_wheels.append(wf)
@@ -161,10 +163,10 @@ def find_dist():
 
 
 def msft():
-    if not platform.platform().startswith('Win'):
+    if not platform.platform().startswith("Win"):
         return
     # These actually sequentially require each other. Like why guys.
-    pinfo = PlatformInfo('amd64')
+    pinfo = PlatformInfo("amd64")
     rinfo = RegistryInfo(pinfo)
     sinfo = SystemInfo(rinfo)  # XXX this can raise
     einfo = EnvironmentInfo(sinfo)
@@ -212,7 +214,7 @@ REQUIRED = [
     # "pyfzf",
     "pygments",
     # "pyperclip",
-    "pyzmq",
+    # "pyzmq",
     "requests",
     "setuptools",
     "traitlets",
@@ -224,7 +226,7 @@ if platform.platform().startswith("Win"):
     REQUIRED.append("colorama")
 
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib", ],
+    "develop": ["pipenv", "pandas", "matplotlib"],
     "docs": [
         "sphinx>=2.2",
         "matplotlib>=3.0.0",
@@ -243,9 +245,9 @@ try:
     from flake8.main.setuptools_command import Flake8
 except ImportError:
     Flake8 = None
-else:
-    # Could reasonably update cmdclass but haven't seen that work yet.
-    other_cmdclass = {"flake8": Flake8}
+# else:
+#     # Could reasonably update cmdclass but haven't seen that work yet.
+#     other_cmdclass = {"flake8": Flake8}
 
 # signature: BuildDoc(dist)
 # Docstring:
@@ -260,7 +262,7 @@ try:
 except ImportError:
     BuildDoc = None
 else:
-    other_cmdclass.update({'build_sphinx': BuildDoc})
+    other_cmdclass.update({"build_sphinx": BuildDoc})
     # name = 'My project'
     # version = '1.2'
     # release = '1.2.0'
@@ -308,9 +310,12 @@ class UploadCommand(Command):
     @property
     def dist(self):
         egg_install_cmd = self.get_finalized_command("egg_info")
-        distribution = pkg_resources.Distribution(egg_install_cmd.egg_base,
-                                                  self.path_metadata, egg_install_cmd.egg_name,
-                                                  egg_install_cmd.egg_version)
+        distribution = pkg_resources.Distribution(
+            egg_install_cmd.egg_base,
+            self.path_metadata,
+            egg_install_cmd.egg_name,
+            egg_install_cmd.egg_version,
+        )
         return distribution
 
     def run(self):
@@ -371,20 +376,18 @@ try:
         # It's kinda set up as an either or tho
         # nvm this didn't work at all
         # package_dir={"default_profile": ""},
-
         packages=find_packages(where="default_profile"),
-        src_root='default_profile',
-        tests_require=EXTRAS['test'],
+        src_root="default_profile",
+        tests_require=EXTRAS["test"],
         # py_modules=find_packages(where="default_profile"),
         platforms="any",
         requires=REQUIRED,  # in what way is this different than install_requires?
         entry_points={
-            "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
+            "console_scripts": ["ip=default_profile.profile_debugger:debug.main"]
         },
         # i dont even understand what error this raised but let's leave this
         # commented out
         # setup_requires=["pkg_resources", "pipenv"],
-
         # namespace_packages=["default_profile", "default_profile.sphinxext"],
         install_requires=REQUIRED,
         extras_require=EXTRAS,
@@ -392,7 +395,7 @@ try:
         include_package_data=True,
         package_data={
             # If any package contains *.txt or *.rst files, include them:
-            "": ["*.txt", "*.rst"],
+            "": ["*.txt", "*.rst"]
         },
         license=LICENSE,
         classifiers=[

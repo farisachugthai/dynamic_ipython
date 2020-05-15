@@ -95,7 +95,7 @@
 <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARNING</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
+<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return a str of the last exception.</span>
 
 <span class="sd">    Returns</span>
@@ -106,17 +106,17 @@
     <span class="k">return</span> <span class="n">format_tb</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
+<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return `format_exc`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">format_exc</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.&quot;&quot;&quot;</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_exec_dir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.get_exec_dir">[docs]</a><span class="k">def</span> <span class="nf">get_exec_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">Path</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Returns IPython&#39;s profile_dir.startup_dir. If that can&#39;t be determined, return CWD.&quot;&quot;&quot;</span>
     <span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">_ip</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -126,7 +126,7 @@
     <span class="k">return</span> <span class="n">exec_dir</span></div>
 
 
-<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span>
+<div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span>
     <span class="n">fileobj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Path</span><span class="p">],</span>
     <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
@@ -150,7 +150,7 @@
         <span class="k">raise</span></div>
 
 
-<div class="viewcode-block" id="rerun_startup"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.rerun_startup">[docs]</a><span class="k">def</span> <span class="nf">rerun_startup</span><span class="p">():</span>
+<div class="viewcode-block" id="rerun_startup"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.rerun_startup">[docs]</a><span class="k">def</span> <span class="nf">rerun_startup</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Rerun the files in the startup directory.</span>
 
 <span class="sd">    Returns</span>
@@ -170,7 +170,7 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">global_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">local_namespace</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Bring execfile back from python2.</span>
 
 <span class="sd">    This function is similar to the `exec` statement, but parses a file</span>
@@ -209,12 +209,12 @@
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ipy_execfile"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.ipy_execfile">[docs]</a><span class="k">def</span> <span class="nf">ipy_execfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<div class="viewcode-block" id="ipy_execfile"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.ipy_execfile">[docs]</a><span class="k">def</span> <span class="nf">ipy_execfile</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run the IPython `%run` -i on a file.&quot;&quot;&quot;</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ipy_execdir"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.ipy_execdir">[docs]</a><span class="k">def</span> <span class="nf">ipy_execdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+<div class="viewcode-block" id="ipy_execdir"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.ipy_execdir">[docs]</a><span class="k">def</span> <span class="nf">ipy_execdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Execute the python files in `directory`.</span>
 
 <span class="sd">    The idea was to create a function that actually does what</span>
@@ -234,7 +234,7 @@
             <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">,</span> <span class="s2">&quot;-i&quot;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="pyg_highlight"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.pyg_highlight">[docs]</a><span class="k">def</span> <span class="nf">pyg_highlight</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="pyg_highlight"><a class="viewcode-back" href="../../../startup/rehashx.html#default_profile.startup.all_fault_handlers.pyg_highlight">[docs]</a><span class="k">def</span> <span class="nf">pyg_highlight</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Run a string through the pygments highlighter.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">pygments</span><span class="o">.</span><span class="n">highlight</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">lexer</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span></div>
 
@@ -257,7 +257,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 05, 2020.
+      Last updated on May 15, 2020.
     </div>
   </body>
 </html>

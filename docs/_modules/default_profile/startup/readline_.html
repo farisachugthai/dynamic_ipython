@@ -80,6 +80,8 @@
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">readline</span> <span class="o">=</span> <span class="kc">None</span>
 
+<span class="kn">from</span> <span class="nn">default_profile.site_customize</span> <span class="kn">import</span> <span class="n">write_history</span>
+
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IPYTHONDIR&quot;</span><span class="p">):</span>
     <span class="n">LOG_FILENAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IPYTHONDIR&quot;</span><span class="p">),</span> <span class="s2">&quot;completer.log&quot;</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
@@ -87,6 +89,9 @@
     <span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <span class="c1"># Patching pyreadline:</span>
@@ -204,10 +209,10 @@
             <span class="c1"># so build a match list.</span>
             <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="k">if</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">text</span><span class="p">)]</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> matches: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> matches: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">matches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[:]</span>
-                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;(empty input) matches: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;(empty input) matches: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">)</span>
 
         <span class="c1"># Return the state&#39;th item from the match list,</span>
         <span class="c1"># if we have that many.</span>
@@ -215,7 +220,7 @@
             <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matches</span><span class="p">[</span><span class="n">state</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;complete(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">) =&gt; </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">state</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;complete(</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">) =&gt; </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">text</span><span class="p">),</span> <span class="n">state</span><span class="p">,</span> <span class="nb">repr</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">response</span></div></div>
 
 
@@ -359,7 +364,7 @@
         <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
             <span class="k">raise</span>
         <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Could not create the history file.&quot;</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Could not create the history file.&quot;</span><span class="p">)</span>
 
     <span class="n">histfile_str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">histfile</span><span class="p">)</span>
     <span class="c1"># now ipython</span>
@@ -424,9 +429,8 @@
 
     <span class="k">if</span> <span class="n">readline</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">history_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/.python_history&quot;</span><span class="p">)</span>
-        <span class="n">setup_historyfile</span><span class="p">(</span><span class="n">history_file</span><span class="p">)</span>
-        <span class="n">original_hist_length</span> <span class="o">=</span> <span class="n">readline</span><span class="o">.</span><span class="n">get_current_history_length</span><span class="p">()</span>
-        <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">readline</span><span class="o">.</span><span class="n">write_history_file</span><span class="p">,</span> <span class="n">history_file</span><span class="p">)</span>
+        <span class="c1"># setup_historyfile(history_file)</span>
+        <span class="c1"># atexit.register(write_history, history_file)</span>
         <span class="n">readline</span><span class="o">.</span><span class="n">set_completer_delims</span><span class="p">(</span><span class="s2">&quot;@#$_&amp;-+()/*</span><span class="se">\&quot;</span><span class="s2">&#39;:;!?~`|÷×</span><span class="si">{}</span><span class="s2">=[]%&lt;&gt;</span><span class="se">\r\t\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">readline_config</span><span class="p">()</span>
 </pre></div>
@@ -436,7 +440,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 05, 2020.
+      Last updated on May 15, 2020.
     </div>
   </body>
 </html>

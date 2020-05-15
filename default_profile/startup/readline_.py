@@ -41,6 +41,8 @@ try:
 except ImportError:
     readline = None
 
+from default_profile.site_customize import write_history
+
 if os.environ.get("IPYTHONDIR"):
     LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
     logging.basicConfig(
@@ -48,6 +50,9 @@ if os.environ.get("IPYTHONDIR"):
     )
 else:
     logging.basicConfig(format="%(message)s", level=logging.DEBUG)
+
+
+logger = logging.getLogger(name=__name__)
 
 
 # Patching pyreadline:
@@ -165,10 +170,10 @@ class SimpleCompleter:
             # so build a match list.
             if text:
                 self.matches = [s for s in self.options if s and s.startswith(text)]
-                logging.debug("%s matches: %s", repr(text), self.matches)
+                logger.debug("%s matches: %s", repr(text), self.matches)
             else:
                 self.matches = self.options[:]
-                logging.debug("(empty input) matches: %s", self.matches)
+                logger.debug("(empty input) matches: %s", self.matches)
 
         # Return the state'th item from the match list,
         # if we have that many.
@@ -176,7 +181,7 @@ class SimpleCompleter:
             response = self.matches[state]
         except IndexError:
             response = None
-        logging.debug("complete(%s, %s) => %s", repr(text), state, repr(response))
+        logger.debug("complete(%s, %s) => %s", repr(text), state, repr(response))
         return response
 
 
@@ -320,7 +325,7 @@ def setup_historyfile(filename=None):
         except PermissionError:
             raise
         except OSError:
-            logging.exception("Could not create the history file.")
+            logger.exception("Could not create the history file.")
 
     histfile_str = str(histfile)
     # now ipython
@@ -385,8 +390,7 @@ if __name__ == "__main__":
 
     if readline is not None:
         history_file = os.path.expanduser("~/.python_history")
-        setup_historyfile(history_file)
-        original_hist_length = readline.get_current_history_length()
-        atexit.register(readline.write_history_file, history_file)
+        # setup_historyfile(history_file)
+        # atexit.register(write_history, history_file)
         readline.set_completer_delims("@#$_&-+()/*\"':;!?~`|÷×{}=[]%<>\r\t\n")
         readline_config()
