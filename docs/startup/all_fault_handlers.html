@@ -182,6 +182,68 @@ pointless for interactive use.</p>
 <dd><p>Run a string through the pygments highlighter.</p>
 </dd></dl>
 
+<dl class="py function">
+<dt id="default_profile.startup.all_fault_handlers.tempdir">
+<code class="sig-name descname">tempdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#tempdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a temporary directory.  This has the same
+behavior as mkdtemp but can be used as a context manager.</p>
+<p>Upon exiting the context, the directory and everything contained
+in it are removed.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">tempdir</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s1">&#39;example_file.txt&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fobj</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="n">_</span> <span class="o">=</span> <span class="n">fobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;a string</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="default_profile.startup.all_fault_handlers.in_tempdir">
+<code class="sig-name descname">in_tempdir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#in_tempdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.in_tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create, return, and change directory to a temporary directory</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">os</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">in_tempdir</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">_</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;test.txt&#39;</span><span class="p">,</span> <span class="s1">&#39;wt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;some text&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="s1">&#39;test.txt&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="s1">&#39;test.txt&#39;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">==</span> <span class="n">my_cwd</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt id="default_profile.startup.all_fault_handlers.in_dir">
+<code class="sig-name descname">in_dir</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dir</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/default_profile/startup/all_fault_handlers.html#in_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.all_fault_handlers.in_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change directory to given directory for duration of <code class="docutils literal notranslate"><span class="pre">with</span></code> block</p>
+<p>Useful when you want to use <a class="reference internal" href="#default_profile.startup.all_fault_handlers.in_tempdir" title="default_profile.startup.all_fault_handlers.in_tempdir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">in_tempdir</span></code></a> for the final test, but
+you are still debugging.  For example, you may want to do this in the end:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">in_tempdir</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="c1"># do something complicated which might break</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>But indeed the complicated thing does break, and meanwhile the
+<code class="docutils literal notranslate"><span class="pre">in_tempdir</span></code> context manager wiped out the directory with the
+temporary files that you wanted for debugging.  So, while debugging, you
+replace with something like:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">in_dir</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span> <span class="c1"># Use working directory by default</span>
+<span class="gp">... </span>    <span class="c1"># do something complicated which might break</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+</pre></div>
+</div>
+<p>You can then look at the temporary file outputs to debug what is happening,
+fix, and finally replace <code class="docutils literal notranslate"><span class="pre">in_dir</span></code> with <code class="docutils literal notranslate"><span class="pre">in_tempdir</span></code> again.</p>
+</dd></dl>
+
 </div>
 </div>
 </div>
@@ -192,7 +254,7 @@ pointless for interactive use.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 15, 2020.
+      Last updated on May 19, 2020.
     </div>
   </body>
 </html>

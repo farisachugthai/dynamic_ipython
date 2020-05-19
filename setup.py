@@ -240,14 +240,16 @@ EXTRAS = {
 
 # }}}
 
+other_cmdclass = {}
+
 # setuptools.Command: {{{
 try:
     from flake8.main.setuptools_command import Flake8
+    other_cmdclass = {"flake8": Flake8}
 except ImportError:
     Flake8 = None
 # else:
 #     # Could reasonably update cmdclass but haven't seen that work yet.
-#     other_cmdclass = {"flake8": Flake8}
 
 # signature: BuildDoc(dist)
 # Docstring:

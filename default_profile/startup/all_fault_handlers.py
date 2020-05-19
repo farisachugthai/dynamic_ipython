@@ -27,7 +27,7 @@ should be discouraged here.
     possibly be :func:`dis.distb`.
 
 """
-import code
+import inspect
 import logging
 import os
 import platform
@@ -36,11 +36,13 @@ import threading
 import traceback
 
 from cgitb import Hook
+from contextlib import contextmanager
 from os import scandir, listdir
 from pathlib import Path
+from shutil import rmtree
+from tempfile import mkdtemp
 from traceback import format_exc, format_tb
 from runpy import run_path
-
 from typing import Any, Callable, Iterable, List, Mapping, Optional, Union, AnyStr
 from types import TracebackType
 
@@ -51,9 +53,6 @@ from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 logging.basicConfig(level=logging.WARNING)
 
 logger = logging.getLogger(name=__name__)
-logger.addHandler(logging.StreamHandler())
-logger.addFilter(logging.Filter())
-logger.setLevel(logging.WARNING)
 
 
 def formatted_tb() -> TracebackType:
@@ -199,6 +198,85 @@ def pyg_highlight(param, **kwargs):
     """Run a string through the pygments highlighter."""
     return pygments.highlight(param, lexer, formatter)
 
+
+@contextmanager
+def tempdir():
+    """Create and return a temporary directory.  This has the same
+    behavior as mkdtemp but can be used as a context manager.
+
+    Upon exiting the context, the directory and everything contained
+    in it are removed.
+
+    Examples
+    --------
+    >>> import os
+    >>> with tempdir() as tmpdir:
+    ...     fname = os.path.join(tmpdir, 'example_file.txt')
+    ...     with open(fname, 'wt') as fobj:
+    ...         _ = fobj.write('a string\\n')
+    >>> os.path.exists(tmpdir)
+    False
+    """
+    d = mkdtemp()
+    yield d
+    rmtree(d)
+
+
+@contextmanager
+def in_tempdir():
+    ''' Create, return, and change directory to a temporary directory
+
+    Examples
+    --------
+    >>> import os
+    >>> my_cwd = os.getcwd()
+    >>> with in_tempdir() as tmpdir:
+    ...     _ = open('test.txt', 'wt').write('some text')
+    ...     assert os.path.isfile('test.txt')
+    ...     assert os.path.isfile(os.path.join(tmpdir, 'test.txt'))
+    >>> os.path.exists(tmpdir)
+    False
+    >>> os.getcwd() == my_cwd
+    True
+    '''
+    pwd = os.getcwd()
+    d = mkdtemp()
+    os.chdir(d)
+    yield d
+    os.chdir(pwd)
+    rmtree(d)
+
+
+@contextmanager
+def in_dir(dir=None):
+    """ Change directory to given directory for duration of ``with`` block
+
+    Useful when you want to use `in_tempdir` for the final test, but
+    you are still debugging.  For example, you may want to do this in the end:
+
+    >>> with in_tempdir() as tmpdir:
+    ...     # do something complicated which might break
+    ...     pass
+
+    But indeed the complicated thing does break, and meanwhile the
+    ``in_tempdir`` context manager wiped out the directory with the
+    temporary files that you wanted for debugging.  So, while debugging, you
+    replace with something like:
+
+    >>> with in_dir() as tmpdir: # Use working directory by default
+    ...     # do something complicated which might break
+    ...     pass
+
+    You can then look at the temporary file outputs to debug what is happening,
+    fix, and finally replace ``in_dir`` with ``in_tempdir`` again.
+    """
+    cwd = os.getcwd()
+    if dir is None:
+        yield cwd
+        return
+    os.chdir(dir)
+    yield dir
+    os.chdir(cwd)
 
 if __name__ == "__main__":
     handled = Hook(file=sys.stdout, format="text")

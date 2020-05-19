@@ -6,11 +6,11 @@ import os
 from pathlib import Path
 from platform import platform
 
-from traitlets.config import get_config
 from IPython.core.getipython import get_ipython
+from traitlets.config import get_config
 
 # even if we're not using them now we will
-from ipykernel.ipkernel import IPythonKernel, ZMQInteractiveShell  # noqa
+# from ipykernel.ipkernel import IPythonKernel, ZMQInteractiveShell  # noqa
 from ipykernel.zmqshell import ZMQShellDisplayHook
 from zmq.backend.cython.context import Context
 
@@ -19,7 +19,8 @@ c = get_config()  # noqa
 context = Context()
 
 
-def instantiate_kernel_logger():
+def instantiate_kernel_logger() -> logging.Logger:
+    """Create a logger."""
     kernel_logger = logging.getLogger(name=__name__)
     log_datefmt = "%Y-%m-%d %H:%M:%S"
     BASIC_FORMAT = "[%(created)f %(levelname)s ] %(module)s  %(message)s : "
@@ -36,7 +37,7 @@ def instantiate_kernel_logger():
 logger = instantiate_kernel_logger()
 
 
-def get_home():
+def get_home() -> Path:
     """Return :func:`pathlib.Path.home`."""
     return Path.home()
 
