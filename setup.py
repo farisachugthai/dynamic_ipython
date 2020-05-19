@@ -16,8 +16,6 @@ Notes
     Libraries like importlib_metadata exist for this purpose.
 
 """
-
-# Imports: {{{
 import codecs
 import logging
 import os
@@ -27,31 +25,29 @@ from pathlib import Path
 from shutil import rmtree
 
 import distutils
-import setuptools
 from distutils.errors import DistutilsArgError, DistutilsError
-from setuptools import setup, find_packages, Command
-from setuptools.command.easy_install import chmod, current_umask, find_distributions
-from setuptools.dist import Distribution
-from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 
-try:
-    import pkg_resources
-except ImportError:
-    sys.exit(
-        "pkg_resources not found but is a hard requirement. Please install with.:"
-        "`python3.8 -m pip install -U pkg_resources`."
-    )
+# Check out this nifty lil trick i saw in numpy src
+if 'setuptools' in sys.modules[:]:
+    import setuptools
+    from setuptools import setup, find_packages, Command
+    from setuptools.command.easy_install import chmod, current_umask, find_distributions
+    from setuptools.dist import Distribution
+    from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
+else:
+    from distutils.core import setup, setup_keywords   # noqa
 
-logging.basicConfig()
+import pkg_resources
+
+logger = logging.getLogger(name=__name__)
 dist = Distribution()
 
 if len(sys.argv) == 1:
     dist.print_commands()
 
+logger.info("Setting up package through setuptools.")
 
-# TODO: i feel like building up the distribution instance could be informative
 # dist.include(py_modules=["x"])
-
 
 def parse_command_line():
     """Process features after parsing command line options."""
@@ -94,30 +90,19 @@ try:
 except ImportError:  # noqa
     __version__ = "0.0.2"
 
-# That might be risky
-# __path__ = find_packages()
-
-# Conda Support:
-
-try:
-    import distutils.command.bdist_conda
-except ImportError:
-    distclass = (None,)
-    bdist_conda = None
-else:
-    distclass = distutils.command.bdist_conda.CondaDistribution
-
-
-# }}}
-
-# Wrangling with Setuptools: {{{
+# Wrangling with Setuptools:
 
 
 def check_installed_modules(requirement):
     try:
         return pkg_resources.get_distribution(requirement)
-    except pkg_resources.DistributionNotFoundError as e:
-        logging.error(e)
+    except pkg_resources.ContextualVersionConflict as e:
+    #  DistributionNotFoundError as e:
+        logger.error(e)
+
+    # kinda just wasting time noting the API here.
+    except (pkg_resources.RequirementParseError, pkg_resources.ResolutionError):
+        raise
 
 
 def install(wheel_dirs=None):
@@ -151,9 +136,12 @@ def install(wheel_dirs=None):
                     return
                 from wheel.wheelfile import WheelFile
 
-                wf = WheelFile(os.path.join(d, w))
-                if wf.compatible:
-                    all_wheels.append(wf)
+                try:
+                    wf = WheelFile(os.path.join(d, w))
+                except WheelError:  # problem opening the wheel
+                    logger.critical("Unable to open .whl file.")
+                    return
+                all_wheels.append(wf)
 
     return all_wheels
 
@@ -238,7 +226,7 @@ EXTRAS = {
 }
 
 
-# }}}
+# setuptools.Command:
 
 other_cmdclass = {}
 
@@ -326,7 +314,7 @@ class UploadCommand(Command):
             self.status("Removing previous builds...")
             rmtree(os.path.join(str(self.root), "dist"))
         except OSError:
-            logging.warning("Could not remove previous builds")
+            logger.warning("Could not remove previous builds")
 
         self.status("Building Source and Wheel (universal) distribution...")
         # I really dislike the idea of forking a new process from python to make
@@ -348,94 +336,95 @@ class UploadCommand(Command):
         self.outfiles.append(target)
 
         if not self.dry_run:
-            pkg_resources.ensure_directory(target)
+            # pkg_resources.ensure_directory(target)
             with open(target, "w" + mode) as f:
                 f.write(contents)
             chmod(target, 0o777 - current_umask())
 
 
-# }}}
+if "__name__" == "__main":
+    # Where the magic happens:
+    if len(sys.argv[:]) > 1:
 
-# Where the magic happens: {{{
-try:
-    setup(
-        name=NAME,
-        version=VERSION,
-        description=DESCRIPTION,
-        long_description=LONG_DESCRIPTION,
-        long_description_content_type="text/restructuredtext",
-        python_requires=REQUIRES_PYTHON,
-        author=AUTHOR,
-        author_email=EMAIL,
-        maintainer=AUTHOR,
-        maintainer_email=EMAIL,
-        url=URL,
-        # in which i add parameters based on running this script through pdb
-        # packages=find_packages(where="default_profile"),
-        # no! this HAS to be a dict
-        # as oddly ubiquitious as the package=find_packages() thing is though,
-        # package_dir is WAY more lenient. it recursively adds EVERYTHING
-        # It's kinda set up as an either or tho
-        # nvm this didn't work at all
-        # package_dir={"default_profile": ""},
-        packages=find_packages(where="default_profile"),
-        src_root="default_profile",
-        tests_require=EXTRAS["test"],
-        # py_modules=find_packages(where="default_profile"),
-        platforms="any",
-        requires=REQUIRED,  # in what way is this different than install_requires?
-        entry_points={
-            "console_scripts": ["ip=default_profile.profile_debugger:debug.main"]
-        },
-        # i dont even understand what error this raised but let's leave this
-        # commented out
-        # setup_requires=["pkg_resources", "pipenv"],
-        # namespace_packages=["default_profile", "default_profile.sphinxext"],
-        install_requires=REQUIRED,
-        extras_require=EXTRAS,
-        test_suite="test",
-        include_package_data=True,
-        package_data={
-            # If any package contains *.txt or *.rst files, include them:
-            "": ["*.txt", "*.rst"]
-        },
-        license=LICENSE,
-        classifiers=[
-            # Trove classifiers
-            # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-            "Environment :: Console",
-            "Framework :: IPython",
-            "Framework :: Jupyter",
-            "Intended Audience :: Developers",
-            "License :: OSI Approved :: MIT License",
-            "Natural Language :: English",
-            "Operating System :: Android",
-            "Operating System :: Microsoft :: Windows :: Windows 10",
-            "Operating System :: POSIX:: Linux",
-            "Programming Language :: Python",
-            "Programming Language :: Python :: 3",
-            "Programming Language :: Python :: 3 :: Only",
-            "Programming Language :: Python :: 3.6",
-            "Programming Language :: Python :: 3.7",
-            "Programming Language :: Python :: 3.8",
-            "Programming Language :: Python :: Implementation :: CPython",
-        ],
-        # $ setup.py publish support.
-        cmdclass={"upload": UploadCommand},
-        # project home page, if any
-        project_urls={
-            "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
-            "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
-            "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
-        }
-        # could also include long_description, download_url, classifiers, etc.
-    )
-except DistutilsArgError:
-    d.print_commands()
+        try:
+            setup(
+                name=NAME,
+                version=VERSION,
+                description=DESCRIPTION,
+                long_description=LONG_DESCRIPTION,
+                long_description_content_type="text/restructuredtext",
+                python_requires=REQUIRES_PYTHON,
+                author=AUTHOR,
+                author_email=EMAIL,
+                maintainer=AUTHOR,
+                maintainer_email=EMAIL,
+                url=URL,
+                # in which i add parameters based on running this script through pdb
+                # packages=find_packages(where="default_profile"),
+                # no! this HAS to be a dict
+                # as oddly ubiquitious as the package=find_packages() thing is though,
+                # package_dir is WAY more lenient. it recursively adds EVERYTHING
+                # It's kinda set up as an either or tho
+                # nvm this didn't work at all
+                # package_dir={"default_profile": ""},
 
-except DistutilsError:
-    raise
+                packages=find_packages(where="default_profile"),
+                src_root='default_profile',
+                tests_require=EXTRAS['test'],
+                # py_modules=find_packages(where="default_profile"),
+                platforms="any",
+                requires=REQUIRED,  # in what way is this different than install_requires?
+                entry_points={
+                    "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
+                },
+                # i dont even understand what error this raised but let's leave this
+                # commented out
+                # setup_requires=["pkg_resources", "pipenv"],
 
-# }}}
+                # namespace_packages=["default_profile", "default_profile.sphinxext"],
+                install_requires=REQUIRED,
+                extras_require=EXTRAS,
+                test_suite="test",
+                include_package_data=True,
+                package_data={
+                    # If any package contains *.txt or *.rst files, include them:
+                    "": ["*.txt", "*.rst"],
+                },
+                license=LICENSE,
+                classifiers=[
+                    # Trove classifiers
+                    # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+                    "Environment :: Console",
+                    "Framework :: IPython",
+                    "Framework :: Jupyter",
+                    "Intended Audience :: Developers",
+                    "License :: OSI Approved :: MIT License",
+                    "Natural Language :: English",
+                    "Operating System :: Android",
+                    "Operating System :: Microsoft :: Windows :: Windows 10",
+                    "Operating System :: POSIX:: Linux",
+                    "Programming Language :: Python",
+                    "Programming Language :: Python :: 3",
+                    "Programming Language :: Python :: 3 :: Only",
+                    "Programming Language :: Python :: 3.6",
+                    "Programming Language :: Python :: 3.7",
+                    "Programming Language :: Python :: 3.8",
+                    "Programming Language :: Python :: Implementation :: CPython",
+                ],
+                # $ setup.py publish support.
+                cmdclass={"upload": UploadCommand},
+                # project home page, if any
+                project_urls={
+                    "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
+                    "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
+                    "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
+                }
+                # could also include long_description, download_url, classifiers, etc.
+            )
+        except DistutilsArgError:
+            dist.print_commands()
 
-# Vim: set fdm=marker fdls=0:
+        except DistutilsError:
+            raise
+
+# Vim: set fdls=0:

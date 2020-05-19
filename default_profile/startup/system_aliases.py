@@ -37,12 +37,9 @@ from typing import Any, Optional, Union
 
 from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
-from default_profile.ipython_config import (
-    UsageError,
-    AliasError,
-    InvalidAliasError,
-    ApplicationError,
-)
+
+from default_profile.ipython_config import (AliasError, ApplicationError,
+                                            InvalidAliasError, UsageError)
 
 
 def validate_alias(alias) -> Optional[Any]:
@@ -272,8 +269,8 @@ class CommonAliases(UserDict):
         if kwargs:
             super().update(other=kwargs)
 
-    def __copy__(self):
-        return copy.copy(self.dict_aliases)
+    # def __copy__(self):
+    #     return copy.copy(self.dict_aliases)
 
     def __contains__(self, other):
         if type(other) == Alias:
@@ -506,27 +503,24 @@ class CommonAliases(UserDict):
         self.dict_aliases.update(
             self.tuple_to_dict(
                 [
-                    # shoddy_hack_for_aliases = [
-                    ("l", "ls -CF '--hide=NTUSER.*' --color=always %l"),
-                    ("la", "ls -AF '--hide=NTUSER.*' --color=always %l"),
-                    ("ldir", "ls -Apo '--hide=NTUSER.*'  --color=always %l | grep /$"),
-                    # ('lf' ,     'ls -Fo --color=always | grep ^-'),
-                    # ('ll' ,          'ls -AFho --color=always %l'),
-                    ("ls", "ls -F '--hide=NTUSER.*' --color=always %l"),
-                    ("lr", "ls -AgFhtr '--hide=NTUSER.*'  --color=always %l"),
-                    ("lt", "ls -AgFht --hide=NTUSER.* --color=always %l"),
+                    ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
+                    ("la", "ls -F --hide=NTUSER.* --color=always %l"),
+                    ("ldir", "ls -po --hide=NTUSER.*  --color=always %l | grep /$"),
+                    # (lf ,     ls -Fo --color=always | grep ^-),
+                    # (ll ,          ls -AFho --color=always %l),
+                    ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
+                    ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
+                    ("lr", "ls -gFhtr --hide=NTUSER.*  --color=always %l"),
+                    ("lt", "ls -gFht --hide=NTUSER.* --color=always %l"),
                     ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
-                    # ('ldir' ,               'ls -Fhpo | grep /$ %l'),
+                    # (ldir ,               ls -Fhpo | grep /$ %l),
                     ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
-                    ("ll", "ls -AgFh --hide=NTUSER.* --color=always %l"),
-                    # ('lt' ,          'ls -Altc --color=always %l'),
-                    # ('lr' ,         'ls -Altcr --color=always %l')
-                ]))
-        # for i in shoddy_hack_for_aliases:
-        #     try:
-        #         self + i
-        #     except InvalidAliasError:
-        #         raise
+                    ("ll", "ls -gFh --hide=NTUSER.* --color=always %l"),
+                    ("lt", "ls -Altc --color=always --hide=NTUSER.* %l"),
+                    ("lr", "ls -Altcr --color=always --hide=NTUSER.* %l"),
+                ]
+            )
+        )
 
 
 class LinuxAliases(CommonAliases):
@@ -560,17 +554,22 @@ class LinuxAliases(CommonAliases):
                     ("dus", "du -d 1 -ha %l"),
                     ("echo", "echo -e %l"),
                     ("free", "free -mt"),
-                    (
-                        "gpip",
-                        "export PIP_REQUIRE_VIRTUALENV=0; python -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+                    ( "gpip",
+                        "export PIP_REQUIRE_VIRTUALENV=0;"
+                        "python -m pip %l;"
+                        "export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
                     ),
                     (
                         "gpip2",
-                        "export PIP_REQUIRE_VIRTUALENV=0; python2 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+                        "export PIP_REQUIRE_VIRTUALENV=0;"
+                        "python2 -m pip %l;"
+                        "export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
                     ),
                     (
                         "gpip3",
-                        "export PIP_REQUIRE_VIRTUALENV=0; python3 -m pip %l; export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
+                        "export PIP_REQUIRE_VIRTUALENV=0;"
+                        "python3 -m pip %l;"
+                        "export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
                     ),
                     ("head", "head -n 30 %l"),
                     ("l", "ls -CF --color=always %l"),

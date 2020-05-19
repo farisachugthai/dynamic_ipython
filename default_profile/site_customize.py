@@ -32,6 +32,7 @@ Pyximport you can import it in a regular Python module like this::
 
 """
 import atexit
+import cgitb
 import contextlib
 import gc
 import inspect
@@ -83,13 +84,14 @@ except ImportError:
 else:
     rlcompleter = None
 
-# Globals: {{{
+
+# Globals:
 site.enablerlcompleter()
 site.ENABLE_USER_SITE = True
 site.check_enableusersite()
-
-
-# }}}
+ENV = os.environ.copy()
+PS1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
+PS2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
 
 def install_jedi():
@@ -103,9 +105,9 @@ def install_jedi():
         jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
 
 
-def pyg_highlight(*param):
+def pyg_highlight(*param, outfile=None):
     """Run a string through the pygments highlighter."""
-    return pygments.highlight(param, lexer, formatter)
+    return pygments.format(lex(*param, lexer), formatter, outfile)
 
 
 def _complete(text, state):
@@ -132,6 +134,11 @@ def _pythonrc_enable_readline():
     readline.parse_and_bind('"\\C-k":kill-whole-line')
     readline.parse_and_bind('"\\C-l":clear-screen')
     readline.parse_and_bind('"\\C-m":accept-line')
+    inputrc = os.environ.get("INPUTRC")
+    if inputrc is None:
+        inputrc = os.path.exists(os.path.join(os.environ.get("HOME"), "", ".inputrc"))
+    if inputrc:
+        readline.read_init_file(inputrc)
     if rlcompleter is not None:
         readline.set_completer(rlcompleter.Completer.complete)
 
@@ -253,19 +260,39 @@ def format_callable(value):
     return reprstr
 
 
-def pprinthook(value=None):
-    """Pretty print an object to sys.stdout."""
+def pprinthook(value=None, *args, **kwargs):
+    """Pretty print an object to sys.stdout.
+
+    Replacement for ``print`` that special-cases dicts and iterables.
+
+    - Dictionaries are printed one line per key-value pair, with key and value colon-separated.
+
+    - Iterables (excluding strings) are printed one line per item
+
+    - Everything else is delegated to `print`. An optional heading may be added
+      for non-iterables with ``__doc__`` defined.
+
+    """
     if value is None:
         return
-    help_types = get_help_types()
-    if not isinstance(value, help_types):
-        return pphighlight(value, width=get_width() or 80)
+    from typing import Iterable
 
-    # reprstr = format_callable(value)
-    reprstr = repr(value)
-    sys.stdout.write(reprstr)
-    if getattr(value, "__doc__", None):
-        sys.stdout.write("\n" + str(pydoc.getdoc(value)) + "\n")
+    if len(args) != 1:
+        print(*args, **kwargs)
+        return
+    x = args[0]
+    if isinstance(x, dict):
+        for k, v in x.items():
+            print(f"{k}:", v, **kwargs)
+    elif isinstance(x, Iterable) and not isinstance(x, str):
+        for i in x:
+            print(i, **kwargs)
+    else:
+        if getattr(value, "__doc__", None):
+            sys.stdout.write("\n" + str(pydoc.getdoc(value)) + "\n")
+            return
+        print(x, **kwargs)
+
 
 
 def get_help_types():
@@ -351,13 +378,16 @@ if __name__ == "__main__":
     sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
+    if jedi is not None:
+        jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
     # Run installation functions and don't taint the global namespace
     history_path = Path("~/.python_history").expanduser()
     atexit.register(write_history, history_path)
+    cgitb.enable(format="text")
 
     # todo: wrap cgitb.Hook with our new exception_hook
+    # sys.excepthook = (threading.excepthook)
     try:
-        sys.excepthook = (threading.excepthook)
         if readline is not None:
             _pythonrc_enable_readline()
             if hasattr(readline, "read_init_file"):
