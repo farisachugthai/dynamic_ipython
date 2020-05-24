@@ -59,16 +59,12 @@ def test_in_tempdir(cwd):
     assert not exists(tmpdir)
 
 
-# def test_given_directory(cwd):
-#     # Test InGivenDirectory
-#     MY_DIR = os.path.abspath(__file__)
-#     with in_dir() as tmpdir:
-#         assert tmpdir==abspath(cwd)
-#     with in_dir(MY_DIR) as tmpdir:
-#         assert tmpdir==MY_DIR
-#         assert realpath(MY_DIR)==realpath(abspath(cwd))
-#     # We were deleting the given directory!  Check not so now.
-#     assert isfile(MY_PATH)
+def test_given_directory(cwd):
+    # Test InGivenDirectory
+    with in_dir() as tmpdir:
+        assert tmpdir==abspath(cwd)
+    with in_dir(cwd) as tmpdir:
+        assert tmpdir==cwd
 
 
 if __name__ == "__main__":

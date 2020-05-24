@@ -8,9 +8,8 @@ import pprint
 import shutil
 import subprocess
 import sys
-import webbrowser
 from pathlib import Path
-from typing import List, Any, Union, Callable, AnyStr, Optional
+from typing import List, Any, Union, Callable, AnyStr, Optional, Dict
 
 try:
     from importlib import metadata
@@ -25,6 +24,7 @@ from jinja2.ext import autoescape, do, with_
 from jinja2.loaders import FileSystemLoader
 
 import sphinx
+from sphinx import package_dir
 from sphinx.application import Sphinx
 
 # So we have to make the Sphinx app first. That'll involve a ton
@@ -43,8 +43,6 @@ from sphinx.config import Config
 from sphinx.errors import ApplicationError, ConfigError
 # , ExtensionError
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
-# from sphinx.jinja2glue import SphinxFileSystemLoader
-
 # from sphinx.registry
 # from sphinx.util.console import (  # type: ignore
 #   colorize, color_terminal
@@ -254,6 +252,7 @@ class DocBuilder:
             doc = "index.html"
         url = os.path.join("file://", self.root, "build", "html", doc)
         self.status("Opening path to: {!s}".format(url))
+        import webbrowser
         webbrowser.open(url, new=2)
 
 
@@ -394,13 +393,13 @@ def setup_jinja(path_to_template: os.PathLike) -> jinja2.environment.Environment
 
 
 class Maker(Make):
-    def __init__(self, source_dir: os.PathLike, build_dir: os.PathLike, builder: List, *args: List, **kwargs):
+    def __init__(self, source_dir: os.PathLike, build_dir: os.PathLike, builder: List, *args: List, **kwargs: Dict):
         super().__init__(source_dir, build_dir, builder, *args)
         self.source_dir = source_dir
         self.build_dir = build_dir
 
     def run(self, **kwargs):
-        super().run(kwargs)
+        super().run(**kwargs)
 
     def __repr__(self):
         return self.__class__.__name__
@@ -425,19 +424,17 @@ def main(repo_root: os.PathLike):
     `sphinx.jinja2glue.SphinxFileSystemLoader`.
 
     """
-    # Probably should initialize in a different/ better way but eh
-    # build_opts = gather_sphinx_options()
     user_parser = _parse_arguments()
     user_args = user_parser.parse_args()
     doc_root = Path(repo_root).joinpath("docs")
     conf_path = doc_root.joinpath("source")
+    sphinx.locale.setlocale(locale.LC_ALL, '')
+    sphinx.locale.init_console(os.path.join(package_dir, 'locale'), 'sphinx')
+
     config = create_sphinx_config(conf_path)
 
     template_path = doc_root.joinpath("source/_templates")
     env = setup_jinja(template_path)
-
-    sphinx.locale.setlocale(locale.LC_ALL, '')
-    # sphinx.locale.init_console(os.path.join(package_dir, 'locale'), 'sphinx')
 
     if user_args.log:
         logger.setLevel(30)

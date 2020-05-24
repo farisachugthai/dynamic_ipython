@@ -19,25 +19,16 @@ dynamic-ipython 0.0.2
 >>> logging.debug('Found namespace packages were: {}'.format(found_namespace_packages))
 
 """
-import importlib
-import inspect
 import logging
 import os
-import pkgutil
 import sys
 from collections import deque
-from pathlib import Path
-import __main__
-
-import setuptools
-import pkg_resources
-from traitlets.config.application import LevelFormatter
 
 try:
-    __path__ = pkgutil.extend_path(__path__, os.path.dirname(os.path.abspath(__name__)))
-    __path__.extend(setuptools.find_packages("."))
-except NameError:
+    import __about__  # noqa
+except:
     pass
+
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
 default_log_format = (
@@ -56,8 +47,14 @@ PROFILE_DEFAULT_HANDLER.addFilter(logging.Filterer())
 PROFILE_DEFAULT_HANDLER.setFormatter(PROFILE_DEFAULT_FORMATTER)
 PROFILE_DEFAULT_LOG.addHandler(PROFILE_DEFAULT_HANDLER)
 
-default_traitlets_log_format = "[ %(name)s  %(relativeCreated)d ] %(highlevel)s %(levelname)s %(module)s %(message)s "
-default_formatter = LevelFormatter(fmt=default_traitlets_log_format)
+QUEUE = deque(maxlen=1000)
+FMT_NORMAL = logging.Formatter(
+    fmt="%(asctime)s %(levelname).4s %(message)s", datefmt="%H:%M:%S"
+)
+FMT_DEBUG = logging.Formatter(
+    fmt="%(asctime)s.%(msecs)03d %(levelname).4s [%(name)s] %(message)s",
+    datefmt="%H:%M:%S",
+)
 
 
 def ask_for_import(mod, package=None):
@@ -77,6 +74,8 @@ def ask_for_import(mod, package=None):
 
     """
     # Go for the low hanging fruit first
+    import inspect
+    import importlib
     if inspect.ismodule(mod):
         return importlib.import_module(mod, package=package)
     if inspect.getmodulename(mod):
@@ -107,19 +106,6 @@ class ModuleNotFoundError(ImportError):
         return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
 
 
-# Keep these imports below the ModuleNotFoundError backport
-try:
-    # these should always be available
-    import IPython  # noqa F0401
-    from IPython.core.getipython import get_ipython  # noqa F0401
-except (ImportError, ModuleNotFoundError):
-    pass
-
-try:
-    import __about__  # noqa
-except:
-    pass
-
 
 # More logging stuff
 
@@ -139,15 +125,6 @@ class QueueHandler(logging.Handler):
     def emit(self, record):
         self.enqueue(self.format(record))
 
-
-QUEUE = deque(maxlen=1000)
-FMT_NORMAL = logging.Formatter(
-    fmt="%(asctime)s %(levelname).4s %(message)s", datefmt="%H:%M:%S"
-)
-FMT_DEBUG = logging.Formatter(
-    fmt="%(asctime)s.%(msecs)03d %(levelname).4s [%(name)s] %(message)s",
-    datefmt="%H:%M:%S",
-)
 
 
 def setup_logging(debug=True, logfile=None):
@@ -180,11 +157,19 @@ def setup_logging(debug=True, logfile=None):
     if not logfile:
         handlers.append(logging.StreamHandler())
     else:
+        from pathlib import Path
         if logfile == "-":
             handlers.append(logging.StreamHandler())
         elif not Path(logfile).exists():
             handlers.append(logging.StreamHandler())
         else:
+
+            # Keep these imports below the ModuleNotFoundError backport
+            try:
+                from IPython.core.getipython import get_ipython  # noqa F0401
+            except (ImportError, ModuleNotFoundError):
+                return
+
             handlers.append(logging.FileHandler(get_ipython().log_dir))
 
     for handler in handlers:
@@ -195,10 +180,3 @@ def setup_logging(debug=True, logfile=None):
 
     root_logger.setLevel(40)
 
-
-# let me tell you i am LOVING this
-try:
-    from . import startup
-except ImportError:
-    importlib.invalidate_caches()
-    print("startup not imported")
