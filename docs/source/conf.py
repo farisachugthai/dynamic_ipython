@@ -96,11 +96,13 @@ if TYPE_CHECKING:
 # }}}
 
 try:
-    from default_profile.__about__ import __version__
+    from default_profile import __version__
 except ImportError:
     import importlib_metadata
 
     dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
+    # well this was unintuitive
+    __version__ = importlib_metadata.version(dist._path.stem)
 
 # Logging: {{{
 mp_logger = multiprocessing.get_logger()

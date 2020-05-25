@@ -105,7 +105,7 @@ class PathCallable(PathCompleter):
     The superclass :class:`~prompt_toolkit.completion.PathCompleter` is
     initialized with a set of parameters, and 'expanduser' defaults to False.
 
-    The 'expanduser' attribute is set to True in contrast with the 
+    The 'expanduser' attribute is set to True in contrast with the
     superclass `PathCompleter`\'s default; however, that can be overridden
     in a subclass.
     """
@@ -194,8 +194,6 @@ class FuzzyCallable(FuzzyWordCompleter):
 
         And the superclasses are initialized a little better.
 
-        Parameters
-        ----------
         :param completer: A :class:`~.Completer` instance.
         :param WORD: When True, use WORD characters.
         :param pattern: Regex pattern which selects the characters before the

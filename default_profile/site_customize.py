@@ -31,7 +31,6 @@ Pyximport you can import it in a regular Python module like this::
     import pyximport; pyximport.install()
 
 """
-import atexit
 import cgitb
 import contextlib
 import gc
@@ -40,17 +39,15 @@ import linecache
 import logging
 import os
 import pprint
-import pydoc
 import re
 import shutil
 import site
 import sys
+import threading
 import traceback
 import types
-import threading
 
 from inspect import findsource, getmodule, getsource, getsourcefile, getsourcelines
-from io import StringIO
 from linecache import cache
 from pathlib import Path
 from pydoc import pager, safeimport
@@ -64,6 +61,7 @@ try:
     from pygments.lexers.python import PythonLexer, PythonTracebackLexer
     from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 except ImportError:
+    pygments = None
     lexer = None
     formatter = None
 else:
@@ -103,11 +101,14 @@ def install_jedi():
     else:
         from jedi.api import replstartup
     if jedi is not None:
-        jedi.settings.auto_import_modules = ["readline", "pygments", "pydoc", "ast"]
+        jedi.settings.auto_import_modules = ["readline", "pygments", "ast"]
 
 
 def pyg_highlight(*param, outfile=None):
     """Run a string through the pygments highlighter."""
+    if pygments is None:
+        pprint.pprint(*param)
+        return
     return pygments.format(lex(*param, lexer), formatter, outfile)
 
 
@@ -139,7 +140,8 @@ def _pythonrc_enable_readline():
     if inputrc is None:
         inputrc = os.path.exists(os.path.join(os.environ.get("HOME"), "", ".inputrc"))
     if inputrc:
-        readline.read_init_file(inputrc)
+        if hasattr(readline, "read_init_file"):
+            readline.read_init_file(inputrc)
     if rlcompleter is not None:
         readline.set_completer(rlcompleter.Completer.complete)
 
@@ -177,19 +179,17 @@ def write_history(history_path: Optional[os.PathLike] = None):
     """
     if readline is None:
         return
-    if history_path is None:
-        history_path = Path("~/.python_history").expanduser()
     length = readline.get_current_history_length()
     readline.append_history_file(length, history_path)
     logger.info("Written history to %s" % history_path)
 
 
 def _pythonrc_enable_history():
-    """Register readline's history functions with atexit.
-    """
-    hist_path = Path("~/.python_history").expanduser()
-    atexit.register(write_history, hist_path)
-    if not hist_path.exists():
+    """Register readline's history functions with atexit."""
+    if readline is None:
+        return
+    history_path = Path("~/.python_history").expanduser()
+    if not history_path.exists():
         try:
             hist_path.touch()
         except PermissionError:
@@ -216,7 +216,7 @@ def get_width() -> AnyStr:
     return shutil.get_terminal_size()[1]
 
 
-def excepthook_(exctype, value, tb):
+def excepthook_(exctype, value, traceback):
     """Prints exceptions to sys.stderr and colorizes them.
 
     Notes
@@ -224,8 +224,9 @@ def excepthook_(exctype, value, tb):
     traceback.format_exception() isn't used because it's
     inconsistent with the built-in formatter
     """
-    old_stderr = sys.stderr
-    sys.stderr = StringIO()
+    import traceback
+
+    ret = pyg_highlight(traceback.print_exception(etype, value, tb))
 
     try:
         stderror = sys.stderr.getvalue()
@@ -233,20 +234,10 @@ def excepthook_(exctype, value, tb):
     except:  # noqa
         # oops
         sys.__excepthook__(exctype, value, tb)
+        print(sys.stderr.getvalue())
     finally:
-        sys.stderr = old_stderr
-
-
-def exception_hook(etype=None, value=None, tb=None):
-    """Return to debugger after fatal exception (Python cookbook 14.5)."""
-    if etype or value or tb is None:
-        etype, value, tb = sys.exc_info()
-    # if hasattr(sys, "ps1") or not sys.stderr.isatty():
-    #     sys.__excepthook__(etype, value, tb)
-    import traceback
-    traceback.print_exception(etype, value, tb)
-    import pdb
-    pdb.pm()
+        sys.exc_info = (None, None, None)
+        gc.collect()
 
 
 def format_callable(value):
@@ -298,13 +289,16 @@ def pprinthook(value=None, *args, **kwargs):
             print(i, **kwargs)
     else:
         if getattr(value, "__doc__", None):
+            import pydoc
+
             sys.stdout.write("\n" + str(pydoc.getdoc(value)) + "\n")
             return
         print(x, **kwargs)
 
 
-
 def get_help_types():
+    import types
+
     help_types = [
         types.BuiltinFunctionType,
         types.BuiltinMethodType,
@@ -382,25 +376,21 @@ def as_cwd(new_dir, *args, **kwargs):
         os.chdir(old_dir)
 
 
-if __name__ == "__main__":
-    sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
-    sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
-
-    if jedi is not None:
-        jedi.settings.auto_import_modules = ["readline", "pygments", "pydoc", "ast"]
-    # Run installation functions and don't taint the global namespace
-    history_path = Path("~/.python_history").expanduser()
-    atexit.register(write_history, history_path)
-    cgitb.enable(format="text")
-
-    # todo: wrap cgitb.Hook with our new exception_hook
-    # sys.excepthook = (threading.excepthook)
+def rerun_startup():
     try:
         if readline is not None:
             _pythonrc_enable_readline()
-            if hasattr(readline, "read_init_file"):
-                readline.read_init_file(os.environ.get("INPUTRC"))
         _pythonrc_enable_history()
         # sys.displayhook = pprinthook
     except Exception as e:
         print(e)
+
+
+if __name__ == "__main__":
+    if sys.stdout.isatty():
+        sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
+        sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
+        rerun_startup()
+        install_jedi()
+        cgitb.enable(format="text")
+        sys.excepthook = exception_hook
