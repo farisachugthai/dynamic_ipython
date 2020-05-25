@@ -45,6 +45,7 @@ import re
 import shutil
 import site
 import sys
+import traceback
 import types
 import threading
 
@@ -102,7 +103,7 @@ def install_jedi():
     else:
         from jedi.api import replstartup
     if jedi is not None:
-        jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
+        jedi.settings.auto_import_modules = ["readline", "pygments", "pydoc", "ast"]
 
 
 def pyg_highlight(*param, outfile=None):
@@ -142,7 +143,8 @@ def _pythonrc_enable_readline():
     if rlcompleter is not None:
         readline.set_completer(rlcompleter.Completer.complete)
 
-def write_history(history_path : Optional[AnyStr] = None):
+
+def write_history(history_path: Optional[os.PathLike] = None):
     """If readline was correctly imported, append to the history_path.
 
     .. currentmodule:: readline
@@ -167,6 +169,11 @@ def write_history(history_path : Optional[AnyStr] = None):
     the underlying library.  Negative values imply
     unlimited history file size.
 
+    Parameters
+    ----------
+    history_path : os.PathLike
+
+
     """
     if readline is None:
         return
@@ -180,11 +187,11 @@ def write_history(history_path : Optional[AnyStr] = None):
 def _pythonrc_enable_history():
     """Register readline's history functions with atexit.
     """
-    history_path = Path("~/.python_history").expanduser()
-    atexit.register(write_history, history_path)
-    if not history_path.exists():
+    hist_path = Path("~/.python_history").expanduser()
+    atexit.register(write_history, hist_path)
+    if not hist_path.exists():
         try:
-            history_path.touch()
+            hist_path.touch()
         except PermissionError:
             raise
         except OSError:
@@ -201,15 +208,15 @@ def pphighlight(o, *a, **kw):
         sys.stdout.write("\n")
 
 
-def get_height():
+def get_height() -> os.terminal_size:
     return shutil.get_terminal_size()
 
 
-def get_width():
+def get_width() -> AnyStr:
     return shutil.get_terminal_size()[1]
 
 
-def excepthook_(exctype, value, traceback):
+def excepthook_(exctype, value, tb):
     """Prints exceptions to sys.stderr and colorizes them.
 
     Notes
@@ -221,11 +228,11 @@ def excepthook_(exctype, value, traceback):
     sys.stderr = StringIO()
 
     try:
-        our_hook(exctype, value, traceback)
         stderror = sys.stderr.getvalue()
-        ret = pyg_highlight(stderror)
-    except UnicodeError:
-        old_stderr.write(ret)
+        pyg_highlight(stderror)
+    except:  # noqa
+        # oops
+        sys.__excepthook__(exctype, value, tb)
     finally:
         sys.stderr = old_stderr
 
@@ -236,7 +243,9 @@ def exception_hook(etype=None, value=None, tb=None):
         etype, value, tb = sys.exc_info()
     # if hasattr(sys, "ps1") or not sys.stderr.isatty():
     #     sys.__excepthook__(etype, value, tb)
+    import traceback
     traceback.print_exception(etype, value, tb)
+    import pdb
     pdb.pm()
 
 
@@ -373,13 +382,12 @@ def as_cwd(new_dir, *args, **kwargs):
         os.chdir(old_dir)
 
 
-
 if __name__ == "__main__":
     sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
     sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
     if jedi is not None:
-        jedi.settings.auto_import_modules = ['readline', 'pygments', 'pydoc', 'ast']
+        jedi.settings.auto_import_modules = ["readline", "pygments", "pydoc", "ast"]
     # Run installation functions and don't taint the global namespace
     history_path = Path("~/.python_history").expanduser()
     atexit.register(write_history, history_path)

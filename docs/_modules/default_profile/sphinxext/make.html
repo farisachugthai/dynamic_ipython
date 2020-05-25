@@ -43,14 +43,13 @@
 <span class="kn">import</span> <span class="nn">codecs</span>
 <span class="kn">import</span> <span class="nn">locale</span>
 <span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">pathlib</span>
-<span class="kn">import</span> <span class="nn">pdb</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">webbrowser</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="n">metadata</span>
@@ -74,13 +73,19 @@
 <span class="c1"># Then make this</span>
 <span class="c1"># from sphinx.builders.html import StandAloneHTMLBuilder</span>
 <span class="c1"># And we&#39;ll have repieced together sphinx to an order of magnitude</span>
-<span class="kn">from</span> <span class="nn">sphinx.cmd.make_mode</span> <span class="kn">import</span> <span class="n">Make</span>
-<span class="kn">from</span> <span class="nn">sphinx.config</span> <span class="kn">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">sphinx.errors</span> <span class="kn">import</span> <span class="n">ApplicationError</span><span class="p">,</span> <span class="n">ConfigError</span>
-<span class="c1"># , ExtensionError</span>
+
 <span class="c1"># from sphinx.cmd.build import build_main</span>
 <span class="c1"># from sphinx.cmd.build import handle_exception</span>
+
+<span class="kn">from</span> <span class="nn">sphinx.cmd.make_mode</span> <span class="kn">import</span> <span class="n">Make</span>
+<span class="kn">from</span> <span class="nn">sphinx.config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="c1"># This could be super useful</span>
+<span class="c1"># from sphinx.environment.adapters.toctree import TocTree</span>
+<span class="kn">from</span> <span class="nn">sphinx.errors</span> <span class="kn">import</span> <span class="n">ApplicationError</span><span class="p">,</span> <span class="n">ConfigError</span>
+<span class="c1"># , ExtensionError</span>
 <span class="c1"># from sphinx.jinja2glue import SphinxFileSystemLoader</span>
+
+<span class="c1"># from sphinx.registry</span>
 <span class="c1"># from sphinx.util.console import (  # type: ignore</span>
 <span class="c1">#   colorize, color_terminal</span>
 <span class="c1"># )</span>
@@ -92,8 +97,6 @@
 <span class="c1"># from sphinx.ext.apidoc import create</span>
 <span class="c1"># from sphinx.ext.autosummary.generate import</span>
 
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">):</span>
-    <span class="k">pass</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -123,10 +126,11 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;builder&quot;</span><span class="p">,</span>
         <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="s2">&quot;html&quot;</span><span class="p">,</span>
         <span class="c1"># ugh this shouldn&#39;t be independent of DocBuilder.kinds</span>
-        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;singlehtml&quot;</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="s2">&quot;linkcheck&quot;</span><span class="p">,</span> <span class="s2">&quot;doctest&quot;</span><span class="p">],</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;builder: &quot;</span><span class="p">,</span>
+        <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="n">cmds</span><span class="p">],</span>
+        <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+        <span class="c1"># choices=[&quot;html&quot;, &quot;singlehtml&quot;, &quot;text&quot;, &quot;linkcheck&quot;, &quot;doctest&quot;],</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;builder&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;command to run: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;,</span><span class="se">\t</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmds</span><span class="p">)),</span>
     <span class="p">)</span>
 
@@ -135,7 +139,7 @@
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--destdir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Destination to pass to Sphinx&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="s2">&quot;--destdir&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Sphinx Build Dir&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -151,12 +155,12 @@
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;-b&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--open_browser&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;BROWSER&quot;</span><span class="p">,</span>
+        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;browser&quot;</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="nb">bool</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;open_browser&quot;</span><span class="p">,</span>
         <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Toggle opening the docs in the default&quot;</span>
-        <span class="s2">&quot; browser after a successful build.&quot;</span><span class="p">,</span>
+        <span class="s2">&quot; browser after a successful build. (boolean)&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -164,7 +168,7 @@
         <span class="s2">&quot;--log&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span>
         <span class="nb">type</span><span class="o">=</span><span class="n">argparse</span><span class="o">.</span><span class="n">FileType</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">),</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Where to write log records to. Defaults to&quot;</span> <span class="s2">&quot; stdout.&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Where to write log records to. Defaults to stdout.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
@@ -173,12 +177,12 @@
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;log_level&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
         <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span> <span class="s2">&quot;ERROR&quot;</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">],</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Log level. Defaults to INFO. Implies logging.&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Log level. If logging is specified, defaults to INFO.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># reasonably should mention what the purpose of some of these are.</span>
     <span class="c1"># they primarily seem like toggles since they don&#39;t provide much else</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;-V&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;-v&quot;</span><span class="p">,</span>
         <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
         <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;?&quot;</span><span class="p">,</span>
         <span class="n">const</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -200,7 +204,8 @@
 
 
 <div class="viewcode-block" id="DocBuilder"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder">[docs]</a><span class="k">class</span> <span class="nc">DocBuilder</span><span class="p">:</span>
-<div class="viewcode-block" id="DocBuilder.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">root</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">num_jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span>
+            <span class="n">Optional</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]</span> <span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">kind</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">kind</span> <span class="o">=</span> <span class="s2">&quot;html&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
@@ -227,7 +232,7 @@
         <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DocBuilder.sphinx_build"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.sphinx_build">[docs]</a>    <span class="k">def</span> <span class="nf">sphinx_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">BUILD_PATH</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.sphinx_build"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.sphinx_build">[docs]</a>    <span class="k">def</span> <span class="nf">sphinx_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">,</span> <span class="n">BUILD_PATH</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]</span> <span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Build docs.</span>
 
 <span class="sd">        Examples</span>
@@ -277,7 +282,7 @@
             <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="DocBuilder.open_browser"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.open_browser">[docs]</a>    <span class="k">def</span> <span class="nf">open_browser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DocBuilder.open_browser"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.DocBuilder.open_browser">[docs]</a>    <span class="k">def</span> <span class="nf">open_browser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">doc</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]</span> <span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open a browser tab to the provided document.</span>
 
 <span class="sd">        :param doc: path to index.html</span>
@@ -297,36 +302,33 @@
         <span class="sd">&quot;&quot;&quot;Initialized with the same args as `DocBuilder`.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_builder</span> <span class="o">=</span> <span class="n">DocBuilder</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Runner.builder"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.builder">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_builder</span></div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">__builder</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_builder</span>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
 <div class="viewcode-block" id="Runner.html"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.html">[docs]</a>    <span class="k">def</span> <span class="nf">html</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Runner.man"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.man">[docs]</a>    <span class="k">def</span> <span class="nf">man</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;man&quot;</span><span class="p">)</span></div>
-
-    <span class="k">def</span> <span class="nf">doctest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;doctest&quot;</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Runner.texinfo"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.texinfo">[docs]</a>    <span class="k">def</span> <span class="nf">texinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;texinfo&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Runner.singlehtml"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.singlehtml">[docs]</a>    <span class="k">def</span> <span class="nf">singlehtml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;singlehtml&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Runner.text"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.text">[docs]</a>    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Runner.linkcheck"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.linkcheck">[docs]</a>    <span class="k">def</span> <span class="nf">linkcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;linkcheck&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;man&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Runner.doctest"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.doctest">[docs]</a>    <span class="k">def</span> <span class="nf">doctest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;doctest&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;doctest&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.texinfo"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.texinfo">[docs]</a>    <span class="k">def</span> <span class="nf">texinfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;texinfo&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.singlehtml"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.singlehtml">[docs]</a>    <span class="k">def</span> <span class="nf">singlehtml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;singlehtml&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.text"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.text">[docs]</a>    <span class="k">def</span> <span class="nf">text</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Runner.linkcheck"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Runner.linkcheck">[docs]</a>    <span class="k">def</span> <span class="nf">linkcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;linkcheck&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Proxy to `DocBuilder.run`.</span>
@@ -338,10 +340,11 @@
 <span class="sd">        .. seealso:: `_parse_arguments`</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__builder</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kind</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kind</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="generate_autosummary"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_autosummary">[docs]</a><span class="k">def</span> <span class="nf">generate_autosummary</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="kn">from</span> <span class="nn">sphinx.ext.autosummary.generate</span> <span class="kn">import</span> <span class="n">generate_autosummary_docs</span>
@@ -349,7 +352,7 @@
     <span class="n">generate_autosummary_docs</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="generate_sphinx_app"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_sphinx_app">[docs]</a><span class="k">def</span> <span class="nf">generate_sphinx_app</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="generate_sphinx_app"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.generate_sphinx_app">[docs]</a><span class="k">def</span> <span class="nf">generate_sphinx_app</span><span class="p">(</span><span class="n">root</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">argparse</span><span class="o">.</span><span class="n">Namespace</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Generate the primary Sphinx application object that drives the project.</span>
 
 <span class="sd">    Parameters</span>
@@ -401,17 +404,19 @@
         <span class="k">return</span> <span class="mi">2</span></div>
 
 
-<div class="viewcode-block" id="get_jinja_loader"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.get_jinja_loader">[docs]</a><span class="k">def</span> <span class="nf">get_jinja_loader</span><span class="p">(</span><span class="n">template_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">FileSystemLoader</span><span class="p">:</span>
+<div class="viewcode-block" id="get_jinja_loader"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.get_jinja_loader">[docs]</a><span class="k">def</span> <span class="nf">get_jinja_loader</span><span class="p">(</span><span class="n">template_path</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">loaders</span><span class="o">.</span><span class="n">FileSystemLoader</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">template_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">template_path</span> <span class="o">=</span> <span class="s2">&quot;_templates&quot;</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="n">template_path</span> <span class="o">=</span> <span class="p">[</span><span class="n">template_path</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()]</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">loader</span> <span class="o">=</span> <span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">template_path</span><span class="p">)</span>
+        <span class="n">loader</span> <span class="o">=</span> <span class="n">FileSystemLoader</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="n">followlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">TemplateError</span><span class="p">:</span>
         <span class="k">return</span>
     <span class="k">return</span> <span class="n">loader</span></div>
 
 
-<div class="viewcode-block" id="setup_jinja"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.setup_jinja">[docs]</a><span class="k">def</span> <span class="nf">setup_jinja</span><span class="p">(</span><span class="n">path_to_template</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">Environment</span><span class="p">:</span>
+<div class="viewcode-block" id="setup_jinja"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.setup_jinja">[docs]</a><span class="k">def</span> <span class="nf">setup_jinja</span><span class="p">(</span><span class="n">path_to_template</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">jinja2</span><span class="o">.</span><span class="n">environment</span><span class="o">.</span><span class="n">Environment</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Use jinja to set up the Sphinx environment.&quot;&quot;&quot;</span>
     <span class="n">TRIM_BLOCKS</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">LSTRIP_BLOCKS</span> <span class="o">=</span> <span class="kc">True</span>
@@ -427,28 +432,31 @@
 
 
 <div class="viewcode-block" id="Maker"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker">[docs]</a><span class="k">class</span> <span class="nc">Maker</span><span class="p">(</span><span class="n">Make</span><span class="p">):</span>
-<div class="viewcode-block" id="Maker.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<div class="viewcode-block" id="Maker.__init__"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_dir</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">builder</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span> <span class="n">build_dir</span><span class="p">,</span> <span class="n">builder</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">source_dir</span> <span class="o">=</span> <span class="n">source_dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">build_dir</span> <span class="o">=</span> <span class="n">build_dir</span></div>
 
-<div class="viewcode-block" id="Maker.run_generic_build"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.run_generic_build">[docs]</a>    <span class="k">def</span> <span class="nf">run_generic_build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="c1"># TODO</span>
-        <span class="k">pass</span></div>
+<div class="viewcode-block" id="Maker.run"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
 
 
-<div class="viewcode-block" id="create_sphinx_config"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.create_sphinx_config">[docs]</a><span class="k">def</span> <span class="nf">create_sphinx_config</span><span class="p">(</span><span class="n">confdir</span><span class="p">):</span>
+<div class="viewcode-block" id="create_sphinx_config"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.create_sphinx_config">[docs]</a><span class="k">def</span> <span class="nf">create_sphinx_config</span><span class="p">(</span><span class="n">confdir</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Config</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Create a sphinx.config.Config object which isn&#39;t utilized currently.</span>
+
+<span class="sd">    Simply here as a thorough method to check for syntax errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tags</span> <span class="o">=</span> <span class="n">Tags</span><span class="p">()</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">Config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">confdir</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
     <span class="k">except</span> <span class="n">ConfigError</span><span class="p">:</span>
-        <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>  <span class="c1"># did i do this right?</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">repo_root</span><span class="p">):</span>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">repo_root</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Create the required objects to simulate the sphinx make-main command.</span>
 
 <span class="sd">    Create a `jinja2.Environment`, a `sphinx.project.Project`,</span>
@@ -476,7 +484,7 @@
     <span class="n">generate_sphinx_app</span><span class="p">(</span><span class="n">doc_root</span><span class="p">,</span> <span class="n">user_args</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_git_root"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.get_git_root">[docs]</a><span class="k">def</span> <span class="nf">get_git_root</span><span class="p">():</span>
+<div class="viewcode-block" id="get_git_root"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.get_git_root">[docs]</a><span class="k">def</span> <span class="nf">get_git_root</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">almost</span> <span class="o">=</span> <span class="n">codecs</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
             <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">([</span><span class="s2">&quot;git&quot;</span><span class="p">,</span> <span class="s2">&quot;rev-parse&quot;</span><span class="p">,</span> <span class="s2">&quot;--show-toplevel&quot;</span><span class="p">]),</span> <span class="s2">&quot;utf-8&quot;</span>
@@ -484,7 +492,7 @@
         <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">almost</span><span class="o">.</span><span class="n">rstrip</span><span class="p">())</span>
     <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span></div>
 
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -497,7 +505,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 19, 2020.
+      Last updated on May 24, 2020.
     </div>
   </body>
 </html>

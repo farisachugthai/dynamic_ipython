@@ -10,7 +10,7 @@ import subprocess
 import sys
 import webbrowser
 from pathlib import Path
-from typing import List, Any, Union, Callable, AnyStr, Optional
+from typing import List, Optional
 
 try:
     from importlib import metadata
@@ -40,9 +40,10 @@ from sphinx.application import Sphinx
 
 from sphinx.cmd.make_mode import Make
 from sphinx.config import Config
+# This could be super useful
+# from sphinx.environment.adapters.toctree import TocTree
 from sphinx.errors import ApplicationError, ConfigError
 # , ExtensionError
-from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
 # from sphinx.jinja2glue import SphinxFileSystemLoader
 
 # from sphinx.registry
@@ -57,8 +58,6 @@ from sphinx.util.tags import Tags
 # from sphinx.ext.apidoc import create
 # from sphinx.ext.autosummary.generate import
 
-if sys.version_info < (3, 7):
-    pass
 
 logger = getLogger(name=__name__)
 

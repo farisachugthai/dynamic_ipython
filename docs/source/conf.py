@@ -13,7 +13,7 @@ import sys
 from datetime import datetime
 from importlib import import_module
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import Any, Dict, IO, Iterable, Iterator, List, Set, Tuple, AnyStr, Union, TYPE_CHECKING
 
 from IPython.lib.lexers import IPyLexer, IPython3Lexer, IPythonTracebackLexer
 
@@ -34,9 +34,16 @@ from pygments.lexers.python import (
     PythonLexer,
     PythonTracebackLexer,
 )
+
 import sphinx
 
 from sphinx import addnodes
+from sphinx.application import Sphinx
+from sphinx.builders.html import StandaloneHTMLBuilder
+from sphinx.config import Config
+from sphinx.environment import BuildEnvironment, CONFIG_OK, CONFIG_CHANGED_REASON
+from sphinx.environment.adapters.asset import ImageAdapter
+from sphinx.errors import SphinxError
 
 # from sphinx.application import Sphinx
 # and i think SphinxError is actually one too
@@ -47,14 +54,45 @@ from sphinx import addnodes
 # from sphinx.util.parallel import ParallelTasks
 
 # from sphinx.extension import Extension
+
+# Yo this line is awesome
+from sphinx.events import EventManager, core_events
 from sphinx.ext.autodoc import cut_lines
 from sphinx.ext.autosummary.generate import setup_documenters
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
+from sphinx.io import read_doc
+from sphinx.locale import __
+from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
+
+from sphinx.util import import_object, rst, progress_message, status_iterator
+from sphinx.util.build_phase import BuildPhase
+from sphinx.util.console import bold  # type: ignore
+from sphinx.util.docfields import GroupedField
+from sphinx.util.docutils import sphinx_domains
+from sphinx.util.i18n import CatalogInfo, CatalogRepository, docname_to_domain
 from sphinx.util.logging import getLogger
 from sphinx.util.docfields import GroupedField
 from sphinx.util.tags import Tags
 from sphinx.util.template import ReSTRenderer
 
+from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
+from sphinx.util.parallel import (
+    ParallelTasks,
+    SerialTasks,
+    make_chunks,
+    parallel_available,
+)
+from sphinx.util.tags import Tags
+
+# from sphinx.util.template import ReSTRenderer
+
+# side effect: registers roles and directives
+from sphinx import roles  # noqa
+from sphinx import directives  # noqa
+
+if TYPE_CHECKING:
+    from jinja2.environment import TRIM_BLOCKS, LSTRIP_BLOCKS  # noqa
+    from sphinx.domains.rst import ReSTDomain  # noqa
 # }}}
 
 try:
@@ -105,7 +143,9 @@ MarkdownLexer.aliases = ["md", "markdown"]
 DOCS_LOGGER = logging.getLogger(__name__)
 
 cgitb.enable(format="text")
-# -- Jinja2 ---------------------------------------------------
+# }}}
+
+# -- Jinja2: {{{ ---------------------------------------------------
 
 loop = asyncio.new_event_loop()
 jinja_templates = FileSystemBytecodeCache(
@@ -116,6 +156,7 @@ sphinx_templates = os.path.join(sphinx_root, "templates", "basic")
 
 
 def instantiate_jinja_loader():
+    """Run 3 different jinja and Sphinx loaders through the ChoiceLoader."""
     template_path = "_templates"
     try:
         loader = ChoiceLoader(
@@ -136,7 +177,7 @@ jinja_loader = instantiate_jinja_loader()
 
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
-    jinja_extensions=[
+    jinja_extensions = [
         "jinja2.ext.i18n",
         autoescape,
         do,
@@ -157,7 +198,7 @@ def create_jinja_env():
         # this ones a default
         # auto_reload=True,
         autoescape=jinja2.select_autoescape(
-            enabled_extensions=("html", "xml"), default_for_string=True, default=True,
+            disabled_extensions=("txt",), default_for_string=True, default=True
         ),
         extensions=jinja_extensions,
         enable_async=True,
@@ -171,11 +212,6 @@ try:
     lexer = get_lexer(create_jinja_env())
 except (TemplateError, TemplateSyntaxError):
     pass
-
-# with open(os.path.join(DOCS, "source", "index.rst")) as f:
-#     t = jinja2.Template(f.read())
-# with open(os.path.join(DOCS, "source", "index.rst.ignore"), "w") as f:
-#     f.write(t.render())
 
 
 @jinja2.contextfunction
@@ -205,9 +241,20 @@ extensions = [
     "sphinx.ext.extlinks",
     "sphinx.ext.githubpages",
     "sphinx.ext.intersphinx",
+    "sphinx.ext.linkcode",
     "sphinx.ext.napoleon",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx.domains.c",
+    "sphinx.domains.changeset",
+    "sphinx.domains.citation",
+    "sphinx.domains.cpp",
+    "sphinx.domains.index",
+    "sphinx.domains.javascript",
+    "sphinx.domains.math",
+    "sphinx.domains.python",
+    "sphinx.domains.rst",
+    "sphinx.domains.std",
     "IPython.sphinxext.ipython_directive",
     "default_profile.sphinxext.magics",
     "matplotlib.sphinxext.plot_directive",
@@ -232,16 +279,16 @@ source_suffix = {
 }
 
 # The encoding of source files.
-source_encoding = u"utf-8"
+source_encoding = "utf-8"
 
 # The master toctree document.
-master_doc = u"index"
+master_doc = "index"
 
 # -- Project information -----------------------------------------------------
 
-project = u"Dynamic IPython"
-copyright = u"(C) 2018-{} Faris Chugthai".format(datetime.now().year)
-author = u"fac"
+project = "Dynamic IPython"
+copyright = "(C) 2018-{} Faris Chugthai".format(datetime.now().year)
+author = "fac"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -264,7 +311,7 @@ release = version
 # non-false value, then it is used:
 # today = ''
 # Else, today_fmt is used as the format for a strftime call.
-today_fmt = u"%B %d, %Y"
+today_fmt = "%B %d, %Y"
 
 # The name of the default domain. Can also be None to disable a default domain.
 # The default is 'py'. Those objects in other domains (whether the domain name
@@ -273,7 +320,7 @@ today_fmt = u"%B %d, %Y"
 # domain is C, Python functions will be named “Python function”, not just
 # “function”).
 # New in version 1.0.
-default_domain = u"py"
+default_domain = "py"
 
 # The name of a reST role (builtin or Sphinx extension) to use as the
 # default role, that is, for text marked up `like this`. This can be set to
@@ -333,6 +380,11 @@ keep_warnings = False
 rst_prolog = """
 .. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
 """
+# }}}
+
+# -- Options for HTML output: {{{
+# ----------------------------------------
+# If true, keep warnings as "system message" paragraphs in the built documents.
 
 trim_doctest_flags = True
 
@@ -375,9 +427,9 @@ html_sidebars = {
     ]
 }
 
-html_title = u"Dynamic IPython"
+html_title = "Dynamic IPython"
 
-html_short_title = u"Dynamic IPython"
+html_short_title = "Dynamic IPython"
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
@@ -387,8 +439,11 @@ html_show_copyright = False
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 html_last_updated_fmt = "%b %d, %Y"
+# }}}
 
-html_baseurl = u"https://farisachugthai.github.io/dynamic-ipython"
+# -- Options for HTMLHelp output ------------------------------------
+
+html_baseurl = "https://farisachugthai.github.io/dynamic-ipython"
 
 html_compact_lists = False
 
@@ -546,7 +601,7 @@ autosummary_generate = True
 autosummary_imported_members = False
 
 # autoclass_content = u'both'
-autodoc_member_order = u"bysource"
+autodoc_member_order = "bysource"
 
 autodoc_docstring_signature = True
 
@@ -654,25 +709,25 @@ plot_html_show_source_link = True
 
 # Autosummary:
 
+
 def figure_out_why_autosummary_never_works():
     from sphinx.ext.autosummary.generate import generate_autosummary_docs
     import glob
+
     part = []
-    for i in os.listdir('.'):
+    for i in os.listdir("."):
         try:
-            part.append(glob.glob(i + os.pathsep + '**'))
+            part.append(glob.glob(i + os.pathsep + "**"))
         except IsADirectoryError:
             pass
 
-    sphinx.util.parallel.ParallelTasks([
-        generate_autosummary_docs(i) for i in part
-    ])
+    sphinx.util.parallel.ParallelTasks([generate_autosummary_docs(i) for i in part])
 
 
 # -- Setup -------------------------------------------------------------------
 
 
-sphinx.locale.setlocale(locale.LC_ALL, '')
+sphinx.locale.setlocale(locale.LC_ALL, "")
 
 
 def parse_event(sig, signode):
@@ -714,16 +769,23 @@ def setup(app):
     """
     DOCS_LOGGER.info("Initializing the Sphinx instance.")
 
-    cgitb.enable(format="text")
     app.connect("source-read", rstjinja)
+
+    # sig right there
+    # def add_lexer(self, alias: str, lexer: Union[Lexer, "Type[Lexer]"]) -> None:
+    app.add_lexer("ipythontb", IPythonTracebackLexer)
     app.add_lexer("ipython", IPyLexer)
     app.add_lexer("py3tb", PythonTracebackLexer)
+    app.add_lexer("bash", BashLexer)
     app.add_lexer("python3", PythonLexer)
     app.add_lexer("python", PythonLexer)
     app.add_lexer("pycon", PythonConsoleLexer)
     app.add_lexer("markdown", MarkdownLexer)
     app.add_lexer("rst", RstLexer)
     app.add_lexer("vim", VimLexer)
+
+    app.add_lexer("ipythontb", IPythonTracebackLexer)
+    app.add_lexer("ipython3", IPython3Lexer)
     app.add_lexer("numpy", NumPyLexer)
     app.connect("autodoc-process-docstring", cut_lines(4, what=["module"]))
     app.add_object_type(
