@@ -138,7 +138,7 @@ jinja_loader = instantiate_jinja_loader()
 
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
-    jinja_extensions=[
+    jinja_extensions = [
         "jinja2.ext.i18n",
         autoescape,
         do,
@@ -655,6 +655,7 @@ plot_rcparams = {
 plot_html_show_source_link = True
 
 # Autosummary:
+
 
 def figure_out_why_autosummary_never_works():
     from sphinx.ext.autosummary.generate import generate_autosummary_docs

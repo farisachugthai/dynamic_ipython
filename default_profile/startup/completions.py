@@ -194,8 +194,6 @@ class FuzzyCallable(FuzzyWordCompleter):
 
         And the superclasses are initialized a little better.
 
-        Parameters
-        ----------
         :param completer: A :class:`~.Completer` instance.
         :param WORD: When True, use WORD characters.
         :param pattern: Regex pattern which selects the characters before the

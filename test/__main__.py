@@ -34,7 +34,7 @@ except ImportError:
     warnings.warn("No Pytest. Using unittest.")
     pytest = None
 
-from default_profile.__about__ import __version__
+from default_profile import __version__
 
 
 # Global:

@@ -52,6 +52,7 @@ logger.info("Setting up package through setuptools.")
 
 # dist.include(py_modules=["x"])
 
+
 def parse_command_line():
     """Process features after parsing command line options."""
     _Distribution = setuptools.monkey.get_unpatched(distutils.core.Distribution)
@@ -92,7 +93,7 @@ try:
 except ImportError:  # noqa
     __version__ = "0.0.2"
 
-if sys.version_info < (3,7):
+if sys.version_info < (3, 7):
     from default_profile import ModuleNotFoundError
 
 
@@ -103,7 +104,7 @@ def check_installed_modules(requirement):
     try:
         return pkg_resources.get_distribution(requirement)
     except pkg_resources.ContextualVersionConflict as e:
-    #  DistributionNotFoundError as e:
+        #  DistributionNotFoundError as e:
         logger.error(e)
 
     # kinda just wasting time noting the API here.
