@@ -88,7 +88,6 @@ def _parse_arguments() -> argparse.ArgumentParser:
         nargs="?",
         # ugh this shouldn't be independent of DocBuilder.kinds
         choices=[cmds],
-        type=str,
         # choices=["html", "singlehtml", "text", "linkcheck", "doctest"],
         metavar="builder",
         help="command to run: {}".format(",\t ".join(cmds)),

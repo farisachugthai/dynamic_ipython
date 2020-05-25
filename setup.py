@@ -25,17 +25,20 @@ from pathlib import Path
 from shutil import rmtree
 
 import distutils
+from distutils.core import setup_keywords   # noqa
 from distutils.errors import DistutilsArgError, DistutilsError
 
 # Check out this nifty lil trick i saw in numpy src
-if 'setuptools' in sys.modules[:]:
-    import setuptools
-    from setuptools import setup, find_packages, Command
-    from setuptools.command.easy_install import chmod, current_umask, find_distributions
+if 'setuptools' in sys.modules:
     from setuptools.dist import Distribution
-    from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 else:
-    from distutils.core import setup, setup_keywords   # noqa
+    from distutils.core import setup_keywords, setup  # noqa
+    from distutils.dist import Distribution
+
+import setuptools
+from setuptools.command.easy_install import chmod, current_umask, find_distributions
+from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
+from setuptools import setup, find_packages, Command
 
 import pkg_resources
 
@@ -85,10 +88,13 @@ except importlib_metadata.PackageNotFoundError:
 # Incorrectly installing the package will leave the package partially installed
 # leading to software half running and creating deeply confusing tracebacks
 try:
-    from default_profile.__about__ import __version__
-    from default_profile import ModuleNotFoundError
+    from default_profile import __version__
 except ImportError:  # noqa
     __version__ = "0.0.2"
+
+if sys.version_info < (3,7):
+    from default_profile import ModuleNotFoundError
+
 
 # Wrangling with Setuptools:
 

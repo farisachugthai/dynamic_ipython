@@ -24,10 +24,26 @@ import os
 import sys
 from collections import deque
 
-try:
-    import __about__  # noqa
-except:
-    pass
+__all__ = [
+    "__title__",
+    "__summary__",
+    "__uri__",
+    "__version__",
+    "__author__",
+    "__email__",
+    "__license__",
+    "__copyright__",
+]
+
+__author__ = "Faris A. Chugthai"
+__copyright__ = "Copyright 2018-2020 %s" % __author__
+__email__ = "farischugthai@gmail.com"
+__license__ = "MIT"
+__package__ = "dynamic_ipython"
+__summary__ = "Core utilities for Python packages"
+__title__ = "dynamic_ipython"
+__uri__ = "https://github.com/pypa/packaging"
+__version__ = "0.0.2"
 
 
 # Lol note that there are FOUR different logging.Formatter.fmt strings in this module
@@ -94,16 +110,17 @@ def ask_for_import(mod, package=None):
         return imported
 
 
-class ModuleNotFoundError(ImportError):
-    """Try to backport this for python3.6<."""
+if sys.version_info < (3,7):
+    class ModuleNotFoundError(ImportError):
+        """Try to backport this for python3.6<."""
 
-    __module__ = "builtins"  # for py3
+        __module__ = "builtins"  # for py3
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args)
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args)
 
-    def __repr__(self):
-        return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
+        def __repr__(self):
+            return "{}\n{}".format(self.__class__.__name__, self.__traceback__)
 
 
 

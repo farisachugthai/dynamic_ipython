@@ -105,7 +105,7 @@ class PathCallable(PathCompleter):
     The superclass :class:`~prompt_toolkit.completion.PathCompleter` is
     initialized with a set of parameters, and 'expanduser' defaults to False.
 
-    The 'expanduser' attribute is set to True in contrast with the 
+    The 'expanduser' attribute is set to True in contrast with the
     superclass `PathCompleter`\'s default; however, that can be overridden
     in a subclass.
     """
