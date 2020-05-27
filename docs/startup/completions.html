@@ -8,6 +8,8 @@
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/bootstrap_sphinx.js" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -22,6 +24,8 @@
     <link rel="next" title="bottom_toolbar" href="toolbar.html" />
     <link rel="prev" title="Prompt Toolkit" href="prompt_toolkit.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
+
+  <script type="text/javascript" src="../_static/js/copybutton.js"></script>
 
   </head><body>
 
@@ -151,20 +155,20 @@ in a subclass.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="default_profile.startup.completions.get_path_completer">
-<code class="sig-name descname">get_path_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#get_path_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.get_path_completer" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.completions.create_path_completer">
+<code class="sig-name descname">create_path_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#create_path_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.create_path_completer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Basically took this from Jon’s unit tests.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="default_profile.startup.completions.get_fuzzy_keyword_completer">
-<code class="sig-name descname">get_fuzzy_keyword_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#get_fuzzy_keyword_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.get_fuzzy_keyword_completer" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.completions.create_fuzzy_keyword_completer">
+<code class="sig-name descname">create_fuzzy_keyword_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#create_fuzzy_keyword_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.create_fuzzy_keyword_completer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return FuzzyWordCompleter initialized with all valid Python keywords.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="default_profile.startup.completions.get_word_completer">
-<code class="sig-name descname">get_word_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#get_word_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.get_word_completer" title="Permalink to this definition">¶</a></dt>
+<dt id="default_profile.startup.completions.create_word_completer">
+<code class="sig-name descname">create_word_completer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#create_word_completer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.create_word_completer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return WordCompleter initialized with all valid Python keywords.</p>
 </dd></dl>
 
@@ -210,30 +214,29 @@ it so we don’t force the method definition.</p>
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">WORD</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">pattern</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Pattern<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">enable_fuzzy</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>prompt_toolkit.filters.base.Filter<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">True</span></em>, <em class="sig-param"><span class="n">meta_dict</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>Dict<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">words</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">, </span>Callable<span class="p">[</span><span class="p">]</span><span class="p">, </span>List<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)">str</a><span class="p">]</span><span class="p">]</span><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ignore_case</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">sentence</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">False</span></em>, <em class="sig-param"><span class="n">match_middle</span><span class="p">:</span> <span class="n">Union<span class="p">[</span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.8)">bool</a><span class="p">, </span>NoneType<span class="p">]</span></span> <span class="o">=</span> <span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/completions.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/completions.html#FuzzyCallable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.completions.FuzzyCallable.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mostly FuzzyWordCompleter…except callable.</p>
 <p>And the superclasses are initialized a little better.</p>
-<p>:param :
-:type : param completer: A <code class="xref py py-class docutils literal notranslate"><span class="pre">Completer</span></code> instance.
-:param :
-:type : param WORD: When True, use WORD characters.
-:param : cursor that are considered for the fuzzy matching.
-:type : param pattern: Regex pattern which selects the characters before the
-:param : easily turning fuzzyness on or off according to a certain condition.
-:type : param enable_fuzzy: (bool or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Filter</span></code>) Enabled the fuzzy behavior. For
-:param :
-:type : param words: List of words or callable that returns a list of words.
-:param :
-:type : param ignore_case: If True, case-insensitive completion.
-:param : should map strings to strings or formatted text.)
-:type : param meta_dict: Optional dict mapping words to their meta-text. (This
-:param :
-:type : param WORD: When True, use WORD characters.
-:param : cursor, but by comparing all the text before the cursor. In this case,</p>
-<blockquote>
-<div><p>the list of words is just a list of strings, where each string can
-contain spaces. (Can not be used together with the WORD option.)</p>
-</div></blockquote>
-<p>:type : param sentence: When True, don’t complete by comparing the word before the
-:param : middle of the word.
-:type : param match_middle: When True, match not only the start, but also in the</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>completer</strong> – A <code class="xref py py-class docutils literal notranslate"><span class="pre">Completer</span></code> instance.</p></li>
+<li><p><strong>WORD</strong> – When True, use WORD characters.</p></li>
+<li><p><strong>pattern</strong> – Regex pattern which selects the characters before the
+cursor that are considered for the fuzzy matching.</p></li>
+<li><p><strong>enable_fuzzy</strong> – (bool or <code class="xref py py-obj docutils literal notranslate"><span class="pre">Filter</span></code>) Enabled the fuzzy behavior. For
+easily turning fuzzyness on or off according to a certain condition.</p></li>
+<li><p><strong>words</strong> – List of words or callable that returns a list of words.</p></li>
+<li><p><strong>ignore_case</strong> – If True, case-insensitive completion.</p></li>
+<li><p><strong>meta_dict</strong> – Optional dict mapping words to their meta-text. (This
+should map strings to strings or formatted text.)</p></li>
+<li><p><strong>WORD</strong> – When True, use WORD characters.</p></li>
+<li><p><strong>sentence</strong> – When True, don’t complete by comparing the word before the
+cursor, but by comparing all the text before the cursor. In this case,
+the list of words is just a list of strings, where each string can
+contain spaces. (Can not be used together with the WORD option.)</p></li>
+<li><p><strong>match_middle</strong> – When True, match not only the start, but also in the
+middle of the word.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -266,7 +269,7 @@ integrated into the rest of the app.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 24, 2020.
+      Last updated on May 27, 2020.
     </div>
   </body>
 </html>

@@ -18,12 +18,15 @@ from typing import Any, Dict, IO, Iterable, Iterator, List, Set, Tuple, AnyStr, 
 from IPython.lib.lexers import IPyLexer, IPython3Lexer, IPythonTracebackLexer
 
 import jinja2
+from jinja2 import evalcontextfilter, Markup, escape
 from jinja2.bccache import FileSystemBytecodeCache
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError, TemplateSyntaxError
 from jinja2.ext import autoescape, do, with_, ExtensionRegistry
-from jinja2.loaders import ChoiceLoader, ModuleLoader, FileSystemLoader
+from jinja2.loaders import ChoiceLoader, PackageLoader, FileSystemLoader
 from jinja2.lexer import get_lexer
+from jinja2.nodes import EvalContext
+from jinja2.runtime import Context
 
 from pygments.lexers.markup import MarkdownLexer, RstLexer
 from pygments.lexers.shell import BashLexer
@@ -74,7 +77,6 @@ from sphinx.util.logging import getLogger
 from sphinx.util.docfields import GroupedField
 from sphinx.util.tags import Tags
 from sphinx.util.template import ReSTRenderer
-
 from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
 from sphinx.util.parallel import (
     ParallelTasks,
@@ -83,9 +85,6 @@ from sphinx.util.parallel import (
     parallel_available,
 )
 from sphinx.util.tags import Tags
-
-# from sphinx.util.template import ReSTRenderer
-
 # side effect: registers roles and directives
 from sphinx import roles  # noqa
 from sphinx import directives  # noqa
@@ -150,9 +149,8 @@ cgitb.enable(format="text")
 # -- Jinja2: {{{ ---------------------------------------------------
 
 loop = asyncio.new_event_loop()
-jinja_templates = FileSystemBytecodeCache(
-    os.environ.get("TMP") + "jinja_cache", "%s.cache"
-)
+asyncio.set_event_loop(loop)
+
 sphinx_root = os.path.dirname(sphinx.__file__)
 sphinx_templates = os.path.join(sphinx_root, "templates", "basic")
 
@@ -166,6 +164,7 @@ def instantiate_jinja_loader():
                 SphinxFileSystemLoader(sphinx_templates),
                 SphinxFileSystemLoader(template_path),
                 FileSystemLoader(template_path),
+                PackageLoader("default_profile"),
             ]
         )
     except (TemplateError, TemplateSyntaxError):
@@ -174,8 +173,10 @@ def instantiate_jinja_loader():
         return loader
 
 
-jinja_loader = instantiate_jinja_loader()
-
+def create_bytecode_cache():
+    return FileSystemBytecodeCache(
+        os.environ.get("TMP") + "jinja_cache", "%s.cache"
+    )
 
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
@@ -186,6 +187,7 @@ def create_jinja_env():
         with_,
         "jinja2.ext.loopcontrols",
     ]
+
     try:
         from jinja2.ext import DebugExtension
     except ImportError:
@@ -204,16 +206,33 @@ def create_jinja_env():
         ),
         extensions=jinja_extensions,
         enable_async=True,
-        bytecode_cache=jinja_templates,
-        loader=jinja_loader,
+        bytecode_cache=create_bytecode_cache(),
+        loader=instantiate_jinja_loader(),
     )
     return env
 
 
 try:
-    lexer = get_lexer(create_jinja_env())
-except (TemplateError, TemplateSyntaxError):
-    pass
+    env = create_jinja_env()
+except (TemplateError, TemplateSyntaxError) as e:
+    logger.exception(e, exc_info=1)
+
+lexer = get_lexer(env)
+
+# jinja_template = env.get_template()
+# ctx = jinja_templates.new_context()
+# context you can work with for contextfunctions
+
+
+def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+    """
+    You can register it on the template environment by updating the
+    :attr:`~Environment.filters` dict on the environment.
+    """
+    return value.strftime(format)
+
+
+env.filters['datetimeformat'] = datetimeformat
 
 
 @jinja2.contextfunction
@@ -221,6 +240,16 @@ def get_exported_names(context):
     """View the exported vars from the jinja2 context."""
     return sorted(context.exported_vars)
 
+
+_paragraph_re = re.compile(r'(?:\r\n|\r(?!\n)|\n){2,}')
+
+@evalcontextfilter
+def nl2br(eval_ctx, value):
+    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', Markup('<br>\n'))
+                            for p in _paragraph_re.split(escape(value)))
+    if eval_ctx.autoescape:
+        result = Markup(result)
+    return result
 
 # -- Extensions ---------------------------------------------------
 
@@ -271,7 +300,7 @@ extensions = [
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
-renderers = ReSTRenderer(templates_path)
+# renderers = ReSTRenderer.render_from_file(os.path.abspath(templates_path[0]), {})
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
@@ -410,6 +439,8 @@ html_theme = "scrolls"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+moar = SphinxFileSystemLoader(html_static_path)
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -809,7 +840,8 @@ def setup(app):
     # doubt this is necessary but
     setup_documenters(app)
 
-    # app.add_css_file("custom.css")
+    app.add_css_file("bootstrap.css")
+    app.add_css_file("bootstrap_sphinx.js")
     # already was added in a template
     # app.add_css_file('pygments.css')
     # There's a html.addjsfile call earlier in the file

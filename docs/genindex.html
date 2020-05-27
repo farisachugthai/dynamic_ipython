@@ -9,6 +9,8 @@
     
     <link rel="stylesheet" href="_static/scrolls.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap_sphinx.js" />
     <link rel="stylesheet" href="_static/print.css" type="text/css" />
     
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -21,6 +23,8 @@
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
   <title>Dynamic IPython --- IPython Extensions</title>
+
+  <script type="text/javascript" src="_static/js/copybutton.js"></script>
 
   </head><body>
 
@@ -353,9 +357,13 @@
 </li>
       <li><a href="util/copytree.html#default_profile.util.copytree.CopyTree.copytree">copytree() (CopyTree method)</a>
 </li>
+      <li><a href="startup/completions.html#default_profile.startup.completions.create_fuzzy_keyword_completer">create_fuzzy_keyword_completer() (in module default_profile.startup.completions)</a>
+</li>
       <li><a href="startup/completions.html#default_profile.startup.completions.create_jedi_script">create_jedi_script() (in module default_profile.startup.completions)</a>
 </li>
       <li><a href="startup/prompt_toolkit.html#default_profile.startup.kb.create_kb">create_kb() (in module default_profile.startup.kb)</a>
+</li>
+      <li><a href="startup/completions.html#default_profile.startup.completions.create_path_completer">create_path_completer() (in module default_profile.startup.completions)</a>
 </li>
       <li><a href="startup/completions.html#default_profile.startup.completions.create_pt_completers">create_pt_completers() (in module default_profile.startup.completions)</a>
 </li>
@@ -364,6 +372,8 @@
       <li><a href="sphinxext/make.html#default_profile.sphinxext.make.create_sphinx_config">create_sphinx_config() (in module default_profile.sphinxext.make)</a>
 </li>
       <li><a href="startup/prompt_toolkit.html#default_profile.startup.kb.create_vi_insert_keybindings">create_vi_insert_keybindings() (in module default_profile.startup.kb)</a>
+</li>
+      <li><a href="startup/completions.html#default_profile.startup.completions.create_word_completer">create_word_completer() (in module default_profile.startup.completions)</a>
 </li>
       <li><a href="startup/prompt_toolkit.html#default_profile.startup.ptoolkit.Helpers.current_buffer">current_buffer() (Helpers property)</a>
 </li>
@@ -670,6 +680,8 @@
 </li>
       <li><a href="startup/lexer.html#default_profile.startup.lexer.IPythonConfigurableLexer.filenames">filenames (IPythonConfigurableLexer attribute)</a>
 </li>
+      <li><a href="startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.find_exec_dir">find_exec_dir() (in module default_profile.startup.all_fault_handlers)</a>
+</li>
       <li><a href="startup/prompt_toolkit.html#default_profile.startup.kb.flatten_kb">flatten_kb() (in module default_profile.startup.kb)</a>
 </li>
   </ul></td>
@@ -728,18 +740,14 @@
 </li>
       <li><a href="util/pager2.html#default_profile.util.pager2.get_docs_and_page">get_docs_and_page() (in module default_profile.util.pager2)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="index.html#default_profile.ipython_config.get_env">get_env() (in module default_profile.ipython_config)</a>
 
       <ul>
         <li><a href="util/machine.html#default_profile.util.machine.Platform.get_env">(Platform static method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.get_exec_dir">get_exec_dir() (in module default_profile.startup.all_fault_handlers)</a>
-</li>
-      <li><a href="startup/completions.html#default_profile.startup.completions.get_fuzzy_keyword_completer">get_fuzzy_keyword_completer() (in module default_profile.startup.completions)</a>
-</li>
       <li><a href="sphinxext/make.html#default_profile.sphinxext.make.get_git_root">get_git_root() (in module default_profile.sphinxext.make)</a>
 </li>
       <li><a href="startup/ipython-logger.html#default_profile.startup.file_logger.get_history">get_history() (in module default_profile.startup.file_logger)</a>
@@ -754,8 +762,6 @@
 </li>
       <li><a href="startup/lexer.html#default_profile.startup.lexer.get_lexer">get_lexer() (in module default_profile.startup.lexer)</a>
 </li>
-      <li><a href="startup/completions.html#default_profile.startup.completions.get_path_completer">get_path_completer() (in module default_profile.startup.completions)</a>
-</li>
       <li><a href="startup/prompt_toolkit.html#default_profile.startup.ptoolkit.get_session">get_session() (in module default_profile.startup.ptoolkit)</a>
 </li>
       <li><a href="startup/ipython-logger.html#default_profile.startup.file_logger.MyHistoryAccessor.get_tail">get_tail() (MyHistoryAccessor method)</a>
@@ -769,8 +775,6 @@
       <li><a href="startup/lexer.html#default_profile.startup.lexer.get_titlebar_text">get_titlebar_text() (in module default_profile.startup.lexer)</a>
 </li>
       <li><a href="startup/lexer.html#default_profile.startup.lexer.MyPythonLexer.get_tokens_unprocessed">get_tokens_unprocessed() (MyPythonLexer method)</a>
-</li>
-      <li><a href="startup/completions.html#default_profile.startup.completions.get_word_completer">get_word_completer() (in module default_profile.startup.completions)</a>
 </li>
       <li><a href="startup/aliases.html#default_profile.startup.system_aliases.CommonAliases.git">git() (CommonAliases method)</a>
 </li>
@@ -1093,8 +1097,6 @@
 </li>
         <li><a href="util/pager2.html#magic-pycat">pycat</a>
 </li>
-        <li><a href="startup/rehashx.html#magic-rehashx">rehashx</a>
-</li>
         <li><a href="startup/aliases.html#magic-unalias">unalias</a>
 </li>
       </ul></li>
@@ -1343,13 +1345,6 @@
         <li><a href="util/pager2.html#default_profile.util.pager2.PagerMagics.registered">(PagerMagics attribute)</a>
 </li>
       </ul></li>
-      <li>
-    rehashx
-
-      <ul>
-        <li><a href="startup/rehashx.html#magic-rehashx">magic command</a>
-</li>
-      </ul></li>
       <li><a href="startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.rehashx_run">rehashx_run() (in module default_profile.startup.all_fault_handlers)</a>
 </li>
       <li><a href="startup/ipython-logger.html#default_profile.startup.file_logger.rem_dups">rem_dups() (in module default_profile.startup.file_logger)</a>
@@ -1362,10 +1357,10 @@
 </li>
       <li><a href="util/profile_override.html#default_profile.util.profile_override.ReprProfileDir">ReprProfileDir (class in default_profile.util.profile_override)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.rerender">rerender() (BottomToolbar method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.rerun_startup">rerun_startup() (in module default_profile.startup.all_fault_handlers)</a>
 </li>
       <li><a href="startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.reset_style">reset_style() (BottomToolbar property)</a>
@@ -1652,7 +1647,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 24, 2020.
+      Last updated on May 27, 2020.
     </div>
   </body>
 </html>
