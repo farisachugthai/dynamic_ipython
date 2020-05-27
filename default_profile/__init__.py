@@ -161,7 +161,7 @@ def setup_logging(debug=True, logfile=None):
         an extended log format will be used, all messages will be processed
         by both the handlers
     """
-    root_logger = logging.getLogger()
+    root_logger = logging.getLogger(name=__name__)
 
     if debug:
         log_level = logging.DEBUG
@@ -196,4 +196,5 @@ def setup_logging(debug=True, logfile=None):
         root_logger.addHandler(handler)
 
     root_logger.setLevel(40)
+    return root_logger
 

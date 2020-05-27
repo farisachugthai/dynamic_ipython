@@ -122,17 +122,17 @@ class PathCallable(PathCompleter):
         return self.get_completions(document, complete_event=complete_event)
 
 
-def get_path_completer():
+def create_path_completer():
     """Basically took this from Jon's unit tests."""
     return PathCallable(min_input_len=1, expanduser=True)
 
 
-def get_fuzzy_keyword_completer():
+def create_fuzzy_keyword_completer():
     """Return FuzzyWordCompleter initialized with all valid Python keywords."""
     return FuzzyWordCompleter(keyword.kwlist)
 
 
-def get_word_completer():
+def create_word_completer():
     """Return WordCompleter initialized with all valid Python keywords."""
     return WordCompleter(
         keyword.kwlist, pattern=re.compile(r"^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)")
@@ -282,9 +282,9 @@ def create_pt_completers():
     fuzzy_completer = FuzzyCallable(ExecutableCompleter())
     list_of_completers = [
         fuzzy_completer,
-        get_path_completer(),
-        get_word_completer(),
-        get_fuzzy_keyword_completer(),
+        create_path_completer(),
+        create_word_completer(),
+        create_fuzzy_keyword_completer(),
         SimpleCompleter(),
     ]
     if get_ipython() is not None:

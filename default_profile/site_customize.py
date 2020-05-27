@@ -393,4 +393,4 @@ if __name__ == "__main__":
         rerun_startup()
         install_jedi()
         cgitb.enable(format="text")
-        sys.excepthook = exception_hook
+        sys.excepthook = excepthook_

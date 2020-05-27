@@ -76,7 +76,7 @@ def rehashx_run() -> None:
     get_ipython().run_line_magic("rehashx", "")
 
 
-def get_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
+def find_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
     """Returns IPython's profile_dir.startup_dir. If that can't be determined, return CWD."""
     _ip = get_ipython()
     if _ip is not None:
@@ -120,7 +120,7 @@ def rerun_startup():
 
     """
     ret = {}
-    exec_dir = get_exec_dir()
+    exec_dir = find_exec_dir()
     for i in scandir(exec_dir):
         if i.name.endswith(".py"):
             try:

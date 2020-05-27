@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """Define the main startup for the IPython startup directory."""
 import asyncio
+import dataclasses
+import pprint
 import platform
 import sys
 
@@ -14,7 +16,6 @@ from asyncio import format_helpers
 from os import scandir
 from os.path import abspath
 from pathlib import Path
-from pprint import pprint as print
 
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor
@@ -25,15 +26,21 @@ except ImportError:
 
 from IPython.core.getipython import get_ipython
 
+from default_profile import setup_logging
 
-def exec_startup():
+logger = setup_logging()
+
+
+def exec_startup(fobj):
     """Runs `exec(compile(__file__))`.
 
     .. danger::
         All of the usual exec admonitions apply here.
 
     """
-    exec(compile(open(__file__).read(), "<string>", "exec",), globals(), locals())
+    if fobj is None:
+        fobj = __file__
+    exec(compile(open(fobj).read(), "<string>", "exec",), globals(), locals())
 
 
 def exec_dir(directory):
@@ -51,9 +58,13 @@ def async_startup():
     shell = get_ipython()
 
     if not shell:
-        print("startup.__main__: get_ipython returned None")
+        logger.warn("startup.__main__: get_ipython returned None")
 
-    this_dir = Path(__file__).parent
+    if hasattr(locals, "__file__"):
+        f = __file__
+    else:
+        f = os.path.abspath('.')
+    this_dir = Path(f).parent
     # this doesn't do anything yet but hey at least we found the api
     if platform.platform().startswith("win"):
         proactor = IocpProactor()
@@ -61,25 +72,24 @@ def async_startup():
     else:
 
         loop = asyncio.new_event_loop()
-    # breakpoint()
-
-    repl_locals = {"asyncio": asyncio}
-    for key in {
-        "__name__",
-        "__package__",
-        "__loader__",
-        "__spec__",
-        "__builtins__",
-        "__file__",
-    }:
-        repl_locals[key] = locals()[key]
+    asyncio.set_event_loop(loop)
+    # repl_locals = {"asyncio": asyncio}
+    # for key in {
+    #     "__name__",
+    #     "__package__",
+    #     "__loader__",
+    #     "__spec__",
+    #     "__builtins__",
+    #     "__file__",
+    # }:
+    #     repl_locals[key] = locals()[key]
 
     console = AsyncIOInteractiveConsole
 
     repl_future = None
     repl_future_interrupted = False
 
-    repl_thread = REPLThread
+    repl_thread = REPLThread()
     repl_thread.daemon = True
     repl_thread.start()
     startup = abspath(".")
@@ -92,13 +102,17 @@ def async_startup():
             if repl_future and not repl_future.done():
                 repl_future.cancel()
                 repl_future_interrupted = True
-                print("Interrupted!")
+                logger.info("Interrupted!")
         except EOFError:
             sys.exit()
             # better than raise?
         except Exception as e:
-            print(format_helpers.extract_stack(e))
+            logger.exception(format_helpers.extract_stack(e))
 
+
+@dataclasses.dataclass
+class VirtualEnv:
+    path: str
 
 if "__name__" == "__main__":
     async_startup()

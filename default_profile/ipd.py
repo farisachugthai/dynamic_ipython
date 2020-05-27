@@ -66,9 +66,7 @@ class IPD(Pdb):
 
         """
         self.shell = shell or get_ipython()
-
-        if self.shell is None:
-            raise UsageError
+        self.pt_session = self.pt_init()
 
         self.keys = self.initialize_keybindings(keys)
         # self.completer = completer or self.initialize_completer()
@@ -76,7 +74,6 @@ class IPD(Pdb):
 
         self.prompt = "Your Debugger: "
         self.context = context
-        self.pt_session = self.pt_init()
 
         super().__init__(self, *args, **kwargs)
 
@@ -171,17 +168,11 @@ def formatted_traceback():
 
 def init_debugger():
     """Create an instance of our debugger."""
-    ip = get_ipython()  # noqa C0103
-    if ip is None:  # noqa C0103
-        ip = initialize_ipython()
-
     if hasattr(sys, "last_traceback"):
         formatted_traceback()
-    else:
-        pdb.set_trace()
 
     # with patch_stdout.patch_stdout():
-    dynamic_debugger = IPD(shell=ip)
+    dynamic_debugger = IPD(shell=get_ipython())
     return dynamic_debugger
 
 

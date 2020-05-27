@@ -28,25 +28,15 @@ import distutils
 from distutils.core import setup_keywords   # noqa
 from distutils.errors import DistutilsArgError, DistutilsError
 
-# Check out this nifty lil trick i saw in numpy src
-if 'setuptools' in sys.modules:
-    from setuptools.dist import Distribution
-else:
-    from distutils.core import setup_keywords, setup  # noqa
-    from distutils.dist import Distribution
-
 import setuptools
-from setuptools.command.easy_install import chmod, current_umask, find_distributions
-from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 from setuptools import setup, find_packages, Command
+from setuptools.command.easy_install import chmod, current_umask, find_distributions
+from setuptools.dist import Distribution
+from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 
 import pkg_resources
 
 logger = logging.getLogger(name=__name__)
-dist = Distribution()
-
-if len(sys.argv) == 1:
-    dist.print_commands()
 
 logger.info("Setting up package through setuptools.")
 
@@ -61,17 +51,22 @@ def parse_command_line():
     # if dist.features: dist._finalize_features()
     print("\n\n\n****")
     print(result)
+
     return _distribution
 
 
 # Btw all that d.parse_command_line is doing is this ^---
+# dist = Distribution()
 
-try:
-    parse_command_line()
-except DistutilsArgError:
-    print("No args provided.")
-except TypeError:  # path was supposed to be path not NoneType
-    print("No args.")
+# if len(sys.argv) == 1:
+#     dist.print_commands()
+
+# try:
+#     parse_command_line()
+# except DistutilsArgError:
+#     print("No args provided.")
+# except TypeError:  # path was supposed to be path not NoneType
+#     print("No args.")
 
 try:  # new replacement for the pkg_resources API
     from importlib import metadata as importlib_metadata
@@ -199,17 +194,10 @@ REQUIRED = [
     "IPython",
     "curio",
     "docutils",
-    "importlib_metadata",
-    # "ipykernel",
-    # "ipyparallel",
     "jedi",
     "jinja2",
     "nbformat",
-    # "py",
-    # "pyfzf",
     "pygments",
-    # "pyperclip",
-    # "pyzmq",
     "requests",
     "setuptools",
     "traitlets",
@@ -219,6 +207,9 @@ REQUIRED = [
 if platform.platform().startswith("Win"):
     REQUIRED.append("pyreadline")
     REQUIRED.append("colorama")
+
+if sys.version_info < (3, 7):
+    REQUIRED.append("importlib-metadata")
 
 EXTRAS = {
     "develop": ["pipenv", "pandas", "matplotlib"],
@@ -349,89 +340,90 @@ class UploadCommand(Command):
             chmod(target, 0o777 - current_umask())
 
 
-if "__name__" == "__main":
-    # Where the magic happens:
-    if len(sys.argv[:]) > 1:
+# Where the magic happens:
+setup_args = dict(
+    name=NAME,
+    version=VERSION,
+    description=DESCRIPTION,
+    long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/restructuredtext",
+    python_requires=REQUIRES_PYTHON,
+    author=AUTHOR,
+    author_email=EMAIL,
+    maintainer=AUTHOR,
+    maintainer_email=EMAIL,
+    url=URL,
+    # in which i add parameters based on running this script through pdb
+    # packages=find_packages(where="default_profile"),
+    # no! this HAS to be a dict
+    # as oddly ubiquitious as the package=find_packages() thing is though,
+    # package_dir is WAY more lenient. it recursively adds EVERYTHING
+    # It's kinda set up as an either or tho
+    # nvm this didn't work at all
+    # package_dir={"default_profile": ""},
 
-        try:
-            setup(
-                name=NAME,
-                version=VERSION,
-                description=DESCRIPTION,
-                long_description=LONG_DESCRIPTION,
-                long_description_content_type="text/restructuredtext",
-                python_requires=REQUIRES_PYTHON,
-                author=AUTHOR,
-                author_email=EMAIL,
-                maintainer=AUTHOR,
-                maintainer_email=EMAIL,
-                url=URL,
-                # in which i add parameters based on running this script through pdb
-                # packages=find_packages(where="default_profile"),
-                # no! this HAS to be a dict
-                # as oddly ubiquitious as the package=find_packages() thing is though,
-                # package_dir is WAY more lenient. it recursively adds EVERYTHING
-                # It's kinda set up as an either or tho
-                # nvm this didn't work at all
-                # package_dir={"default_profile": ""},
+    packages=find_packages(where="default_profile"),
+    src_root='default_profile',
+    tests_require=EXTRAS['test'],
+    # py_modules=find_packages(where="default_profile"),
+    platforms="any",
+    requires=REQUIRED,  # in what way is this different than install_requires?
+    entry_points={
+        "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
+    },
+    # i dont even understand what error this raised but let's leave this
+    # commented out
+    # setup_requires=["pkg_resources", "pipenv"],
 
-                packages=find_packages(where="default_profile"),
-                src_root='default_profile',
-                tests_require=EXTRAS['test'],
-                # py_modules=find_packages(where="default_profile"),
-                platforms="any",
-                requires=REQUIRED,  # in what way is this different than install_requires?
-                entry_points={
-                    "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
-                },
-                # i dont even understand what error this raised but let's leave this
-                # commented out
-                # setup_requires=["pkg_resources", "pipenv"],
+    # namespace_packages=["default_profile", "default_profile.sphinxext"],
+    install_requires=REQUIRED,
+    extras_require=EXTRAS,
+    test_suite="test",
+    include_package_data=True,
+    package_data={
+        # If any package contains *.txt or *.rst files, include them:
+        "": ["*.txt", "*.rst"],
+    },
+    license=LICENSE,
+    classifiers=[
+        # Trove classifiers
+        # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
+        "Environment :: Console",
+        "Framework :: IPython",
+        "Framework :: Jupyter",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: MIT License",
+        "Natural Language :: English",
+        "Operating System :: Android",
+        "Operating System :: Microsoft :: Windows :: Windows 10",
+        "Operating System :: POSIX:: Linux",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: Implementation :: CPython",
+    ],
+    # $ setup.py publish support.
+    cmdclass={"upload": UploadCommand},
+    # project home page, if any
+    project_urls={
+        "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
+        "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
+        "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
+    }
+    # could also include long_description, download_url, classifiers, etc.
+)
 
-                # namespace_packages=["default_profile", "default_profile.sphinxext"],
-                install_requires=REQUIRED,
-                extras_require=EXTRAS,
-                test_suite="test",
-                include_package_data=True,
-                package_data={
-                    # If any package contains *.txt or *.rst files, include them:
-                    "": ["*.txt", "*.rst"],
-                },
-                license=LICENSE,
-                classifiers=[
-                    # Trove classifiers
-                    # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
-                    "Environment :: Console",
-                    "Framework :: IPython",
-                    "Framework :: Jupyter",
-                    "Intended Audience :: Developers",
-                    "License :: OSI Approved :: MIT License",
-                    "Natural Language :: English",
-                    "Operating System :: Android",
-                    "Operating System :: Microsoft :: Windows :: Windows 10",
-                    "Operating System :: POSIX:: Linux",
-                    "Programming Language :: Python",
-                    "Programming Language :: Python :: 3",
-                    "Programming Language :: Python :: 3 :: Only",
-                    "Programming Language :: Python :: 3.6",
-                    "Programming Language :: Python :: 3.7",
-                    "Programming Language :: Python :: 3.8",
-                    "Programming Language :: Python :: Implementation :: CPython",
-                ],
-                # $ setup.py publish support.
-                cmdclass={"upload": UploadCommand},
-                # project home page, if any
-                project_urls={
-                    "Bug Tracker": "https://www.github.com/farisachugthai/dynamic_ipython/issues",
-                    "Documentation": "https://farisachugthai.github.io/dynamic_ipython",
-                    "Source Code": "https://www.github.com/farisachugthai/dynamic_ipython",
-                }
-                # could also include long_description, download_url, classifiers, etc.
-            )
-        except DistutilsArgError:
-            dist.print_commands()
+if len(sys.argv) > 1:
+    try:
+        setup(**setup_args)
+    except DistutilsArgError:
+        dist.print_commands()
 
-        except DistutilsError:
-            raise
+    except DistutilsError:
+        raise
+
 
 # Vim: set fdls=0:
