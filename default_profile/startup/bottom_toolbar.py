@@ -15,7 +15,7 @@ import time
 from datetime import date
 from pathlib import Path
 from shutil import get_terminal_size
-from typing import Dict, List, Any, AnyStr
+from typing import Dict, List, Any, AnyStr, Optional
 
 import prompt_toolkit
 from IPython.core.getipython import get_ipython
@@ -42,7 +42,7 @@ else:
     pygments_style = GruvboxStyle
 
 
-def get_app():
+def get_app() -> prompt_toolkit.application.Application:
     """A patch to cover up the fact that get_app() returns a DummyApplication."""
     if get_ipython() is not None:
         return get_ipython().pt_app.app
@@ -53,25 +53,25 @@ def exit_clicked():
     get_app().exit(result=False, exception=EOFError)
 
 
-def init_style():
+def init_style() -> prompt_toolkit.styles.Style:
     """Merges the styles from default_pygments_style and the previously imported `pygments_style`."""
     return merge_styles(
         [style_from_pygments_cls(pygments_style), default_pygments_style()]
     )
 
 
-def show_header(header_text: AnyStr = None) -> prompt_toolkit.widgets.Frame:
+def show_header(header_text: Optional[AnyStr] = None) -> prompt_toolkit.widgets.Frame:
     if header_text is None:
-        header_text = textwrap.dedent(
+        header_text = textwrap.dedent(str(
             "Press Control-Y to paste from the system _clipboard.\n"
             "Press Control-Space or Control-@ to enter selection mode.\n"
             "Press Control-W to cut to _clipboard.\n"
-        )
+        ))
     text_area = TextArea(header_text, style="#ebdbb2")
     return Frame(text_area)
 
 
-def terminal_width():
+def terminal_width() -> int:
     """Returns `shutil.get_terminal_size.columns`."""
     return get_terminal_size().columns
 
@@ -99,11 +99,11 @@ class LineCounter:
         """Yes!!! This now behaves as expected."""
         return self.display()
 
-    def __repr__(self):
+    def __repr__(self) -> AnyStr:
         return f"<{self.__class__.__name__}:> {self.__call__}"
 
     @property
-    def time(self):
+    def time(self) -> int:
         return time.strftime("%H:%M:%S")
 
     def __pt_formatted_text__(self):
@@ -132,8 +132,8 @@ class BottomToolbar:
     # are you allowed to doctest fstrings
 
     def __init__(
-        self, _style: prompt_toolkit.styles.Style = None, *args: List, **kwargs: Dict
-    ) -> Any:
+        self, _style: Optional[prompt_toolkit.styles.Style] = None, *args: List, **kwargs: Dict
+    ):
         """Require an 'app' for initialization.
 
         This will eliminate all IPython code out of this class and make things
@@ -146,15 +146,15 @@ class BottomToolbar:
         self._style = _style if _style is not None else self.app.style
 
     @property
-    def session(self):
+    def session(self) -> prompt_toolkit.shortcuts.PromptSession:
         return self.shell.pt_app
 
     @property
-    def layout(self):
+    def layout(self) -> prompt_toolkit.layout.Layout:
         return self.shell.pt_app.layout
 
     @property
-    def is_vi_mode(self):
+    def is_vi_mode(self) -> prompt_toolkit.enums.EditingMode:
         if self.app.editing_mode == EditingMode.VI:
             return True
         else:
@@ -174,11 +174,11 @@ class BottomToolbar:
         return f"{self.rerender()}"
 
     @property
-    def style(self):
+    def style(self) -> prompt_toolkit.styles.Style:
         return self._style
 
     @style.setter
-    def reset_style(self, new_style):
+    def reset_style(self, new_style: prompt_toolkit.styles.Style):
         # do these function names even show up in `dir`?
         self._style = new_style
 
@@ -186,11 +186,11 @@ class BottomToolbar:
         """The length of the text we display."""
         return len(self.rerender())
 
-    def full_width(self):
+    def full_width(self) -> bool:
         """Bool indicating bottom toolbar == shutil.get_terminal_size().columns."""
         return len(self) == terminal_width()
 
-    def rerender(self):
+    def rerender(self) -> AnyStr:
         """Render the toolbar at the bottom for prompt_toolkit.
 
         .. warning::

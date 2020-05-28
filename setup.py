@@ -2,18 +2,12 @@
 # -*- coding: utf-8 -*-
 """Install the repo as a python package.
 
-Notes
-------
-.. envvar:: PIP_VERBOSE
-
-    Who knew that this was a recognized thing? As is PIP_QUIET!
-
 .. tip::
     Always have a fallback for determining version.
-    If using an import from your repo doesn't work, then depending on that
-    will give a `None` for version to setuptools.setup().
+   If using an import from your repo doesn't work, then depending on that
+   will give a `None` for version to setuptools.setup().
 
-    Libraries like importlib_metadata exist for this purpose.
+   Libraries like importlib_metadata exist for this purpose.
 
 """
 import codecs
@@ -35,38 +29,12 @@ from setuptools.dist import Distribution
 from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
 
 import pkg_resources
+# from packaging.utils import canonicalize_version
 
 logger = logging.getLogger(name=__name__)
 
 logger.info("Setting up package through setuptools.")
 
-# dist.include(py_modules=["x"])
-
-
-def parse_command_line():
-    """Process features after parsing command line options."""
-    _Distribution = setuptools.monkey.get_unpatched(distutils.core.Distribution)
-    _distribution: setuptools.Distribution = _Distribution()
-    result = dist.parse_command_line()
-    # if dist.features: dist._finalize_features()
-    print("\n\n\n****")
-    print(result)
-
-    return _distribution
-
-
-# Btw all that d.parse_command_line is doing is this ^---
-# dist = Distribution()
-
-# if len(sys.argv) == 1:
-#     dist.print_commands()
-
-# try:
-#     parse_command_line()
-# except DistutilsArgError:
-#     print("No args provided.")
-# except TypeError:  # path was supposed to be path not NoneType
-#     print("No args.")
 
 try:  # new replacement for the pkg_resources API
     from importlib import metadata as importlib_metadata
@@ -86,6 +54,7 @@ except importlib_metadata.PackageNotFoundError:
 try:
     from default_profile import __version__
 except ImportError:  # noqa
+    # __version__ = canonicalize_version("0.0.2")
     __version__ = "0.0.2"
 
 if sys.version_info < (3, 7):

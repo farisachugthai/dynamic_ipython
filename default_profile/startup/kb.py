@@ -4,9 +4,10 @@
 import logging
 import operator
 import reprlib
-from collections.abc import MutableSequence
 import sys
-from typing import Callable, Optional, Dict, Any, Union, List
+from collections.abc import MutableSequence
+from functools import total_ordering
+from typing import Callable, Optional, Dict, Any, Union, List, Generator
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
@@ -25,7 +26,7 @@ from prompt_toolkit.key_binding.key_bindings import (
     KeyBindings, ConditionalKeyBindings, _MergedKeyBindings,
     Binding, KeyBindingsBase
 )
-from prompt_toolkit.key_binding.key_processor import KeyPress
+from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.keys import Keys
 
 from default_profile.startup.ptoolkit import create_searching_keybindings, determine_which_pt_attribute
@@ -33,6 +34,7 @@ from default_profile.startup.ptoolkit import create_searching_keybindings, deter
 logging.basicConfig(level=logging.WARNING)
 
 
+@total_ordering
 class BindingPP(Binding):
     """Fix the prompt_toolkit binding.
 
@@ -66,12 +68,13 @@ class BindingPP(Binding):
     def __bool__(self):
         return self.filter()
 
-    def __call__(self, event: "KeyPressEvent") -> None:
+    def __call__(self, event: KeyPressEvent) -> None:
         return self.call(event)
 
 
-def convert_bindings(bindings):
-    for b in _ip.pt_app.app.key_bindings.bindings:
+def convert_bindings(bindings: KeyBindingsBase):
+    # -> Generator[BindingPP]:
+    for b in get_ipython().pt_app.app.key_bindings.bindings:
         yield BindingPP(b.keys, b.handler, filter=b.filter, eager=b.eager, is_global=b.is_global)
 
 
@@ -86,8 +89,11 @@ class KeyBindingsManager(KeyBindingsBase):
     _get_bindings_for_keys_cache: SimpleCache[Any, Any]
 
     def __init__(
-        self, kb: KeyBindings = None, shell: InteractiveShell = None, **kwargs
-    ) -> Optional:
+        self,
+        kb: Optional[KeyBindings] = None,
+        shell: Optional[InteractiveShell] = None,
+        **kwargs,
+    ):
         """Initialize the class.
 
         Parameters
@@ -126,8 +132,8 @@ class KeyBindingsManager(KeyBindingsBase):
             return self.bindings.append(maybe_key)
         return self.kb.add_binding(another_one)
 
-    def __iadd__(self, another_one):
-        return self.__add__(another_one)
+    def __iadd__(self, another_one, *args):
+        return self.__add__(another_one, *args)
 
     def __mul__(self):
         raise TypeError
@@ -138,7 +144,7 @@ class KeyBindingsManager(KeyBindingsBase):
         Takes same parameters as `Binding` ``__init__``
         and **not** the same bindings as `KeyBindings.add`.
         """
-        return self.__add__(another_one)
+        return self.__add__(another_one, *args)
 
     @property
     def kb(self):
@@ -385,7 +391,7 @@ def create_vi_insert_keybindings() -> ConditionalKeyBindings:
     return ConditionalKeyBindings(kb, filter=ViInsertMode())
 
 
-def create_kb() -> list([Binding]):
+def create_kb() -> List[Binding]:
     # Honestly I'm wary to do this but let's go for it
     if get_ipython() is None:
         return

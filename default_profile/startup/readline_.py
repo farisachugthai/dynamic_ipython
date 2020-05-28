@@ -33,6 +33,7 @@ import subprocess
 import sys
 import tempfile
 import traceback
+from typing import Union, Any, AnyStr, Iterable, Optional
 
 from IPython.core.getipython import get_ipython
 
@@ -44,6 +45,7 @@ except ImportError:
 from default_profile.site_customize import write_history
 
 if os.environ.get("IPYTHONDIR"):
+    LOG_FILENAME: Union[AnyStr, os.PathLike]
     LOG_FILENAME = os.path.join(os.environ.get("IPYTHONDIR"), "completer.log")
     logging.basicConfig(
         format="%(message)s", filename=LOG_FILENAME, level=logging.DEBUG,
@@ -76,7 +78,7 @@ class ViExternalEditor:
     it's a little too easy to initialize this sucker with no state.
     """
 
-    def __init__(self, line=None):
+    def __init__(self, line: AnyStr=None):
         """Instantiate the editor :command:`vi`.
 
         Parameters
@@ -96,10 +98,10 @@ class ViExternalEditor:
     def __repr__(self):
         return f"{self.__class__.__name__}>:"
 
-    def __call__(self, filename=None):
+    def __call__(self, filename: Optional[Union[AnyStr, os.PathLike]]=None):
         return self.run_editor(filename)
 
-    def run_editor(self, filename=None):
+    def run_editor(self, filename: Optional[Union[AnyStr, os.PathLike]]=None):
         """It's the goddamn ViExternalEditor default to Vim!"""
         try:
             editor = os.environ["EDITOR"]
@@ -114,19 +116,19 @@ class ViExternalEditor:
             cmd = [editor, filename]
             return self.run_command(cmd)
 
-    def run_command(self, command):
+    def run_command(self, command: AnyStr):
         return subprocess.run(
-            shlex.quote(command),
+            shlex.split(shlex.quote(command)),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True,
         )
 
-    async def async_run_command(self, command):
+    async def async_run_command(self, command: AnyStr):
         # Did i do this right?
         proc = await asyncio.subprocess.run(
-            command,
+            shlex.split(shlex.quote(command)),
             stdin=asyncio.subprocess.PIPE,
             stdout=asyncio.subprocess.PIPE,
             stderr=asyncio.subprocess.PIPE,
@@ -147,7 +149,7 @@ class SimpleCompleter:
 
     """
 
-    def __init__(self, options):
+    def __init__(self, options: Iterable):
         self.options = sorted(options)
 
     def complete(self, text, state):
@@ -307,7 +309,7 @@ def pyreadline_specific(rl=None):
 # History
 
 
-def setup_historyfile(filename=None):
+def setup_historyfile(filename: Optional[Union[AnyStr, os.PathLike]]=None):
     """Add a history file to readline.
 
     Parameters
@@ -335,7 +337,7 @@ def setup_historyfile(filename=None):
     shell.events.register("post_run_cell", add_last_input)
 
 
-def last_input():
+def last_input() -> AnyStr:
     """Returns the user's last input.
 
     Utilizes the *raw_cell* attribute found on an

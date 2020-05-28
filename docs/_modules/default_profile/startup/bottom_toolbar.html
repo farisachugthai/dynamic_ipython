@@ -58,7 +58,7 @@
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">shutil</span> <span class="kn">import</span> <span class="n">get_terminal_size</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AnyStr</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AnyStr</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">import</span> <span class="nn">prompt_toolkit</span>
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
@@ -85,7 +85,7 @@
     <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">GruvboxStyle</span>
 
 
-<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">():</span>
+<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
@@ -96,25 +96,25 @@
     <span class="n">get_app</span><span class="p">()</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exception</span><span class="o">=</span><span class="ne">EOFError</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">():</span>
+<div class="viewcode-block" id="init_style"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.init_style">[docs]</a><span class="k">def</span> <span class="nf">init_style</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Merges the styles from default_pygments_style and the previously imported `pygments_style`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">merge_styles</span><span class="p">(</span>
         <span class="p">[</span><span class="n">style_from_pygments_cls</span><span class="p">(</span><span class="n">pygments_style</span><span class="p">),</span> <span class="n">default_pygments_style</span><span class="p">()]</span>
     <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">(</span><span class="n">header_text</span><span class="p">:</span> <span class="n">AnyStr</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Frame</span><span class="p">:</span>
+<div class="viewcode-block" id="show_header"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.show_header">[docs]</a><span class="k">def</span> <span class="nf">show_header</span><span class="p">(</span><span class="n">header_text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">widgets</span><span class="o">.</span><span class="n">Frame</span><span class="p">:</span>
     <span class="k">if</span> <span class="n">header_text</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">header_text</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span>
+        <span class="n">header_text</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span>
             <span class="s2">&quot;Press Control-Y to paste from the system _clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="s2">&quot;Press Control-Space or Control-@ to enter selection mode.</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="s2">&quot;Press Control-W to cut to _clipboard.</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
+        <span class="p">))</span>
     <span class="n">text_area</span> <span class="o">=</span> <span class="n">TextArea</span><span class="p">(</span><span class="n">header_text</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s2">&quot;#ebdbb2&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">Frame</span><span class="p">(</span><span class="n">text_area</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="terminal_width"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.terminal_width">[docs]</a><span class="k">def</span> <span class="nf">terminal_width</span><span class="p">():</span>
+<div class="viewcode-block" id="terminal_width"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.terminal_width">[docs]</a><span class="k">def</span> <span class="nf">terminal_width</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns `shutil.get_terminal_size.columns`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">get_terminal_size</span><span class="p">()</span><span class="o">.</span><span class="n">columns</span></div>
 
@@ -142,11 +142,11 @@
         <span class="sd">&quot;&quot;&quot;Yes!!! This now behaves as expected.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">:&gt; </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="LineCounter.time"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.LineCounter.time">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H:%M:%S&quot;</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">__pt_formatted_text__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -175,8 +175,8 @@
     <span class="c1"># are you allowed to doctest fstrings</span>
 
 <div class="viewcode-block" id="BottomToolbar.__init__"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="p">:</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">_style</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Dict</span>
+    <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Require an &#39;app&#39; for initialization.</span>
 
 <span class="sd">        This will eliminate all IPython code out of this class and make things</span>
@@ -189,15 +189,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_style</span> <span class="o">=</span> <span class="n">_style</span> <span class="k">if</span> <span class="n">_style</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">style</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.session"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.session">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">shortcuts</span><span class="o">.</span><span class="n">PromptSession</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.layout"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.layout">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">layout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">Layout</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">layout</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.is_vi_mode"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.is_vi_mode">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">is_vi_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">is_vi_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">EditingMode</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">editing_mode</span> <span class="o">==</span> <span class="n">EditingMode</span><span class="o">.</span><span class="n">VI</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
@@ -217,11 +217,11 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
 
 <div class="viewcode-block" id="BottomToolbar.style"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.style">[docs]</a>    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">style</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">style</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_style</span></div>
 
 <div class="viewcode-block" id="BottomToolbar.reset_style"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.reset_style">[docs]</a>    <span class="nd">@style</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">reset_style</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_style</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">reset_style</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_style</span><span class="p">:</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">Style</span><span class="p">):</span>
         <span class="c1"># do these function names even show up in `dir`?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_style</span> <span class="o">=</span> <span class="n">new_style</span></div>
 
@@ -229,11 +229,11 @@
         <span class="sd">&quot;&quot;&quot;The length of the text we display.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rerender</span><span class="p">())</span>
 
-<div class="viewcode-block" id="BottomToolbar.full_width"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.full_width">[docs]</a>    <span class="k">def</span> <span class="nf">full_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BottomToolbar.full_width"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.full_width">[docs]</a>    <span class="k">def</span> <span class="nf">full_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Bool indicating bottom toolbar == shutil.get_terminal_size().columns.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">==</span> <span class="n">terminal_width</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="BottomToolbar.rerender"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.rerender">[docs]</a>    <span class="k">def</span> <span class="nf">rerender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BottomToolbar.rerender"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.BottomToolbar.rerender">[docs]</a>    <span class="k">def</span> <span class="nf">rerender</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;Render the toolbar at the bottom for prompt_toolkit.</span>
 
 <span class="sd">        .. warning::</span>
@@ -299,7 +299,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 27, 2020.
+      Last updated on May 28, 2020.
     </div>
   </body>
 </html>

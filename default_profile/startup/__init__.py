@@ -1,26 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # import functools
+__package__ = "default_profile.startup"
 import importlib
 import logging
-import pkgutil
+import os
 
 from importlib.util import _find_spec_from_path
+from typing import Union, AnyStr
 
-try:
-    from importlib.machinery import SourceFileLoader, FileFinder
-except ImportError:
-    SourceFileLoader = FileFinder = None
-
-try:
-    from importlib.resources import Package, Resource
-except ImportError:
-    Package = Resource = None
-
-try:
-    __path__ = pkgutil.extend_path(__path__, __name__)
-except NameError:
-    print('default_profile is not a package with __path__ defined.')
 
 BASIC_FORMAT = "[ %(name)s  %(relativeCreated)d ] %(levelname)s %(module)s %(message)s "
 STARTUP_LOGGER = logging.getLogger(name=__name__)
@@ -34,7 +22,7 @@ STARTUP_LOGGER.addHandler(STARTUP_HANDLER)
 STARTUP_LOGGER.setLevel(logging.WARNING)
 
 
-def module_from_path(path):
+def module_from_path(path: Union[AnyStr, os.PathLike]):
     """Return a module from a given 'path'.
 
     Intended as a simpler replacement for the now deprecated importlib.find_module.

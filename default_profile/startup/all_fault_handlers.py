@@ -43,10 +43,11 @@ from shutil import rmtree
 from tempfile import mkdtemp
 from traceback import format_exc, format_tb
 from runpy import run_path
-from typing import Any, Callable, Iterable, List, Mapping, Optional, Union, AnyStr
+from typing import Any, Callable, Iterable, List, Mapping, Optional, Union, AnyStr, Dict
 from types import TracebackType
 
 from IPython.core.getipython import get_ipython
+from IPython.terminal.prompts import RichDisplayHook
 from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
@@ -71,12 +72,12 @@ def last_exc() -> TracebackType:
     return format_exc()
 
 
-def rehashx_run() -> None:
+def rehashx_run():
     """Add all executables on the user's :envvar:`PATH` into the IPython ns."""
     get_ipython().run_line_magic("rehashx", "")
 
 
-def find_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
+def find_exec_dir() -> Union[AnyStr, os.PathLike]:
     """Returns IPython's profile_dir.startup_dir. If that can't be determined, return CWD."""
     _ip = get_ipython()
     if _ip is not None:
@@ -87,7 +88,7 @@ def find_exec_dir() -> Union[AnyStr, os.PathLike, Path]:
 
 
 def safe_run_path(
-    fileobj: Union[Path],
+    fileobj: Union[AnyStr, os.PathLike],
     logger: Optional[logging.Logger] = None,
 ) -> Mapping:
     """Run a file with runpy.run_path and try to catch everything."""
@@ -110,7 +111,7 @@ def safe_run_path(
         raise
 
 
-def rerun_startup():
+def rerun_startup() -> Dict:
     """Rerun the files in the startup directory.
 
     Returns
@@ -130,7 +131,9 @@ def rerun_startup():
     return ret
 
 
-def execfile(filename, global_namespace=None, local_namespace=None):
+def execfile(filename: Union[AnyStr, os.PathLike],
+        global_namespace: Optional[Mapping]=None,
+        local_namespace: Optional[Mapping]=None):
     """Bring execfile back from python2.
 
     This function is similar to the `exec` statement, but parses a file
@@ -169,12 +172,12 @@ def execfile(filename, global_namespace=None, local_namespace=None):
         )
 
 
-def ipy_execfile(f):
+def ipy_execfile(f: Union[AnyStr, os.PathLike]):
     """Run the IPython `%run` -i on a file."""
     get_ipython().run_line_magic("run", "-i", f)
 
 
-def ipy_execdir(directory):
+def ipy_execdir(directory: Union[AnyStr, os.PathLike]):
     """Execute the python files in `directory`.
 
     The idea was to create a function that actually does what
@@ -194,7 +197,7 @@ def ipy_execdir(directory):
             get_ipython().run_line_magic("run", "-i", i.name)
 
 
-def pyg_highlight(param, **kwargs):
+def pyg_highlight(param: Any, **kwargs):
     """Run a string through the pygments highlighter."""
     return pygments.highlight(param, lexer, formatter)
 
@@ -216,6 +219,7 @@ def tempdir():
     ...         _ = fobj.write('a string\\n')
     >>> os.path.exists(tmpdir)
     False
+
     """
     d = mkdtemp()
     yield d
@@ -248,11 +252,15 @@ def in_tempdir():
 
 
 @contextmanager
-def in_dir(dir=None):
-    """ Change directory to given directory for duration of ``with`` block
+def in_dir(dir: Union[AnyStr, os.PathLike]):
+    """ Change directory to given directory for duration of `with` block.
+
+    .. testsetup::
+
+        from default_profile.startupm.all_fault_handlers import in_tempdir, in_dir
 
     Useful when you want to use `in_tempdir` for the final test, but
-    you are still debugging.  For example, you may want to do this in the end:
+    you are still debugging.  For example, you may want to do this in the end.::
 
     >>> with in_tempdir() as tmpdir:
     ...     # do something complicated which might break
@@ -261,14 +269,15 @@ def in_dir(dir=None):
     But indeed the complicated thing does break, and meanwhile the
     ``in_tempdir`` context manager wiped out the directory with the
     temporary files that you wanted for debugging.  So, while debugging, you
-    replace with something like:
+    replace with something like.::
 
     >>> with in_dir() as tmpdir: # Use working directory by default
     ...     # do something complicated which might break
     ...     pass
 
     You can then look at the temporary file outputs to debug what is happening,
-    fix, and finally replace ``in_dir`` with ``in_tempdir`` again.
+    fix, and finally replace ``in_dir` with `in_tempdir` again.
+
     """
     cwd = os.getcwd()
     if dir is None:

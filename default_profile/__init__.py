@@ -4,8 +4,6 @@
 
 The heart of all IPython and console related code lives here.
 
-Also a good check to see whats being counted as a package is::
-
 >>> import pkg_resources
 >>> for i in pkg_resources.find_distributions('.'):
 ...     print(i)
@@ -16,13 +14,14 @@ dynamic-ipython 0.0.2
 >>> found_packages = find_packages(where='.')
 >>> found_namespace_packages = find_namespace_packages(where='.')
 >>> logging.debug('Found packages were: {}'.format(found_packages))
->>> logging.debug('Found namespace packages were: {}'.format(found_namespace_packages))
 
 """
 import logging
 import os
 import sys
 from collections import deque
+
+# from packaging.version import Version
 
 __all__ = [
     "__title__",
@@ -43,6 +42,7 @@ __package__ = "dynamic_ipython"
 __summary__ = "Core utilities for Python packages"
 __title__ = "dynamic_ipython"
 __uri__ = "https://github.com/pypa/packaging"
+# __version__ = Version("0.0.2")
 __version__ = "0.0.2"
 
 
