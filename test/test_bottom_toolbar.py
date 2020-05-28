@@ -12,6 +12,7 @@ from unittest.mock import patch
 from IPython.testing.globalipapp import get_ipython
 from IPython.terminal.interactiveshell import InteractiveShell
 
+
 try:
     spec = importlib.util.spec_from_file_location(
         "default_profile.startup.bottom_toolbar_mod",
@@ -42,13 +43,10 @@ def debugging_myoutput(capsys):
 class TestBottomToolbar(TestCase):
     # ugh this is proving entirely too difficult
 
-    @classmethod
-    def setUpClass(cls):
-        cls.logpoint()
-        _ip = get_ipython()
-        if bt_mod.BottomToolbar() is None:
-            if _ip is not None:
-                bt_mod.add_toolbar(cls.toolbar)
+    def setUp(self):
+        self.logpoint()
+        self.toolbar = bt_mod.BottomToolbar("InkPotStyle", shell=get_ipython())
+        bt_mod.add_toolbar(self.toolbar)
 
     def test_toolbar_existence(self, _ip):
         self.logpoint()

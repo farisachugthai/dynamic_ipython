@@ -42,10 +42,12 @@ else:
     pygments_style = GruvboxStyle
 
 
-def get_app() -> prompt_toolkit.application.Application:
+def get_app(shell=None) -> prompt_toolkit.application.Application:
     """A patch to cover up the fact that get_app() returns a DummyApplication."""
-    if get_ipython() is not None:
-        return get_ipython().pt_app.app
+    shell = shell if shell is not None else get_ipython()
+    if hasattr(shell, "pt_app"):
+        if hasattr(shell.pt_app, "app"):
+            return shell.pt_app.app
 
 
 def exit_clicked():
@@ -139,7 +141,7 @@ class BottomToolbar:
         This will eliminate all IPython code out of this class and make things
         a little more modular for the tests.
         """
-        self.shell = get_ipython()
+        self.shell = kwargs.pop("shell", None) if kwargs.pop("shell", None) is not None else get_ipython()
         self.app = get_app()
         self.PythonLexer = PythonLexer()
         self.Formatter = TerminalTrueColorFormatter()

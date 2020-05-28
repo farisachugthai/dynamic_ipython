@@ -85,10 +85,12 @@
     <span class="n">pygments_style</span> <span class="o">=</span> <span class="n">GruvboxStyle</span>
 
 
-<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span><span class="p">:</span>
+<div class="viewcode-block" id="get_app"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.get_app">[docs]</a><span class="k">def</span> <span class="nf">get_app</span><span class="p">(</span><span class="n">shell</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">prompt_toolkit</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">Application</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A patch to cover up the fact that get_app() returns a DummyApplication.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
+    <span class="n">shell</span> <span class="o">=</span> <span class="n">shell</span> <span class="k">if</span> <span class="n">shell</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_ipython</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">shell</span><span class="p">,</span> <span class="s2">&quot;pt_app&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="p">,</span> <span class="s2">&quot;app&quot;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">shell</span><span class="o">.</span><span class="n">pt_app</span><span class="o">.</span><span class="n">app</span></div>
 
 
 <div class="viewcode-block" id="exit_clicked"><a class="viewcode-back" href="../../../startup/toolbar.html#default_profile.startup.bottom_toolbar.exit_clicked">[docs]</a><span class="k">def</span> <span class="nf">exit_clicked</span><span class="p">():</span>
@@ -182,7 +184,7 @@
 <span class="sd">        This will eliminate all IPython code out of this class and make things</span>
 <span class="sd">        a little more modular for the tests.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shell</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;shell&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">get_ipython</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">get_app</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PythonLexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span>

@@ -47,7 +47,7 @@ from typing import Any, Callable, Iterable, List, Mapping, Optional, Union, AnyS
 from types import TracebackType
 
 from IPython.core.getipython import get_ipython
-from IPython.terminal.prompts import RichDisplayHook
+from IPython.terminal.prompts import RichPromptDisplayHook
 from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 

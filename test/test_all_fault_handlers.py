@@ -61,7 +61,7 @@ def test_in_tempdir(cwd):
 
 def test_given_directory(cwd):
     # Test InGivenDirectory
-    with in_dir() as tmpdir:
+    with in_dir(cwd) as tmpdir:
         assert tmpdir==abspath(cwd)
     with in_dir(cwd) as tmpdir:
         assert tmpdir==cwd
