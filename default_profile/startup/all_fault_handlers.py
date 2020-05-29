@@ -2,18 +2,8 @@
 # -*- coding: utf-8 -*-
 """Initialize exception handlers and run `%rehashx`.
 
-`%rehashx` magic
-----------------
-
-This is an incredible little gem that's hugely useful for
-making IPython work as a more versatile system shell.
-
-Unfortunately, it executes files in the cwd in an odd manner on Windows,
-and believes files on Dropbox should be executed without checking a filetype.
-
 Work in Progress
 -----------------
-
 Reorganizing this code to focus on setting up tracers, debuggers and
 formatters for exceptions.
 
@@ -25,6 +15,33 @@ should be discouraged here.
 .. tip::
     A possible alternative to get_ipython().showsyntaxerror might
     possibly be :func:`dis.distb`.
+
+Temporary Directories
+----------------------
+
+.. testsetup::
+
+    from default_profile.startup.all_fault_handlers import in_tempdir, in_dir
+
+Useful when you want to use `in_tempdir` for the final test, but
+you are still debugging.  For example, you may want to do this in the end.:
+
+>>> with in_tempdir() as tmpdir:
+...     # do something complicated which might break
+...     pass
+
+But indeed the complicated thing does break, and meanwhile the
+``in_tempdir`` context manager wiped out the directory with the
+temporary files that you wanted for debugging.  So, while debugging, you
+replace with something like.:
+
+>>> with in_dir() as tmpdir: # Use working directory by default
+...     # do something complicated which might break
+...     pass
+
+You can then look at the temporary file outputs to debug what is happening,
+fix, and finally replace `in_dir` with `in_tempdir` again.
+
 
 """
 import inspect
@@ -68,8 +85,40 @@ def formatted_tb() -> TracebackType:
 
 
 def last_exc() -> TracebackType:
-    """Return `format_exc`."""
+    """Return `traceback.format_exc`."""
     return format_exc()
+
+class Fr:
+    """Frames don't define dict so vars doesnt work on it.
+
+    Attributes
+    ----------
+    Frame attributes.:
+
+    frame.f_back           frame.f_lasti          frame.f_trace_lines
+    frame.f_builtins       frame.f_lineno         frame.f_trace_opcodes
+    frame.f_code           frame.f_locals
+    frame.f_globals        frame.f_trace
+    """
+
+    def __init__(self, frame):
+        self.frame = frame
+        self.cur_frame = inspect.current_frame()
+
+    @staticmethod
+    def all_methods():
+        return dir(Fr)
+
+    def vars(self):
+        raise
+
+    def get_lineno(self):
+        return self.frame.f_lineno
+
+    def get_filename(self):
+        pass
+
+
 
 
 def rehashx_run():
@@ -228,7 +277,7 @@ def tempdir():
 
 @contextmanager
 def in_tempdir():
-    ''' Create, return, and change directory to a temporary directory
+    """Create, return, and change directory to a temporary directory
 
     Examples
     --------
@@ -242,7 +291,8 @@ def in_tempdir():
     False
     >>> os.getcwd() == my_cwd
     True
-    '''
+
+    """
     pwd = os.getcwd()
     d = mkdtemp()
     os.chdir(d)
@@ -253,32 +303,7 @@ def in_tempdir():
 
 @contextmanager
 def in_dir(dir: Union[AnyStr, os.PathLike]):
-    """ Change directory to given directory for duration of `with` block.
-
-    .. testsetup::
-
-        from default_profile.startupm.all_fault_handlers import in_tempdir, in_dir
-
-    Useful when you want to use `in_tempdir` for the final test, but
-    you are still debugging.  For example, you may want to do this in the end.::
-
-    >>> with in_tempdir() as tmpdir:
-    ...     # do something complicated which might break
-    ...     pass
-
-    But indeed the complicated thing does break, and meanwhile the
-    ``in_tempdir`` context manager wiped out the directory with the
-    temporary files that you wanted for debugging.  So, while debugging, you
-    replace with something like.::
-
-    >>> with in_dir() as tmpdir: # Use working directory by default
-    ...     # do something complicated which might break
-    ...     pass
-
-    You can then look at the temporary file outputs to debug what is happening,
-    fix, and finally replace ``in_dir` with `in_tempdir` again.
-
-    """
+    """Change directory to given directory for duration of `with` block."""
     cwd = os.getcwd()
     if dir is None:
         yield cwd

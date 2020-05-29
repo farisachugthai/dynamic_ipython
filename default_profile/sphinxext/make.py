@@ -9,53 +9,86 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import List, Any, Union, Callable, AnyStr, Optional, Dict
+from typing import (IO, TYPE_CHECKING, Any, AnyStr, Callable, Dict, List,
+                    Optional, Union)
+
+import jinja2
+import sphinx
+from docutils import nodes
+from docutils.core import publish_doctree
+from jinja2.environment import Environment
+from jinja2.exceptions import TemplateError
+from jinja2.ext import autoescape, do, with_
+from jinja2.lexer import get_lexer
+    # 'FileSystemBytecodeCache': < class 'jinja2.bccache.FileSystemBytecodeCache' >,
+from jinja2.loaders import FileSystemLoader
+from jinja2.nodes import EvalContext
+from jinja2.runtime import Context
+from pygments.lexers.markup import MarkdownLexer, RstLexer
+from pygments.lexers.python import (NumPyLexer, PythonConsoleLexer,
+                                    PythonLexer, PythonTracebackLexer)
+from pygments.lexers.shell import BashLexer
+from pygments.lexers.textedit import VimLexer
+# side effect: registers roles and directives
+from sphinx import directives  # noqa
+from sphinx import roles  # noqa
+from sphinx import package_dir
+from sphinx.application import Sphinx
+# theme_factory = HTMLThemeFactory(self.app)
+# Then make this
+from sphinx.builders.html import StandaloneHTMLBuilder
+# from sphinx.cmd.build import build_main
+# from sphinx.cmd.build import handle_exception
+from sphinx.cmd.make_mode import Make
+from sphinx.config import Config
+from sphinx.environment import (CONFIG_CHANGED_REASON, CONFIG_OK,
+                                BuildEnvironment)
+from sphinx.environment.adapters.asset import ImageAdapter
+# This could be super useful
+# from sphinx.environment.adapters.toctree import TocTree
+from sphinx.errors import ApplicationError, ConfigError
+# , ExtensionError
+from sphinx.events import EventManager, core_events
+from sphinx.io import SphinxStandaloneReader, read_doc
+from sphinx.jinja2glue import BuiltinTemplateLoader, SphinxFileSystemLoader
+from sphinx.locale import __
+from sphinx.parsers import RSTParser
+from sphinx.util import import_object, progress_message, rst, status_iterator
+from sphinx.util.build_phase import BuildPhase
+from sphinx.util.console import bold  # type: ignore
+from sphinx.util.docfields import GroupedField
+# from sphinx.util.console import (  # type: ignore
+#   colorize, color_terminal
+# )
+from sphinx.util.docutils import (docutils_namespace, patch_docutils,
+                                  sphinx_domains)
+from sphinx.util.i18n import CatalogInfo, CatalogRepository, docname_to_domain
+# 'CatalogInfo': < class 'sphinx.util.i18n.CatalogInfo' >,
+# 'CatalogRepository': < class 'sphinx.util.i18n.CatalogRepository' >,
+# this is good to be aware of
+# from sphinx.util.inspect import getdoc
+from sphinx.util.logging import getLogger
+from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
+# this is used alongside multiprocessing.connection.Connection
+# from sphinx.util.parallel import ParallelTasks
+from sphinx.util.parallel import (ParallelTasks, SerialTasks, make_chunks,
+                                  parallel_available)
+from sphinx.util.tags import Tags
+from sphinx.util.template import ReSTRenderer
 
 try:
     from importlib import metadata
 except ImportError:
     import importlib_metadata as metadata
 
-# from jinja2.constants import TRIM_BLOCKS, LSTRIP_BLOCKS
-import jinja2
-from jinja2.environment import Environment
-from jinja2.exceptions import TemplateError
-from jinja2.ext import autoescape, do, with_
-from jinja2.loaders import FileSystemLoader
 
-import sphinx
-from sphinx import package_dir
-from sphinx.application import Sphinx
-
-# So we have to make the Sphinx app first. That'll involve a ton
-# of moving parts. It'll also require the Extension Registry which
-# is equally massive. Then we can make this
-# theme_factory = HTMLThemeFactory(self.app)
-# Then make this
-# from sphinx.builders.html import StandAloneHTMLBuilder
-# And we'll have repieced together sphinx to an order of magnitude
-
-# from sphinx.cmd.build import build_main
-# from sphinx.cmd.build import handle_exception
-
-from sphinx.cmd.make_mode import Make
-from sphinx.config import Config
-# This could be super useful
-# from sphinx.environment.adapters.toctree import TocTree
-from sphinx.errors import ApplicationError, ConfigError
-# , ExtensionError
-from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
 # from sphinx.registry
-# from sphinx.util.console import (  # type: ignore
-#   colorize, color_terminal
-# )
-from sphinx.util.docutils import patch_docutils, docutils_namespace
-# this is good to be aware of
-# from sphinx.util.inspect import getdoc
-from sphinx.util.logging import getLogger
-from sphinx.util.tags import Tags
-# from sphinx.ext.apidoc import create
-# from sphinx.ext.autosummary.generate import
+
+
+if TYPE_CHECKING:
+    from jinja2.environment import TRIM_BLOCKS, LSTRIP_BLOCKS  # noqa
+    from sphinx.domains.rst import ReSTDomain  # noqa
+# }}}
 
 
 logger = getLogger(name=__name__)
@@ -162,9 +195,27 @@ def _parse_arguments() -> argparse.ArgumentParser:
     return parser
 
 
+def parse(app: Sphinx, text: str, docname: str = 'index') -> nodes.document:
+    """Parse a string as reStructuredText with Sphinx application."""
+    try:
+        app.env.temp_data['docname'] = docname
+        reader = SphinxStandaloneReader()
+        reader.setup(app)
+        parser = RSTParser()
+        parser.set_application(app)
+        with sphinx_domains(app.env):
+            return publish_doctree(text, path.join(app.srcdir, docname + '.rst'),
+                                   reader=reader,
+                                   parser=parser,
+                                   settings_overrides={'env': app.env,
+                                                       'gettext_compact': True})
+    finally:
+        app.env.temp_data.pop('docname', None)
+
+
 class DocBuilder:
     def __init__(self, kind=None, num_jobs=1, verbosity=0, root:
-            Optional[os.PathLike] =None):
+                 Optional[os.PathLike] = None):
         if kind is None:
             kind = "html"
         self.kind = kind
@@ -191,7 +242,7 @@ class DocBuilder:
         except OSError as e:
             logger.error(e)
 
-    def sphinx_build(self, kind, BUILD_PATH: Optional[os.PathLike] =None):
+    def sphinx_build(self, kind, BUILD_PATH: Optional[os.PathLike] = None):
         """Build docs.
 
         Examples
@@ -241,7 +292,7 @@ class DocBuilder:
             ).strip(),
         )
 
-    def open_browser(self, doc: Optional[os.PathLike] =None):
+    def open_browser(self, doc: Optional[os.PathLike] = None):
         """Open a browser tab to the provided document.
 
         :param doc: path to index.html
@@ -310,6 +361,19 @@ def generate_autosummary(**kwargs):
     from sphinx.ext.autosummary.generate import generate_autosummary_docs
 
     generate_autosummary_docs(**kwargs)
+
+
+class UserSphinxAdditions:
+
+    def __init__(self, sphinx: Sphinx):
+        self.sphinx = sphinx
+
+    @classmethod
+    def additions(self, method, **kwargs):
+        if not hasattr(self.sphinx, "method"):
+            raise AttributeError
+
+        getattr(self.sphinx, "method")(**kwargs)
 
 
 def generate_sphinx_app(root: os.PathLike, namespace: Optional[argparse.Namespace] = None):

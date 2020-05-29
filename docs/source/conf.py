@@ -47,25 +47,17 @@ from sphinx.config import Config
 from sphinx.environment import BuildEnvironment, CONFIG_OK, CONFIG_CHANGED_REASON
 from sphinx.environment.adapters.asset import ImageAdapter
 from sphinx.errors import SphinxError
-
-# from sphinx.application import Sphinx
-# and i think SphinxError is actually one too
-# from sphinx.environment import BuildEnvironment
-# could manually start creating extensions
 # from sphinx.errors import SphinxError, ExtensionError
-# this is used alongside multiprocessing.connection.Connection
-# from sphinx.util.parallel import ParallelTasks
-
-# from sphinx.extension import Extension
 
 # Yo this line is awesome
 from sphinx.events import EventManager, core_events
 from sphinx.ext.autodoc import cut_lines
 from sphinx.ext.autosummary.generate import setup_documenters
+# from sphinx.extension import Extension
+
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
 from sphinx.io import read_doc
 from sphinx.locale import __
-from sphinx.jinja2glue import SphinxFileSystemLoader  # , SandboxedEnvironment
 
 from sphinx.util import import_object, rst, progress_message, status_iterator
 from sphinx.util.build_phase import BuildPhase
@@ -78,6 +70,8 @@ from sphinx.util.docfields import GroupedField
 from sphinx.util.tags import Tags
 from sphinx.util.template import ReSTRenderer
 from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
+# this is used alongside multiprocessing.connection.Connection
+# from sphinx.util.parallel import ParallelTasks
 from sphinx.util.parallel import (
     ParallelTasks,
     SerialTasks,
