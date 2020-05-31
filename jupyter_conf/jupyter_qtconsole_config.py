@@ -9,13 +9,16 @@ import traitlets
 from traitlets.config import get_config
 
 # I think we can safely assume this one
-from ipykernel.zmqshell import ZMQInteractiveShell
-from jupyter_core.paths import get_home_dir
+try:
 
-from jupyter_client.manager import KernelManager, start_new_kernel
+    from jupyter_core.paths import get_home_dir
 
-# Something in this is throwing an error
-from jupyter_client.session import Session
+    from jupyter_client.manager import KernelManager, start_new_kernel
+
+    # Something in this is throwing an error
+    from jupyter_client.session import Session
+except ImportError:
+    sys.exit()
 
 try:
     from gruvbox.gruvbox import GruvboxStyle

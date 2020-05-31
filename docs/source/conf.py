@@ -167,6 +167,7 @@ def instantiate_jinja_loader():
         return loader
 
 
+
 def create_bytecode_cache():
     return FileSystemBytecodeCache(
         os.environ.get("TMP") + "jinja_cache", "%s.cache"
@@ -217,6 +218,7 @@ lexer = get_lexer(env)
 # ctx = jinja_templates.new_context()
 # context you can work with for contextfunctions
 
+# }}}
 
 def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
     """
@@ -245,11 +247,28 @@ def nl2br(eval_ctx, value):
         result = Markup(result)
     return result
 
+
+
+# -- Project information: {{{
+# --------------------------------------------
+
+# Does Sphinx use this while building the docs? Appears so from
+# Sphinx.
+project = "Tutorials"
+copyright = "2018-{}, Faris A Chugthai".format(datetime.now().year)
+author = "Faris A Chugthai"
+
+# The short X.Y version
+version = "1.2.0.dev"
+# The full version, including alpha/beta/rc tags
+release = version
+
+# -- General configuration ------------------------------------------
 # -- Extensions ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
 
-needs_sphinx = "2.1.0"
+needs_sphinx = "2.4.0"
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -289,7 +308,6 @@ extensions = [
     # "recommonmark",
 ]
 
-# -- General Configuration ----------------------------------------
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

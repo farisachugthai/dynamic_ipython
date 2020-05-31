@@ -109,7 +109,7 @@ def pyg_highlight(*param, outfile=None):
     if pygments is None:
         pprint.pprint(*param)
         return
-    return pygments.format(lex(*param, lexer), formatter, outfile)
+    return pygments.format(pygments.lex(str(*param), lexer), formatter, outfile)
 
 
 def _complete(text, state):
@@ -136,7 +136,7 @@ def _pythonrc_enable_readline():
     readline.parse_and_bind('"\\C-k":kill-whole-line')
     readline.parse_and_bind('"\\C-l":clear-screen')
     readline.parse_and_bind('"\\C-m":accept-line')
-    inputrc = os.environ.get("INPUTRC")
+    inputrc = os.environ.get("INPUTRC") if "INPUTRC" in ENV else None
     if inputrc is None:
         inputrc = os.path.exists(os.path.join(os.environ.get("HOME"), "", ".inputrc"))
     if inputrc:
@@ -179,6 +179,7 @@ def write_history(history_path: Optional[os.PathLike] = None):
     """
     if readline is None:
         return
+    history_path = os.path.expanduser("~/.history") if history_path is None else history_path
     length = readline.get_current_history_length()
     readline.append_history_file(length, history_path)
     logger.info("Written history to %s" % history_path)
@@ -216,7 +217,7 @@ def get_width() -> AnyStr:
     return shutil.get_terminal_size()[1]
 
 
-def excepthook_(exctype, value, traceback):
+def excepthook_(etype, value, tb):
     """Prints exceptions to sys.stderr and colorizes them.
 
     Notes
@@ -224,8 +225,6 @@ def excepthook_(exctype, value, traceback):
     traceback.format_exception() isn't used because it's
     inconsistent with the built-in formatter
     """
-    import traceback
-
     ret = pyg_highlight(traceback.print_exception(etype, value, tb))
 
     try:
@@ -233,7 +232,7 @@ def excepthook_(exctype, value, traceback):
         pyg_highlight(stderror)
     except:  # noqa
         # oops
-        sys.__excepthook__(exctype, value, tb)
+        sys.__excepthook__(etype, value, tb)
         print(sys.stderr.getvalue())
     finally:
         sys.exc_info = (None, None, None)

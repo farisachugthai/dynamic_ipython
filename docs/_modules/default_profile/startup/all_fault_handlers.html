@@ -45,18 +45,8 @@
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="sd">&quot;&quot;&quot;Initialize exception handlers and run `%rehashx`.</span>
 
-<span class="sd">`%rehashx` magic</span>
-<span class="sd">----------------</span>
-
-<span class="sd">This is an incredible little gem that&#39;s hugely useful for</span>
-<span class="sd">making IPython work as a more versatile system shell.</span>
-
-<span class="sd">Unfortunately, it executes files in the cwd in an odd manner on Windows,</span>
-<span class="sd">and believes files on Dropbox should be executed without checking a filetype.</span>
-
 <span class="sd">Work in Progress</span>
 <span class="sd">-----------------</span>
-
 <span class="sd">Reorganizing this code to focus on setting up tracers, debuggers and</span>
 <span class="sd">formatters for exceptions.</span>
 
@@ -68,6 +58,33 @@
 <span class="sd">.. tip::</span>
 <span class="sd">    A possible alternative to get_ipython().showsyntaxerror might</span>
 <span class="sd">    possibly be :func:`dis.distb`.</span>
+
+<span class="sd">Temporary Directories</span>
+<span class="sd">----------------------</span>
+
+<span class="sd">.. testsetup::</span>
+
+<span class="sd">    from default_profile.startup.all_fault_handlers import in_tempdir, in_dir</span>
+
+<span class="sd">Useful when you want to use `in_tempdir` for the final test, but</span>
+<span class="sd">you are still debugging.  For example, you may want to do this in the end.:</span>
+
+<span class="sd">&gt;&gt;&gt; with in_tempdir() as tmpdir:</span>
+<span class="sd">...     # do something complicated which might break</span>
+<span class="sd">...     pass</span>
+
+<span class="sd">But indeed the complicated thing does break, and meanwhile the</span>
+<span class="sd">``in_tempdir`` context manager wiped out the directory with the</span>
+<span class="sd">temporary files that you wanted for debugging.  So, while debugging, you</span>
+<span class="sd">replace with something like.:</span>
+
+<span class="sd">&gt;&gt;&gt; with in_dir() as tmpdir: # Use working directory by default</span>
+<span class="sd">...     # do something complicated which might break</span>
+<span class="sd">...     pass</span>
+
+<span class="sd">You can then look at the temporary file outputs to debug what is happening,</span>
+<span class="sd">fix, and finally replace `in_dir` with `in_tempdir` again.</span>
+
 
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
@@ -111,8 +128,40 @@
 
 
 <div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Return `format_exc`.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Return `traceback.format_exc`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">format_exc</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Fr"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr">[docs]</a><span class="k">class</span> <span class="nc">Fr</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Frames don&#39;t define dict so vars doesnt work on it.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Frame attributes.:</span>
+
+<span class="sd">    frame.f_back           frame.f_lasti          frame.f_trace_lines</span>
+<span class="sd">    frame.f_builtins       frame.f_lineno         frame.f_trace_opcodes</span>
+<span class="sd">    frame.f_code           frame.f_locals</span>
+<span class="sd">    frame.f_globals        frame.f_trace</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Fr.__init__"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cur_frame</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">current_frame</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Fr.all_methods"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr.all_methods">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">all_methods</span><span class="p">():</span>
+        <span class="k">return</span> <span class="nb">dir</span><span class="p">(</span><span class="n">Fr</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Fr.vars"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr.vars">[docs]</a>    <span class="k">def</span> <span class="nf">vars</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span></div>
+
+<div class="viewcode-block" id="Fr.get_lineno"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr.get_lineno">[docs]</a>    <span class="k">def</span> <span class="nf">get_lineno</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">f_lineno</span></div>
+
+<div class="viewcode-block" id="Fr.get_filename"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr.get_filename">[docs]</a>    <span class="k">def</span> <span class="nf">get_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+
 
 
 <div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">():</span>
@@ -271,7 +320,7 @@
 
 <div class="viewcode-block" id="in_tempdir"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.in_tempdir">[docs]</a><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">in_tempdir</span><span class="p">():</span>
-    <span class="sd">&#39;&#39;&#39; Create, return, and change directory to a temporary directory</span>
+    <span class="sd">&quot;&quot;&quot;Create, return, and change directory to a temporary directory</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -285,7 +334,8 @@
 <span class="sd">    False</span>
 <span class="sd">    &gt;&gt;&gt; os.getcwd() == my_cwd</span>
 <span class="sd">    True</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">mkdtemp</span><span class="p">()</span>
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
@@ -296,32 +346,7 @@
 
 <div class="viewcode-block" id="in_dir"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.in_dir">[docs]</a><span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">in_dir</span><span class="p">(</span><span class="nb">dir</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]):</span>
-    <span class="sd">&quot;&quot;&quot; Change directory to given directory for duration of `with` block.</span>
-
-<span class="sd">    .. testsetup::</span>
-
-<span class="sd">        from default_profile.startupm.all_fault_handlers import in_tempdir, in_dir</span>
-
-<span class="sd">    Useful when you want to use `in_tempdir` for the final test, but</span>
-<span class="sd">    you are still debugging.  For example, you may want to do this in the end.::</span>
-
-<span class="sd">    &gt;&gt;&gt; with in_tempdir() as tmpdir:</span>
-<span class="sd">    ...     # do something complicated which might break</span>
-<span class="sd">    ...     pass</span>
-
-<span class="sd">    But indeed the complicated thing does break, and meanwhile the</span>
-<span class="sd">    ``in_tempdir`` context manager wiped out the directory with the</span>
-<span class="sd">    temporary files that you wanted for debugging.  So, while debugging, you</span>
-<span class="sd">    replace with something like.::</span>
-
-<span class="sd">    &gt;&gt;&gt; with in_dir() as tmpdir: # Use working directory by default</span>
-<span class="sd">    ...     # do something complicated which might break</span>
-<span class="sd">    ...     pass</span>
-
-<span class="sd">    You can then look at the temporary file outputs to debug what is happening,</span>
-<span class="sd">    fix, and finally replace ``in_dir` with `in_tempdir` again.</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Change directory to given directory for duration of `with` block.&quot;&quot;&quot;</span>
     <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
     <span class="k">if</span> <span class="nb">dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">yield</span> <span class="n">cwd</span>
@@ -348,7 +373,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 29, 2020.
+      Last updated on May 31, 2020.
     </div>
   </body>
 </html>
