@@ -2,7 +2,6 @@
 
 Summary
 -------
-
 Create classes used to enhance the prompt_toolkit objects
 bound to the running IPython interpreter.
 
@@ -18,7 +17,6 @@ relationship between a number of the intertwined classes in a running
 
 Notes
 -----
-
 Of use might be.:
 
     get_ipython().pt_app.layout
@@ -29,18 +27,23 @@ to a container `HSplit` and a few other things possibly worth exploring.
 """
 import functools
 import sys
+from typing import Callable, AnyStr, Any, Union, Optional
 
 import jedi
 import prompt_toolkit
 from IPython.core.getipython import get_ipython
+
 from prompt_toolkit.buffer import Buffer
 from prompt_toolkit.document import Document
+
 # from prompt_toolkit.keys import Keys
 # from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.filters import is_searching, ViInsertMode
 from prompt_toolkit.key_binding.bindings import search
 from prompt_toolkit.key_binding.key_bindings import (
-    KeyBindings, ConditionalKeyBindings, _MergedKeyBindings
+    KeyBindings,
+    ConditionalKeyBindings,
+    _MergedKeyBindings,
 )
 from prompt_toolkit.layout.containers import HSplit, Window
 from prompt_toolkit.layout.controls import BufferControl
@@ -64,6 +67,7 @@ try:
     from gruvbox import GruvboxStyle
 except ImportError:
     from pygments.styles.inkpot import InkPotStyle
+
     pygments_style = InkPotStyle
 else:
     pygments_style = GruvboxStyle
@@ -84,7 +88,7 @@ def get_session():
         return get_ipython().pt_app
 
 
-def get_jedi_interpreter(document):
+def create_jedi_interpreter(document: Document) -> Union[jedi.Interpreter, None]:
     # Copied from ptpython.utils
     try:
         return jedi.Interpreter(
@@ -92,7 +96,7 @@ def get_jedi_interpreter(document):
             column=document.cursor_position_col,
             line=document.cursor_position_row + 1,
             path="input-text",
-            namespaces=[locals, globals],
+            namespaces=[locals(), globals()],
         )
     except ValueError:
         # Invalid cursor position.
@@ -114,13 +118,25 @@ def get_jedi_interpreter(document):
 
 
 class Helpers:
-    """A class that attempt enumerating the hierarchy of classes in prompt_toolkit."""
+    """A class that attempts enumerating the hierarchy of classes in prompt_toolkit."""
 
     def __init__(self):
         """Define the shell, PromptSession and Application."""
         self.shell = get_ipython()
-        self.pt_app = get_app()
-        self.session = get_session()
+        if self.shell is not None:
+            self.pt_app = get_app()
+            self.session = get_session()
+        else:
+            from prompt_toolkit import VERSION as ptk_version
+
+            # Gonna need a ptk version check
+            if ptk_version > 3:
+                from prompt_toolkit.application.current import get_app_or_none
+
+                self.pt_app = get_app_or_none()
+                self.session = self.pt_app.session
+            # todo:
+            # else:
 
     def __repr__(self):
         return f"{self.__class__.__name__} with app at {self.pt_app}"
@@ -459,13 +475,15 @@ class ConditionalCallable(ConditionalValidator):
     # """Because it's annoying having to pass the document just to see it."""
     # return self.__repr__()
 
-    def __call__(self, document=None):
+    def __call__(self, document: Optional[Document] = None):
         if document is None:
             document = get_ipython().pt_app.app.current_buffer.document
         return self.validate(document)
 
 
-def _conditional_validator(validator, document):
+def _conditional_validator(
+    validator: prompt_toolkit.validation.Validator, document: Document
+) -> Callable:
     return ConditionalCallable(validator, document=document, filter=ViInsertMode())
 
 
@@ -492,6 +510,7 @@ def user_overrides(f, overrides=None, *args, **kwargs):
 def initialize_prompt_toolkit(prompt=None):
     # make these imports local because shits gonna run so slow otherwise
     from default_profile.startup.lexer import get_lexer
+
     # from default_profile.startup.completions import create_pt_completers
     # from default_profile.startup.clipboard import UsefulClipboard
     from prompt_toolkit.clipboard.base import DynamicClipboard
@@ -499,25 +518,28 @@ def initialize_prompt_toolkit(prompt=None):
     from prompt_toolkit.key_binding.defaults import load_key_bindings
 
     if prompt is None:
-        prompt = 'YourPTApp:'
+        prompt = "YourPTApp:"
     from prompt_toolkit.output import ColorDepth
-    partial_session = functools.partial(prompt_toolkit.shortcuts.PromptSession(
-        message=prompt,
-        vi_mode=True,
-        lexer=get_lexer(),
-        key_bindings=load_key_bindings(),
-        enable_open_in_editor=True,
-        enable_history_search=True,
-        enable_system_prompt=True,
-        enable_suspend=True,
-        color_depth=ColorDepth.TRUE_COLOR,
-        clipboard=DynamicClipboard(InMemoryClipboard()),
-        validator=pt_validator(),
-        # TODO: style
-        # include_default_pygments_style
-        # history
-        # and then eventually layout
-    ))
+
+    partial_session = functools.partial(
+        prompt_toolkit.shortcuts.PromptSession(
+            message=prompt,
+            vi_mode=True,
+            lexer=get_lexer(),
+            key_bindings=load_key_bindings(),
+            enable_open_in_editor=True,
+            enable_history_search=True,
+            enable_system_prompt=True,
+            enable_suspend=True,
+            color_depth=ColorDepth.TRUE_COLOR,
+            clipboard=DynamicClipboard(InMemoryClipboard()),
+            validator=pt_validator(),
+            # TODO: style
+            # include_default_pygments_style
+            # history
+            # and then eventually layout
+        )
+    )
     return partial_session
 
 
@@ -556,10 +578,8 @@ def determine_which_pt_attribute():
 
 
 if __name__ == "__main__":
-    try:
-        pt_helper = Helpers()
-    except Exception as e:  # noqa
-        print(e)
+    pt_helper = Helpers()
+    jedi_interpreter = create_jedi_interpreter(pt_helper.current_document)
 
     pt = determine_which_pt_attribute()
     get_ipython().pt_app.validator = pt_validator()

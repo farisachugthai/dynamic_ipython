@@ -51,7 +51,7 @@ from inspect import findsource, getmodule, getsource, getsourcefile, getsourceli
 from linecache import cache
 from pathlib import Path
 from pydoc import pager, safeimport
-from typing import Optional, AnyStr
+from typing import Optional, AnyStr, Any, Union, IO, Iterable
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(name=__name__)
@@ -104,7 +104,7 @@ def install_jedi():
         jedi.settings.auto_import_modules = ["readline", "pygments", "ast"]
 
 
-def pyg_highlight(*param, outfile=None):
+def pyg_highlight(*param: Any, outfile: Optional[IO] = None):
     """Run a string through the pygments highlighter."""
     if pygments is None:
         pprint.pprint(*param)
@@ -112,7 +112,7 @@ def pyg_highlight(*param, outfile=None):
     return pygments.format(pygments.lex(str(*param), lexer), formatter, outfile)
 
 
-def _complete(text, state):
+def _complete(text: AnyStr, state: Any) -> AnyStr:
     old_complete = readline.get_completer()
     if not text:
         # Insert four spaces for indentation
@@ -146,7 +146,7 @@ def _pythonrc_enable_readline():
         readline.set_completer(rlcompleter.Completer.complete)
 
 
-def write_history(history_path: Optional[os.PathLike] = None):
+def write_history(history_path: Union[Optional[os.PathLike], AnyStr] = None):
     """If readline was correctly imported, append to the history_path.
 
     .. currentmodule:: readline
@@ -179,7 +179,9 @@ def write_history(history_path: Optional[os.PathLike] = None):
     """
     if readline is None:
         return
-    history_path = os.path.expanduser("~/.history") if history_path is None else history_path
+    history_path = (
+        os.path.expanduser("~/.history") if history_path is None else history_path
+    )
     length = readline.get_current_history_length()
     readline.append_history_file(length, history_path)
     logger.info("Written history to %s" % history_path)
@@ -199,7 +201,7 @@ def _pythonrc_enable_history():
             print("Error while trying to create the history file.")
 
 
-def pphighlight(o, *a, **kw):
+def pphighlight(o: Any, *a, **kw):
     """Lex a `pprint.pformat`\'ted str, then run it through `pyg_highlight`."""
     s = pprint.pformat(o, *a, **kw)
     try:
@@ -259,7 +261,7 @@ def format_callable(value):
     return reprstr
 
 
-def pprinthook(value=None, *args, **kwargs):
+def pprinthook(value: Optional[Any] = None, *args, **kwargs):
     """Pretty print an object to sys.stdout.
 
     Replacement for ``print`` that special-cases dicts and iterables.
@@ -274,7 +276,6 @@ def pprinthook(value=None, *args, **kwargs):
     """
     if value is None:
         return
-    from typing import Iterable
 
     if len(args) != 1:
         print(*args, **kwargs)
@@ -296,8 +297,6 @@ def pprinthook(value=None, *args, **kwargs):
 
 
 def get_help_types():
-    import types
-
     help_types = [
         types.BuiltinFunctionType,
         types.BuiltinMethodType,
