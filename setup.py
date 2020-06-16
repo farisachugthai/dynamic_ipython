@@ -139,7 +139,7 @@ NAME = "dynamic_ipython"
 AUTHOR = "Faris Chugthai"
 EMAIL = "farischugthai@gmail.com"
 DESCRIPTION = "An IPython configuration system."
-LICENSE = "MIT"
+LICENSE = "LICENSE"
 KEYWORDS = ["ipython", "configuration", "ipython_extensions", "jupyter", "frameworks"]
 URL = "https://github.com/farisachugthai/dynamic_ipython"
 REQUIRES_PYTHON = ">=3.6.0"
@@ -337,9 +337,9 @@ setup_args = dict(
     # py_modules=find_packages(where="default_profile"),
     platforms="any",
     requires=REQUIRED,  # in what way is this different than install_requires?
-    entry_points={
-        "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
-    },
+    # entry_points={
+    #     "console_scripts": ["ip=default_profile.profile_debugger:debug.main"],
+    # },
     # i dont even understand what error this raised but let's leave this
     # commented out
     # setup_requires=["pkg_resources", "pipenv"],
