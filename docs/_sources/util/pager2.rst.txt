@@ -1,7 +1,6 @@
 ==========================================
 :mod:`~default_profile.util.pager2` module
 ==========================================
-.. highlight:: ipython
 
 .. currentmodule:: default_profile.util.pager2
 
@@ -14,7 +13,6 @@ if the user has a pager they would like to implement!
 
 Revisions
 ----------
-
 .. magic:: pycat
 
 Still considering different ways of designing a new Windows specific pager
@@ -26,52 +24,18 @@ Windows user who doesn't have :envvar:`PAGER` set will use a home-brewed
 However, I haven't found anywhere in the docs where this is mentioned which
 is frustrating.
 
-
-Working Implementation
-======================
-
-Oct 28, 2019:
-Just ran this in the shell and I'm really pleased with it.
-
-It utilizes the :attr:`autocall` functionality of IPython, works with the
-``pycolorize`` utils, uses the `page` core function.
-
-If the user doesn't provide an argument, then just show them the last input
-they gave us especially since that var is **guaranteed** to always
-be there.
-
-.. testsetup::
-
-   import IPython
-   from IPython import get_ipython
-   from IPython.core.magic import line_magic
-
-I believe that this magic gets loaded automatically on startup now.
-
-.. ipython::
-   :verbatim:
-
-    In [105]: @line_magic
-         ...: def p(shell=None, s=None):
-         ...:     if shell is None:
-         ...:         shell = get_ipython()
-         ...:     if s is None:
-         ...:         IPython.core.page.page(shell.pycolorize(_i))
-         ...:     else:
-         ...:         IPython.core.page.page(shell.pycolorize(shell.find_user_code(s, skip_encoding_cookie=True)))
-
-
 .. _pydoc-bug:
 
 Original Pydoc Implementation and Errors
 ----------------------------------------
-
 Running `pydoc` with `PAGER` set on Windows doesn't catch the `KeyboardInterrupt`. ...
 
-.. ipython::
-   :verbatim:
+.. code-block:: bash
 
    $ pydoc FRAMEOBJECTS
+
+.. code-block:: py3tb
+
    Traceback (most recent call last):
    File "C:/tools/miniconda3/lib/runpy.py", line 193, in _run_module_as_main
       "__main__", mod_spec)
@@ -98,10 +62,9 @@ however we should re-use this implementation entirely and cut
 
 Also worth noting `IPython.core.payloadpage.page`.:
 
-.. ipython::
-   :verbatim:
+.. code-block:: python
 
-   In [63]: pydoc.pipepager(inspect.getdoc(arg), os.environ.get('PAGER'))
+   pydoc.pipepager(inspect.getdoc(arg), os.environ.get('PAGER'))
 
 Despite the source code of the std lib stating that pipes are completely
 broken on windows, this worked just fine for me.

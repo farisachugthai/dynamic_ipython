@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>default_profile.startup.readline_ &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
@@ -76,6 +77,7 @@
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AnyStr</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 
@@ -87,6 +89,7 @@
 <span class="kn">from</span> <span class="nn">default_profile.site_customize</span> <span class="kn">import</span> <span class="n">write_history</span>
 
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IPYTHONDIR&quot;</span><span class="p">):</span>
+    <span class="n">LOG_FILENAME</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]</span>
     <span class="n">LOG_FILENAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;IPYTHONDIR&quot;</span><span class="p">),</span> <span class="s2">&quot;completer.log&quot;</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
         <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">LOG_FILENAME</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
@@ -119,7 +122,7 @@
 <span class="sd">    it&#39;s a little too easy to initialize this sucker with no state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ViExternalEditor.__init__"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ViExternalEditor.__init__"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="n">AnyStr</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Instantiate the editor :command:`vi`.</span>
 
 <span class="sd">        Parameters</span>
@@ -139,10 +142,10 @@
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&gt;:&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_editor</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ViExternalEditor.run_editor"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.run_editor">[docs]</a>    <span class="k">def</span> <span class="nf">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ViExternalEditor.run_editor"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.run_editor">[docs]</a>    <span class="k">def</span> <span class="nf">run_editor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;It&#39;s the goddamn ViExternalEditor default to Vim!&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">editor</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;EDITOR&quot;</span><span class="p">]</span>
@@ -157,19 +160,19 @@
             <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="n">editor</span><span class="p">,</span> <span class="n">filename</span><span class="p">]</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">run_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ViExternalEditor.run_command"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+<div class="viewcode-block" id="ViExternalEditor.run_command"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">AnyStr</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">),</span>
+            <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">)),</span>
             <span class="n">stdin</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">universal_newlines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="ViExternalEditor.async_run_command"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.async_run_command">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">async_run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+<div class="viewcode-block" id="ViExternalEditor.async_run_command"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.ViExternalEditor.async_run_command">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">async_run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">AnyStr</span><span class="p">):</span>
         <span class="c1"># Did i do this right?</span>
         <span class="n">proc</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-            <span class="n">command</span><span class="p">,</span>
+            <span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="n">command</span><span class="p">)),</span>
             <span class="n">stdin</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stdout</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
             <span class="n">stderr</span><span class="o">=</span><span class="n">asyncio</span><span class="o">.</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
@@ -190,7 +193,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SimpleCompleter.__init__"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.SimpleCompleter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+<div class="viewcode-block" id="SimpleCompleter.__init__"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.SimpleCompleter.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">options</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="SimpleCompleter.complete"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.SimpleCompleter.complete">[docs]</a>    <span class="k">def</span> <span class="nf">complete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
@@ -350,7 +353,7 @@
 <span class="c1"># History</span>
 
 
-<div class="viewcode-block" id="setup_historyfile"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.setup_historyfile">[docs]</a><span class="k">def</span> <span class="nf">setup_historyfile</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="setup_historyfile"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.setup_historyfile">[docs]</a><span class="k">def</span> <span class="nf">setup_historyfile</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Add a history file to readline.</span>
 
 <span class="sd">    Parameters</span>
@@ -378,7 +381,7 @@
     <span class="n">shell</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;post_run_cell&quot;</span><span class="p">,</span> <span class="n">add_last_input</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="last_input"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.last_input">[docs]</a><span class="k">def</span> <span class="nf">last_input</span><span class="p">():</span>
+<div class="viewcode-block" id="last_input"><a class="viewcode-back" href="../../../startup/readline.html#default_profile.startup.readline_.last_input">[docs]</a><span class="k">def</span> <span class="nf">last_input</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Returns the user&#39;s last input.</span>
 
 <span class="sd">    Utilizes the *raw_cell* attribute found on an</span>
@@ -444,7 +447,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 27, 2020.
+      Last updated on Jun 16, 2020.
     </div>
   </body>
 </html>

@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>default_profile.startup.completions &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
@@ -165,17 +166,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_completions</span><span class="p">(</span><span class="n">document</span><span class="p">,</span> <span class="n">complete_event</span><span class="o">=</span><span class="n">complete_event</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_path_completer"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.get_path_completer">[docs]</a><span class="k">def</span> <span class="nf">get_path_completer</span><span class="p">():</span>
+<div class="viewcode-block" id="create_path_completer"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.create_path_completer">[docs]</a><span class="k">def</span> <span class="nf">create_path_completer</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Basically took this from Jon&#39;s unit tests.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">PathCallable</span><span class="p">(</span><span class="n">min_input_len</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">expanduser</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_fuzzy_keyword_completer"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.get_fuzzy_keyword_completer">[docs]</a><span class="k">def</span> <span class="nf">get_fuzzy_keyword_completer</span><span class="p">():</span>
+<div class="viewcode-block" id="create_fuzzy_keyword_completer"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.create_fuzzy_keyword_completer">[docs]</a><span class="k">def</span> <span class="nf">create_fuzzy_keyword_completer</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Return FuzzyWordCompleter initialized with all valid Python keywords.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">FuzzyWordCompleter</span><span class="p">(</span><span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="get_word_completer"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.get_word_completer">[docs]</a><span class="k">def</span> <span class="nf">get_word_completer</span><span class="p">():</span>
+<div class="viewcode-block" id="create_word_completer"><a class="viewcode-back" href="../../../startup/completions.html#default_profile.startup.completions.create_word_completer">[docs]</a><span class="k">def</span> <span class="nf">create_word_completer</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Return WordCompleter initialized with all valid Python keywords.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">WordCompleter</span><span class="p">(</span>
         <span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span><span class="p">,</span> <span class="n">pattern</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^([a-zA-Z0-9_.]+|[^a-zA-Z0-9_.\s]+)&quot;</span><span class="p">)</span>
@@ -325,9 +326,9 @@
     <span class="n">fuzzy_completer</span> <span class="o">=</span> <span class="n">FuzzyCallable</span><span class="p">(</span><span class="n">ExecutableCompleter</span><span class="p">())</span>
     <span class="n">list_of_completers</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">fuzzy_completer</span><span class="p">,</span>
-        <span class="n">get_path_completer</span><span class="p">(),</span>
-        <span class="n">get_word_completer</span><span class="p">(),</span>
-        <span class="n">get_fuzzy_keyword_completer</span><span class="p">(),</span>
+        <span class="n">create_path_completer</span><span class="p">(),</span>
+        <span class="n">create_word_completer</span><span class="p">(),</span>
+        <span class="n">create_fuzzy_keyword_completer</span><span class="p">(),</span>
         <span class="n">SimpleCompleter</span><span class="p">(),</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">get_ipython</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -359,7 +360,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on May 27, 2020.
+      Last updated on Jun 16, 2020.
     </div>
   </body>
 </html>

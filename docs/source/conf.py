@@ -299,7 +299,6 @@ extensions = [
     "sphinx.domains.python",
     "sphinx.domains.rst",
     "sphinx.domains.std",
-    "IPython.sphinxext.ipython_directive",
     "default_profile.sphinxext.magics",
     "matplotlib.sphinxext.plot_directive",
     "matplotlib.sphinxext.mathmpl",
@@ -624,18 +623,18 @@ viewcode_follow_imported_members = False
 
 # -- IPython directive -------------------------------------------------------
 
-ipython_savefig_dir = BUILD_DIR.joinpath("_images").__fspath__()
-savefig_dir = ipython_savefig_dir
+# ipython_savefig_dir = BUILD_DIR.joinpath("_images").__fspath__()
+# savefig_dir = ipython_savefig_dir
 
-ipython_warning_is_error = False
+# ipython_warning_is_error = False
 
-ipython_execlines = [
-    "import numpy",
-    "import IPython",
-    "import default_profile",
-    "import matplotlib as mpl",
-    "import matplotlib.pyplot",
-]
+# ipython_execlines = [
+#     "import numpy",
+#     "import IPython",
+#     "import default_profile",
+#     "import matplotlib as mpl",
+#     "import matplotlib.pyplot",
+# ]
 
 # -------------------------------------------------------------------
 # Autosummary

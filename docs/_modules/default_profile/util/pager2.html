@@ -4,6 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>default_profile.util.pager2 &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../../../_static/scrolls.css" type="text/css" />
@@ -49,7 +50,8 @@
 <span class="kn">import</span> <span class="nn">pydoc</span>
 <span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">from</span> <span class="nn">inspect</span> <span class="kn">import</span> <span class="n">getdoc</span>
+<span class="c1"># seriously use pydocs</span>
+<span class="c1"># from inspect import getdoc</span>
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.core.magic</span> <span class="kn">import</span> <span class="n">line_magic</span><span class="p">,</span> <span class="n">magics_class</span><span class="p">,</span> <span class="n">Magics</span>
@@ -84,8 +86,8 @@
     <span class="sd">&quot;&quot;&quot;Resourceful way to parse sys.argv and then expand a ``*args``.&quot;&quot;&quot;</span>
     <span class="n">_</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[:]</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="n">pydoc</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="were_in_ipython"><a class="viewcode-back" href="../../../util/pager2.html#default_profile.util.pager2.were_in_ipython">[docs]</a><span class="k">def</span> <span class="nf">were_in_ipython</span><span class="p">():</span>
@@ -225,7 +227,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_bool_globals_check</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-            <span class="n">txt</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+            <span class="n">txt</span> <span class="o">=</span> <span class="n">pydoc</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
             <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;First&#39;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">blocking_pager</span><span class="p">(</span><span class="n">txt</span><span class="p">)</span>
             <span class="k">return</span>
@@ -265,7 +267,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jun 11, 2020.
+      Last updated on Jun 16, 2020.
     </div>
   </body>
 </html>
