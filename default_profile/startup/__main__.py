@@ -16,6 +16,10 @@ from asyncio import format_helpers
 from os import scandir
 from os.path import abspath
 from pathlib import Path
+import logging
+# So this is the verbatim asyncio.log module
+# Name the logger after the package.
+logger = logging.getLogger(__package__)
 
 try:
     from asyncio.windows_events import ProactorEventLoop, IocpProactor
@@ -26,10 +30,7 @@ except ImportError:
 
 from IPython.core.getipython import get_ipython
 
-from default_profile import setup_logging
-
-logger = setup_logging()
-
+# from default_profile import setup_logging
 
 def exec_startup(fobj):
     """Runs `exec(compile(__file__))`.

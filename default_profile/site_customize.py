@@ -46,7 +46,6 @@ import sys
 import threading
 import traceback
 import types
-
 from inspect import findsource, getmodule, getsource, getsourcefile, getsourcelines
 from linecache import cache
 from pathlib import Path
@@ -109,6 +108,8 @@ def pyg_highlight(*param: Any, outfile: Optional[IO] = None):
     if pygments is None:
         pprint.pprint(*param)
         return
+    if outfile is None:
+        outfile = sys.stdout
     return pygments.format(pygments.lex(str(*param), lexer), formatter, outfile)
 
 
@@ -227,15 +228,11 @@ def excepthook_(etype, value, tb):
     traceback.format_exception() isn't used because it's
     inconsistent with the built-in formatter
     """
-    ret = pyg_highlight(traceback.print_exception(etype, value, tb))
-
     try:
-        stderror = sys.stderr.getvalue()
-        pyg_highlight(stderror)
+        pyg_highlight(traceback.print_exception(etype, value, tb))
     except:  # noqa
         # oops
         sys.__excepthook__(etype, value, tb)
-        print(sys.stderr.getvalue())
     finally:
         sys.exc_info = (None, None, None)
         gc.collect()
@@ -361,7 +358,15 @@ def pf(obj):
 
 
 def ps(obj):
-    return pprint.pprint(getsourcelines(obj))
+    return pyg_highlight(getsourcelines(obj))
+
+
+def pp(obj):
+    pyg_highlight(obj)
+
+
+def pd():
+    pyg_highlight(dir(), outfile=sys.stdout)
 
 
 @contextlib.contextmanager

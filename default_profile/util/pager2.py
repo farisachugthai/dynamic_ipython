@@ -6,7 +6,8 @@ import logging
 import pydoc
 import shlex
 import sys
-from inspect import getdoc
+# seriously use pydocs
+# from inspect import getdoc
 
 from IPython.core.getipython import get_ipython
 from IPython.core.magic import line_magic, magics_class, Magics
@@ -41,8 +42,8 @@ def get_docs_and_page():
     """Resourceful way to parse sys.argv and then expand a ``*args``."""
     _, *args = sys.argv[:]
     if len(args) > 0:
-        print(getdoc(*args))
-        return getdoc(*args)
+        print(pydoc.getdoc(*args))
+        return pydoc.getdoc(*args)
 
 
 def were_in_ipython():
@@ -182,7 +183,7 @@ class PagerMagics(Magics):
         """
         s = str(s)
         if _bool_globals_check(s):
-            txt = inspect.getdoc(s.__class__)
+            txt = pydoc.getdoc(s.__class__)
             logging.warning('First')
             self.blocking_pager(txt)
             return

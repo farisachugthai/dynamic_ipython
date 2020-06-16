@@ -353,7 +353,7 @@ setup_args = dict(
         # If any package contains *.txt or *.rst files, include them:
         "": ["*.txt", "*.rst"],
     },
-    license=LICENSE,
+    license_files=LICENSE,
     classifiers=[
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers

@@ -1,5 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# {{{
 import argparse
 import codecs
 import locale
@@ -20,7 +21,7 @@ from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_
 from jinja2.lexer import get_lexer
-    # 'FileSystemBytecodeCache': < class 'jinja2.bccache.FileSystemBytecodeCache' >,
+# 'FileSystemBytecodeCache': < class 'jinja2.bccache.FileSystemBytecodeCache' >,
 from jinja2.loaders import FileSystemLoader
 from jinja2.nodes import EvalContext
 from jinja2.runtime import Context
@@ -195,27 +196,30 @@ def _parse_arguments() -> argparse.ArgumentParser:
     return parser
 
 
-def parse(app: Sphinx, text: str, docname: str = 'index') -> nodes.document:
+def parse(app: Sphinx, text: str, docname: str = "index") -> nodes.document:
     """Parse a string as reStructuredText with Sphinx application."""
     try:
-        app.env.temp_data['docname'] = docname
+        app.env.temp_data["docname"] = docname
         reader = SphinxStandaloneReader()
         reader.setup(app)
         parser = RSTParser()
         parser.set_application(app)
         with sphinx_domains(app.env):
-            return publish_doctree(text, path.join(app.srcdir, docname + '.rst'),
-                                   reader=reader,
-                                   parser=parser,
-                                   settings_overrides={'env': app.env,
-                                                       'gettext_compact': True})
+            return publish_doctree(
+                text,
+                path.join(app.srcdir, docname + ".rst"),
+                reader=reader,
+                parser=parser,
+                settings_overrides={"env": app.env, "gettext_compact": True},
+            )
     finally:
-        app.env.temp_data.pop('docname', None)
+        app.env.temp_data.pop("docname", None)
 
 
 class DocBuilder:
-    def __init__(self, kind=None, num_jobs=1, verbosity=0, root:
-                 Optional[os.PathLike] = None):
+    def __init__(
+        self, kind=None, num_jobs=1, verbosity=0, root: Optional[os.PathLike] = None
+    ):
         if kind is None:
             kind = "html"
         self.kind = kind
@@ -303,6 +307,7 @@ class DocBuilder:
         url = os.path.join("file://", self.root, "build", "html", doc)
         self.status("Opening path to: {!s}".format(url))
         import webbrowser
+
         webbrowser.open(url, new=2)
 
 
@@ -364,7 +369,6 @@ def generate_autosummary(**kwargs):
 
 
 class UserSphinxAdditions:
-
     def __init__(self, sphinx: Sphinx):
         self.sphinx = sphinx
 
@@ -376,7 +380,9 @@ class UserSphinxAdditions:
         getattr(self.sphinx, "method")(**kwargs)
 
 
-def generate_sphinx_app(root: os.PathLike, namespace: Optional[argparse.Namespace] = None):
+def generate_sphinx_app(
+    root: os.PathLike, namespace: Optional[argparse.Namespace] = None
+):
     """Generate the primary Sphinx application object that drives the project.
 
     Parameters
@@ -456,7 +462,14 @@ def setup_jinja(path_to_template: os.PathLike) -> jinja2.environment.Environment
 
 
 class Maker(Make):
-    def __init__(self, source_dir: os.PathLike, build_dir: os.PathLike, builder: List, *args: List, **kwargs: Dict):
+    def __init__(
+        self,
+        source_dir: os.PathLike,
+        build_dir: os.PathLike,
+        builder: List,
+        *args: List,
+        **kwargs: Dict,
+    ):
         super().__init__(source_dir, build_dir, builder, *args)
         self.source_dir = source_dir
         self.build_dir = build_dir
@@ -480,19 +493,21 @@ def create_sphinx_config(confdir: os.PathLike) -> Config:
         print(*sys.exc_info())
 
 
-def main(repo_root: os.PathLike):
+def main(repo_root: os.PathLike, argv=None):
     """Create the required objects to simulate the sphinx make-main command.
 
     Create a `jinja2.Environment`, a `sphinx.project.Project`,
     `sphinx.jinja2glue.SphinxFileSystemLoader`.
 
     """
+    if argv is None:
+        argv = sys.argv[1:]
     user_parser = _parse_arguments()
-    user_args = user_parser.parse_args()
+    user_args = user_parser.parse_args(argv)
     doc_root = Path(repo_root).joinpath("docs")
     conf_path = doc_root.joinpath("source")
-    sphinx.locale.setlocale(locale.LC_ALL, '')
-    sphinx.locale.init_console(os.path.join(package_dir, 'locale'), 'sphinx')
+    sphinx.locale.setlocale(locale.LC_ALL, "")
+    sphinx.locale.init_console(os.path.join(package_dir, "locale"), "sphinx")
 
     config = create_sphinx_config(conf_path)
 
