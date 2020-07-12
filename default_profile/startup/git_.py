@@ -58,13 +58,23 @@ class ShellRepo:
 class PyGit(Git):
     """Subclass pip's Git implementation."""
 
+    def __init__(self, location=None):
+        # They don't initialize it with any state?
+        self.get_repository_root(location)
+
+    @classmethod
+    def get_repository_root(self, location=None):
+        if location is None:
+            location = Path.cwd()
+        self.root = super().get_repository_root(location)
+
     def __mro__(self):
         """For `inspect.getmro`."""
         if hasattr(self, "__bases__"):
             return self.__bases__
 
     def __repr__(self):
-        return f"{self.__class__.__name__}"
+        return f"{self.__class__.__name__}: Root: {self.root}"
 
     def get_current_branch(self, location=None):
         """Make the super classes' *location* parameter optional."""

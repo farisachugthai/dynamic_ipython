@@ -308,7 +308,6 @@ class UploadCommand(Command):
                 f.write(contents)
             chmod(target, 0o777 - current_umask())
 
-
 # Where the magic happens:
 setup_args = dict(
     name=NAME,
@@ -384,6 +383,13 @@ setup_args = dict(
     }
     # could also include long_description, download_url, classifiers, etc.
 )
+
+try:
+    from mypyc.build import mypycify
+except ImportError:
+    pass
+else:
+    setup_args[ext_modules]=mypycify(['default_profile/startup/ptoolkit.py'], )
 
 if len(sys.argv) > 1:
     try:

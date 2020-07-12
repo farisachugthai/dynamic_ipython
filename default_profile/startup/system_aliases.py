@@ -33,7 +33,7 @@ import os
 import platform
 import reprlib
 from collections import UserDict
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, Dict
 
 from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
@@ -503,21 +503,17 @@ class CommonAliases(UserDict):
         self.dict_aliases.update(
             self.tuple_to_dict(
                 [
-                    ("l", "ls -CF --hide=NTUSER.* --color=always %l"),
-                    ("la", "ls -F --hide=NTUSER.* --color=always %l"),
-                    ("ldir", "ls -po --hide=NTUSER.*  --color=always %l | grep /$"),
-                    # (lf ,     ls -Fo --color=always | grep ^-),
-                    # (ll ,          ls -AFho --color=always %l),
-                    ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
-                    ("ls", "ls -F --hide=NTUSER.* --color=always %l"),
+                    ("l", "ls -ChF --hide=NTUSER.* --color=always %l"),
+                    ("la", "ls -AhFg --color=always %l"),
+                    ("ldir", "ls -pFho --hide=NTUSER.*  --color=always %l | grep /$"),
+                    ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
+                    ("ll", "ls -AgFho --color=always --hide=NTUSER.* %l"),
+                    ("ls", "ls -Fh --hide=NTUSER.* --color=always %l"),
+                    # alternatively -Altcr
                     ("lr", "ls -gFhtr --hide=NTUSER.*  --color=always %l"),
+                    # alternatively could do ls -Altc
                     ("lt", "ls -gFht --hide=NTUSER.* --color=always %l"),
                     ("lx", "ls -Fo --hide=NTUSER.* --color=always | grep ^-..x"),
-                    # (ldir ,               ls -Fhpo | grep /$ %l),
-                    ("lf", "ls -Foh --hide=NTUSER.* --color=always | grep ^- %l"),
-                    ("ll", "ls -gFh --hide=NTUSER.* --color=always %l"),
-                    ("lt", "ls -Altc --color=always --hide=NTUSER.* %l"),
-                    ("lr", "ls -Altcr --color=always --hide=NTUSER.* %l"),
                 ]
             )
         )
@@ -572,22 +568,11 @@ class LinuxAliases(CommonAliases):
                         "export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
                     ),
                     ("head", "head -n 30 %l"),
-                    ("l", "ls -CF --color=always %l"),
-                    ("la", "ls -AFh --color=always %l"),
-                    ("ldir", "ls -Fhpo --color=always %l | grep /$"),
-                    ("lf", "ls -Foh --color=always | grep ^-"),
-                    ("ll", "ls -FAgh --color=always %l"),
-                    ("ls", "ls -Fh --color=always %l"),
-                    # alternatively -Altcr
-                    ("lr", "ls -AgFhtr --color=always %l"),
-                    # alternatively could do ls -Altc
-                    ("lt", "ls -AgFht --color=always %l"),
-                    ("lx", "ls -Fo --color=always | grep ^-..x"),
                     ("mk", "mkdir -pv %l && cd %l"),  # check if this works. only mkdir
                     ("mkdir", "mkdir -pv %l"),
                     ("mv", "mv -v %l"),
-                    ("r", "fc -s"),
-                    ("redo", "fc -s"),
+                    ("r", "fc last"),
+                    ("redo", "fc last"),
                     # Less annoying than -i but more safe
                     # only prompts with more than 3 files or recursed dirs.
                     ("rm", "rm -Iv %l"),
@@ -618,6 +603,7 @@ class LinuxAliases(CommonAliases):
                     ("cat", "bat %l"),
                     ("nvim", "nvim %l"),
                     ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
+                    ('ph', 'pygmentize -v -f terminal256 -P "heading=Pygments, the Python highlighter" -l python3 %s'),
                     ("tre", "tree -DAshFC --prune -I .git %l"),
                 ]
             )
@@ -637,7 +623,7 @@ class WindowsAliases(CommonAliases):
 
     """
 
-    def __init__(self, dict_aliases=None, *args, **kwargs):
+    def __init__(self, dict_aliases: Optional[Dict] =None, *args, **kwargs):
         # if you don't give **kwargs to dict_aliases, then by giving *args as
         # it's definition it ends up becoming a list which will immediately
         # screw everything up.
