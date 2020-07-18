@@ -101,7 +101,7 @@ def _parse():
         "-V", "--version", action="version", version="%(prog)s" + __version__
     )
 
-    if len(sys.argv[:]) == 0:
+    if len(sys.argv[1:]) == 0:
         parser.print_help()
         return
     args = parser.parse_args()
@@ -200,12 +200,7 @@ def import_module(name, *, required_on=None):
             raise unittest.SkipTest(str(msg))
 
 
-def run():
-    # Believe it or not this is in fact necessary if you want to run
-    # the tests inside of IPython.
-    _ = sys.argv[:]
-    sys.argv = get_ipython_cmd(as_string=False)
-    args = _parse()
+def run(args):
     if args is None:
         # hm what should i do
         return
@@ -263,4 +258,9 @@ if __name__ == "__main__":
     mp_logger.addHandler(mp_handler)
     mp_logger.info(f"mp context: {mp_context}")
 
-    run()
+    # Believe it or not this is in fact necessary if you want to run
+    # the tests inside of IPython.
+    _ = sys.argv[:]
+    sys.argv = get_ipython_cmd(as_string=False)
+    args = _parse()
+    run(args)
