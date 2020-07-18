@@ -18,7 +18,6 @@ should be discouraged here.
 
 Temporary Directories
 ----------------------
-
 .. testsetup::
 
     from default_profile.startup.all_fault_handlers import in_tempdir, in_dir
@@ -65,6 +64,7 @@ from types import TracebackType
 
 from IPython.core.getipython import get_ipython
 from IPython.terminal.prompts import RichPromptDisplayHook
+import pygments
 from pygments.lexers.python import PythonLexer
 from pygments.formatters.terminal256 import TerminalTrueColorFormatter
 
@@ -73,7 +73,7 @@ logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(name=__name__)
 
 
-def formatted_tb() -> TracebackType:
+def formatted_tb() -> List[bytes]:
     """Return a str of the last exception.
 
     Returns
@@ -84,9 +84,10 @@ def formatted_tb() -> TracebackType:
     return format_tb(*sys.exc_info())
 
 
-def last_exc() -> TracebackType:
+def last_exc() -> AnyStr:
     """Return `traceback.format_exc`."""
     return format_exc()
+
 
 class Fr:
     """Frames don't define dict so vars doesnt work on it.
@@ -119,8 +120,6 @@ class Fr:
         pass
 
 
-
-
 def rehashx_run():
     """Add all executables on the user's :envvar:`PATH` into the IPython ns."""
     get_ipython().run_line_magic("rehashx", "")
@@ -137,9 +136,8 @@ def find_exec_dir() -> Union[AnyStr, os.PathLike]:
 
 
 def safe_run_path(
-    fileobj: Union[AnyStr, os.PathLike],
-    logger: Optional[logging.Logger] = None,
-) -> Mapping:
+    fileobj: Union[AnyStr, os.PathLike], logger: Optional[logging.Logger] = None,
+) -> Union[str, os.PathLike[Any]]:
     """Run a file with runpy.run_path and try to catch everything."""
     if logger is None:
         logger = logging.getLogger(name=__name__)
@@ -180,9 +178,11 @@ def rerun_startup() -> Dict:
     return ret
 
 
-def execfile(filename: Union[AnyStr, os.PathLike],
-        global_namespace: Optional[Mapping]=None,
-        local_namespace: Optional[Mapping]=None):
+def execfile(
+    filename: Union[AnyStr, os.PathLike],
+    global_namespace: Optional[Mapping] = None,
+    local_namespace: Optional[Mapping] = None,
+):
     """Bring execfile back from python2.
 
     This function is similar to the `exec` statement, but parses a file
@@ -312,8 +312,18 @@ def in_dir(dir: Union[AnyStr, os.PathLike]):
     yield dir
     os.chdir(cwd)
 
+
+class ExceptionHook(Hook):
+    def __init__(self, **kwargs):
+        super().__init__(file=sys.stdout, format="text", **kwargs)
+
+    def __name__(self):
+        # according to trio this wasnt defined.
+        return self.__class__.__name__
+
+
 if __name__ == "__main__":
-    handled = Hook(file=sys.stdout, format="text")
+    handled = ExceptionHook()
 
     lexer = PythonLexer()
     formatter = TerminalTrueColorFormatter()

@@ -33,13 +33,17 @@ import os
 import platform
 import reprlib
 from collections import UserDict
-from typing import Any, Optional, Union, Dict
+from typing import Any, AnyStr, Optional, Union, Dict
 
 from IPython.core.alias import default_aliases
 from IPython.core.getipython import get_ipython
 
-from default_profile.ipython_config import (AliasError, ApplicationError,
-                                            InvalidAliasError, UsageError)
+from default_profile.ipython_config import (
+    AliasError,
+    ApplicationError,
+    InvalidAliasError,
+    UsageError,
+)
 
 
 def validate_alias(alias) -> Optional[Any]:
@@ -84,7 +88,9 @@ class Alias(UserDict):
     # class Inspector method _get_info. Or possibly that append_field closure.
     # which contains a call to _mime_format so somewhere around there though
 
-    def __init__(self, name, cmd, **kwargs: dict):
+    def __init__(
+        self, name: AnyStr, cmd: AnyStr, **kwargs: Optional[Dict[AnyStr, AnyStr]]
+    ):
         """Validate the alias, and return the number of arguments."""
         super().__init__(**kwargs)
         self.name = name
@@ -550,7 +556,8 @@ class LinuxAliases(CommonAliases):
                     ("dus", "du -d 1 -ha %l"),
                     ("echo", "echo -e %l"),
                     ("free", "free -mt"),
-                    ( "gpip",
+                    (
+                        "gpip",
                         "export PIP_REQUIRE_VIRTUALENV=0;"
                         "python -m pip %l;"
                         "export PIP_REQUIRE_VIRTUALENV=1 > /dev/null",
@@ -603,7 +610,10 @@ class LinuxAliases(CommonAliases):
                     ("cat", "bat %l"),
                     ("nvim", "nvim %l"),
                     ("nman", 'nvim -c "Man %l" -c"wincmd T"'),
-                    ('ph', 'pygmentize -v -f terminal256 -P "heading=Pygments, the Python highlighter" -l python3 %s'),
+                    (
+                        "ph",
+                        'pygmentize -v -f terminal256 -P "heading=Pygments, the Python highlighter" -l python3 %s',
+                    ),
                     ("tre", "tree -DAshFC --prune -I .git %l"),
                 ]
             )
@@ -623,7 +633,7 @@ class WindowsAliases(CommonAliases):
 
     """
 
-    def __init__(self, dict_aliases: Optional[Dict] =None, *args, **kwargs):
+    def __init__(self, dict_aliases: Optional[Dict] = None, *args, **kwargs):
         # if you don't give **kwargs to dict_aliases, then by giving *args as
         # it's definition it ends up becoming a list which will immediately
         # screw everything up.
@@ -830,6 +840,7 @@ def generate_aliases() -> Union[None, LinuxAliases, WindowsAliases]:
     if machine.startswith("Linux"):
         # aliases = LinuxAliases(dict_aliases=_ip.alias_manager.user_aliases)
         aliases = LinuxAliases()
+        aliases.busybox()
     elif machine.startswith("Win"):
         # aliases = WindowsAliases(dict_aliases=_ip.alias_manager.user_aliases)
         aliases = WindowsAliases()
