@@ -65,7 +65,10 @@ except ImportError:
     formatter = None
 else:
     lexer = PythonLexer()
-    formatter = TerminalTrueColorFormatter()
+    from pygments.styles.inkpot import InkPotStyle
+
+    style = InkPotStyle
+    formatter = TerminalTrueColorFormatter(style=style)
 
 
 try:
@@ -358,15 +361,19 @@ def pf(obj):
 
 
 def ps(obj):
-    return pyg_highlight(getsourcelines(obj))
+    return pyg_highlight(getsourcelines(obj), outfile=sys.stdout)
 
 
 def pp(obj):
-    pyg_highlight(obj)
+    pyg_highlight(obj, outfile=sys.stdout)
 
 
 def pd():
-    pyg_highlight(dir(), outfile=sys.stdout)
+    return pyg_highlight(dir())
+
+
+def pv():
+    return pyg_highlight(vars())
 
 
 @contextlib.contextmanager
