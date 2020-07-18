@@ -174,6 +174,12 @@ number displayed in the source code.</p>
 </pre></div>
 </div>
 <p>Will be rendered as:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [2]: </span><span class="n">x</span><span class="o">**</span><span class="mi">3</span>
+<span class="gh">Out[2]: </span><span class="go">8</span>
+</pre></div>
+</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
@@ -216,6 +222,14 @@ the code block from above.</p>
 <h2>Multi-line input<a class="headerlink" href="#multi-line-input" title="Permalink to this headline">¶</a></h2>
 <p>Multi-line input is supported, and particularly lengthy blocks of text can be
 parsed correctly.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;http://ichart.finance.yahoo.com/table.csv?s=CROX</span><span class="se">\</span>
+<span class="gp">   ...: </span><span class="s1">&amp;d=9&amp;e=22&amp;f=2009&amp;g=d&amp;a=1&amp;br=8&amp;c=2006&amp;ignore=.csv&#39;</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [4]: </span><span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
+<span class="go">[&#39;http://ichart.finance.yahoo.com/table.csv?s=CROX&#39;, &#39;d=9&#39;, &#39;e=22&#39;,</span>
+</pre></div>
+</div>
 <div class="section" id="writing-pure-python-code">
 <h3>Writing Pure Python Code<a class="headerlink" href="#writing-pure-python-code" title="Permalink to this headline">¶</a></h3>
 <p>Pure python code is supported by the optional argument <code class="xref py py-obj docutils literal notranslate"><span class="pre">:python:</span></code>.
@@ -230,6 +244,17 @@ python interpreter. The following markup:</p>
 </pre></div>
 </div>
 <p>Renders as</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+
+<span class="gp">In [6]: </span><span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">bar</span>
+
+<span class="gp">In [7]: </span><span class="n">foo</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [8]: </span><span class="n">foo</span><span class="o">**</span><span class="mi">2</span>
+<span class="gh">Out[8]: </span><span class="go">4</span>
+</pre></div>
+</div>
 <p>We can even plot from python, using the <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">savefig</span></code> option to the directive,
 as well as <code class="xref rst rst-dir docutils literal notranslate"><span class="pre">suppress</span></code> output with a semicolon.</p>
 <p>These options can both be expressed with their decorator counterparts like so:</p>
@@ -239,6 +264,11 @@ as well as <code class="xref rst rst-dir docutils literal notranslate"><span cla
    plot([1, 2, 3])
 </pre></div>
 </div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">plot</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="gh">Out[9]: </span><span class="go">[&lt;matplotlib.lines.Line2D at 0x795a00daf0&gt;]</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/plot_simple_python.png"><img alt="../_images/plot_simple_python.png" src="../_images/plot_simple_python.png" style="width: 4in;" /></a>
 <p>For more information on the <code class="xref py py-obj docutils literal notranslate"><span class="pre">&#64;savefig</span></code> decorator, please refer to the end of
 this page in Pseudo-Decorators section.</p>
 <p>Similarly, <a class="reference external" href="https://docs.python.org/3/library/sys.html#sys.stderr" title="(in Python v3.8)"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a> is inserted.:</p>
@@ -249,13 +279,27 @@ this page in Pseudo-Decorators section.</p>
    foo[)
 </pre></div>
 </div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">foo</span> <span class="o">=</span> <span class="s1">&#39;bar&#39;</span>
+
+<span class="gp">In [11]: </span><span class="n">foo</span><span class="p">[)</span>
+<span class="gt">  File</span><span class="nn"> &quot;&lt;ipython-input-11-edde7a2425af&gt;&quot;</span><span class="gt">, line </span><span class="mi">1</span>
+    <span class="n">foo</span><span class="p">[)</span>
+        <span class="o">^</span>
+<span class="ne">SyntaxError</span>: closing parenthesis &#39;)&#39; does not match opening parenthesis &#39;[&#39;
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="handling-comments">
 <h2>Handling Comments<a class="headerlink" href="#handling-comments" title="Permalink to this headline">¶</a></h2>
 <p>Comments are handled and state is preserved.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># comments are handled</span>
+<span class="gp">In [12]: </span><span class="nb">print</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">bar</span>
+</pre></div>
+</div>
 <p>The following section attempts to execute faulty code, namely calling
-the <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.html#module-matplotlib.pyplot" title="(in Matplotlib v3.2.1)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code></a> functions <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.ioff</span></code>
+the <a class="reference external" href="https://matplotlib.org/api/_as_gen/matplotlib.pyplot.html#module-matplotlib.pyplot" title="(in Matplotlib v3.2.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib.pyplot</span></code></a> functions <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.ioff</span></code>
 and <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.ion</span></code> which haven’t been defined in this session.</p>
 <div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">ipython</span><span class="p">::</span> python
    <span class="nc">:suppress:</span>
@@ -270,8 +314,36 @@ suppresses the error during doc-builds.</p>
 <div class="section" id="splitting-python-statements-across-lines">
 <h2>Splitting Python statements across lines<a class="headerlink" href="#splitting-python-statements-across-lines" title="Permalink to this headline">¶</a></h2>
 <p>Multi-line input is handled.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;Multi</span><span class="se">\</span>
+<span class="gp">   ....: </span><span class="s1">        line &amp;</span><span class="se">\</span>
+<span class="gp">   ....: </span><span class="s1">        support &amp;</span><span class="se">\</span>
+<span class="gp">   ....: </span><span class="s1">        works&#39;</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [14]: </span><span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">))</span>
+<span class="go">[&#39;Multi        line &#39;, &#39;        support &#39;, &#39;        works&#39;]</span>
+</pre></div>
+</div>
 <p>Functions definitions are correctly parsed.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="k">def</span> <span class="nf">square</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="sd">&quot;&quot;&quot;</span>
+<span class="gp">   ....: </span><span class="sd">    An overcomplicated square function as an example.</span>
+<span class="gp">   ....: </span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="gp">   ....: </span>    <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+<span class="gp">   ....: </span>        <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="gp">   ....: </span>    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span>
+<span class="gp">   ....: </span>    <span class="k">return</span> <span class="n">y</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
 <p>And persist across sessions.:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="nb">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="go">9</span>
+
+<span class="gp">In [17]: </span><span class="nb">print</span><span class="p">(</span><span class="n">square</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">4</span>
+</pre></div>
+</div>
 <dl class="glossary simple">
 <dt id="term-environment">environment</dt><dd><p>A structure where information about all documents under the root is saved,
 and used for cross-referencing.  The environment is pickled after the
@@ -409,7 +481,7 @@ in the prompt.</p>
 <code class="sig-name descname">ipython_mplbackend</code><a class="headerlink" href="#confval-ipython_mplbackend" title="Permalink to this definition">¶</a></dt>
 <dd><p>A <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a> which specifies if the embedded Sphinx shell should import
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">matplotlib</span></code> and if so, which backend it should use.
-The value is  passed to <a class="reference external" href="https://matplotlib.org/api/matplotlib_configuration_api.html#matplotlib.use" title="(in Matplotlib v3.2.1)"><code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.use()</span></code></a> before any lines in
+The value is  passed to <a class="reference external" href="https://matplotlib.org/api/matplotlib_configuration_api.html#matplotlib.use" title="(in Matplotlib v3.2.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">matplotlib.use()</span></code></a> before any lines in
 <a class="reference internal" href="#confval-ipython_execlines"><code class="xref std std-confval docutils literal notranslate"><span class="pre">ipython_execlines</span></code></a> are executed.
 If not specified in conf.py, then the default value of ‘agg’ is
 used. To use the IPython directive without matplotlib as a dependency, set
@@ -478,7 +550,7 @@ obtainable from the “Show Source” button.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jun 16, 2020.
+      Last updated on Jul 16, 2020.
     </div>
   </body>
 </html>

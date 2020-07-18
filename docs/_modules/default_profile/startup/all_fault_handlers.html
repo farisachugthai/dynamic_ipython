@@ -62,7 +62,6 @@
 
 <span class="sd">Temporary Directories</span>
 <span class="sd">----------------------</span>
-
 <span class="sd">.. testsetup::</span>
 
 <span class="sd">    from default_profile.startup.all_fault_handlers import in_tempdir, in_dir</span>
@@ -109,6 +108,7 @@
 
 <span class="kn">from</span> <span class="nn">IPython.core.getipython</span> <span class="kn">import</span> <span class="n">get_ipython</span>
 <span class="kn">from</span> <span class="nn">IPython.terminal.prompts</span> <span class="kn">import</span> <span class="n">RichPromptDisplayHook</span>
+<span class="kn">import</span> <span class="nn">pygments</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="n">PythonLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.formatters.terminal256</span> <span class="kn">import</span> <span class="n">TerminalTrueColorFormatter</span>
 
@@ -117,7 +117,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
+<div class="viewcode-block" id="formatted_tb"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.formatted_tb">[docs]</a><span class="k">def</span> <span class="nf">formatted_tb</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Return a str of the last exception.</span>
 
 <span class="sd">    Returns</span>
@@ -128,9 +128,10 @@
     <span class="k">return</span> <span class="n">format_tb</span><span class="p">(</span><span class="o">*</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">())</span></div>
 
 
-<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">TracebackType</span><span class="p">:</span>
+<div class="viewcode-block" id="last_exc"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.last_exc">[docs]</a><span class="k">def</span> <span class="nf">last_exc</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">AnyStr</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Return `traceback.format_exc`.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">format_exc</span><span class="p">()</span></div>
+
 
 <div class="viewcode-block" id="Fr"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.Fr">[docs]</a><span class="k">class</span> <span class="nc">Fr</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Frames don&#39;t define dict so vars doesnt work on it.</span>
@@ -163,8 +164,6 @@
         <span class="k">pass</span></div></div>
 
 
-
-
 <div class="viewcode-block" id="rehashx_run"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.rehashx_run">[docs]</a><span class="k">def</span> <span class="nf">rehashx_run</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Add all executables on the user&#39;s :envvar:`PATH` into the IPython ns.&quot;&quot;&quot;</span>
     <span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="n">run_line_magic</span><span class="p">(</span><span class="s2">&quot;rehashx&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
@@ -181,9 +180,8 @@
 
 
 <div class="viewcode-block" id="safe_run_path"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.safe_run_path">[docs]</a><span class="k">def</span> <span class="nf">safe_run_path</span><span class="p">(</span>
-    <span class="n">fileobj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">],</span>
-    <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Mapping</span><span class="p">:</span>
+    <span class="n">fileobj</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">],</span> <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;Run a file with runpy.run_path and try to catch everything.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">logger</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
@@ -224,9 +222,11 @@
     <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">],</span>
-        <span class="n">global_namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">local_namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="execfile"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.execfile">[docs]</a><span class="k">def</span> <span class="nf">execfile</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">],</span>
+    <span class="n">global_namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">local_namespace</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Mapping</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Bring execfile back from python2.</span>
 
 <span class="sd">    This function is similar to the `exec` statement, but parses a file</span>
@@ -356,8 +356,18 @@
     <span class="k">yield</span> <span class="nb">dir</span>
     <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">cwd</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="ExceptionHook"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.ExceptionHook">[docs]</a><span class="k">class</span> <span class="nc">ExceptionHook</span><span class="p">(</span><span class="n">Hook</span><span class="p">):</span>
+<div class="viewcode-block" id="ExceptionHook.__init__"><a class="viewcode-back" href="../../../startup/all_fault_handlers.html#default_profile.startup.all_fault_handlers.ExceptionHook.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__name__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># according to trio this wasnt defined.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
+
+
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">handled</span> <span class="o">=</span> <span class="n">Hook</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+    <span class="n">handled</span> <span class="o">=</span> <span class="n">ExceptionHook</span><span class="p">()</span>
 
     <span class="n">lexer</span> <span class="o">=</span> <span class="n">PythonLexer</span><span class="p">()</span>
     <span class="n">formatter</span> <span class="o">=</span> <span class="n">TerminalTrueColorFormatter</span><span class="p">()</span>
@@ -374,7 +384,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jun 16, 2020.
+      Last updated on Jul 18, 2020.
     </div>
   </body>
 </html>

@@ -54,8 +54,7 @@
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span><span class="n">IO</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AnyStr</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span>
-                    <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">IO</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AnyStr</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">import</span> <span class="nn">jinja2</span>
 <span class="kn">import</span> <span class="nn">sphinx</span>
@@ -65,33 +64,42 @@
 <span class="kn">from</span> <span class="nn">jinja2.exceptions</span> <span class="kn">import</span> <span class="n">TemplateError</span>
 <span class="kn">from</span> <span class="nn">jinja2.ext</span> <span class="kn">import</span> <span class="n">autoescape</span><span class="p">,</span> <span class="n">do</span><span class="p">,</span> <span class="n">with_</span>
 <span class="kn">from</span> <span class="nn">jinja2.lexer</span> <span class="kn">import</span> <span class="n">get_lexer</span>
+
 <span class="c1"># &#39;FileSystemBytecodeCache&#39;: &lt; class &#39;jinja2.bccache.FileSystemBytecodeCache&#39; &gt;,</span>
 <span class="kn">from</span> <span class="nn">jinja2.loaders</span> <span class="kn">import</span> <span class="n">FileSystemLoader</span>
 <span class="kn">from</span> <span class="nn">jinja2.nodes</span> <span class="kn">import</span> <span class="n">EvalContext</span>
 <span class="kn">from</span> <span class="nn">jinja2.runtime</span> <span class="kn">import</span> <span class="n">Context</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.markup</span> <span class="kn">import</span> <span class="n">MarkdownLexer</span><span class="p">,</span> <span class="n">RstLexer</span>
-<span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="p">(</span><span class="n">NumPyLexer</span><span class="p">,</span> <span class="n">PythonConsoleLexer</span><span class="p">,</span>
-                                    <span class="n">PythonLexer</span><span class="p">,</span> <span class="n">PythonTracebackLexer</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pygments.lexers.python</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">NumPyLexer</span><span class="p">,</span>
+    <span class="n">PythonConsoleLexer</span><span class="p">,</span>
+    <span class="n">PythonLexer</span><span class="p">,</span>
+    <span class="n">PythonTracebackLexer</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.shell</span> <span class="kn">import</span> <span class="n">BashLexer</span>
 <span class="kn">from</span> <span class="nn">pygments.lexers.textedit</span> <span class="kn">import</span> <span class="n">VimLexer</span>
+
 <span class="c1"># side effect: registers roles and directives</span>
 <span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">directives</span>  <span class="c1"># noqa</span>
 <span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">roles</span>  <span class="c1"># noqa</span>
 <span class="kn">from</span> <span class="nn">sphinx</span> <span class="kn">import</span> <span class="n">package_dir</span>
 <span class="kn">from</span> <span class="nn">sphinx.application</span> <span class="kn">import</span> <span class="n">Sphinx</span>
+
 <span class="c1"># theme_factory = HTMLThemeFactory(self.app)</span>
 <span class="c1"># Then make this</span>
 <span class="kn">from</span> <span class="nn">sphinx.builders.html</span> <span class="kn">import</span> <span class="n">StandaloneHTMLBuilder</span>
+
 <span class="c1"># from sphinx.cmd.build import build_main</span>
 <span class="c1"># from sphinx.cmd.build import handle_exception</span>
 <span class="kn">from</span> <span class="nn">sphinx.cmd.make_mode</span> <span class="kn">import</span> <span class="n">Make</span>
 <span class="kn">from</span> <span class="nn">sphinx.config</span> <span class="kn">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">sphinx.environment</span> <span class="kn">import</span> <span class="p">(</span><span class="n">CONFIG_CHANGED_REASON</span><span class="p">,</span> <span class="n">CONFIG_OK</span><span class="p">,</span>
-                                <span class="n">BuildEnvironment</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sphinx.environment</span> <span class="kn">import</span> <span class="n">CONFIG_CHANGED_REASON</span><span class="p">,</span> <span class="n">CONFIG_OK</span><span class="p">,</span> <span class="n">BuildEnvironment</span>
 <span class="kn">from</span> <span class="nn">sphinx.environment.adapters.asset</span> <span class="kn">import</span> <span class="n">ImageAdapter</span>
+
 <span class="c1"># This could be super useful</span>
 <span class="c1"># from sphinx.environment.adapters.toctree import TocTree</span>
 <span class="kn">from</span> <span class="nn">sphinx.errors</span> <span class="kn">import</span> <span class="n">ApplicationError</span><span class="p">,</span> <span class="n">ConfigError</span>
+
 <span class="c1"># , ExtensionError</span>
 <span class="kn">from</span> <span class="nn">sphinx.events</span> <span class="kn">import</span> <span class="n">EventManager</span><span class="p">,</span> <span class="n">core_events</span>
 <span class="kn">from</span> <span class="nn">sphinx.io</span> <span class="kn">import</span> <span class="n">SphinxStandaloneReader</span><span class="p">,</span> <span class="n">read_doc</span>
@@ -102,22 +110,28 @@
 <span class="kn">from</span> <span class="nn">sphinx.util.build_phase</span> <span class="kn">import</span> <span class="n">BuildPhase</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.console</span> <span class="kn">import</span> <span class="n">bold</span>  <span class="c1"># type: ignore</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.docfields</span> <span class="kn">import</span> <span class="n">GroupedField</span>
+
 <span class="c1"># from sphinx.util.console import (  # type: ignore</span>
 <span class="c1">#   colorize, color_terminal</span>
 <span class="c1"># )</span>
-<span class="kn">from</span> <span class="nn">sphinx.util.docutils</span> <span class="kn">import</span> <span class="p">(</span><span class="n">docutils_namespace</span><span class="p">,</span> <span class="n">patch_docutils</span><span class="p">,</span>
-                                  <span class="n">sphinx_domains</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sphinx.util.docutils</span> <span class="kn">import</span> <span class="n">docutils_namespace</span><span class="p">,</span> <span class="n">patch_docutils</span><span class="p">,</span> <span class="n">sphinx_domains</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.i18n</span> <span class="kn">import</span> <span class="n">CatalogInfo</span><span class="p">,</span> <span class="n">CatalogRepository</span><span class="p">,</span> <span class="n">docname_to_domain</span>
+
 <span class="c1"># &#39;CatalogInfo&#39;: &lt; class &#39;sphinx.util.i18n.CatalogInfo&#39; &gt;,</span>
 <span class="c1"># &#39;CatalogRepository&#39;: &lt; class &#39;sphinx.util.i18n.CatalogRepository&#39; &gt;,</span>
 <span class="c1"># this is good to be aware of</span>
 <span class="c1"># from sphinx.util.inspect import getdoc</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.logging</span> <span class="kn">import</span> <span class="n">getLogger</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.osutil</span> <span class="kn">import</span> <span class="n">SEP</span><span class="p">,</span> <span class="n">ensuredir</span><span class="p">,</span> <span class="n">relative_uri</span><span class="p">,</span> <span class="n">relpath</span>
+
 <span class="c1"># this is used alongside multiprocessing.connection.Connection</span>
 <span class="c1"># from sphinx.util.parallel import ParallelTasks</span>
-<span class="kn">from</span> <span class="nn">sphinx.util.parallel</span> <span class="kn">import</span> <span class="p">(</span><span class="n">ParallelTasks</span><span class="p">,</span> <span class="n">SerialTasks</span><span class="p">,</span> <span class="n">make_chunks</span><span class="p">,</span>
-                                  <span class="n">parallel_available</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sphinx.util.parallel</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">ParallelTasks</span><span class="p">,</span>
+    <span class="n">SerialTasks</span><span class="p">,</span>
+    <span class="n">make_chunks</span><span class="p">,</span>
+    <span class="n">parallel_available</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.tags</span> <span class="kn">import</span> <span class="n">Tags</span>
 <span class="kn">from</span> <span class="nn">sphinx.util.template</span> <span class="kn">import</span> <span class="n">ReSTRenderer</span>
 
@@ -518,8 +532,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">source_dir</span> <span class="o">=</span> <span class="n">source_dir</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">build_dir</span> <span class="o">=</span> <span class="n">build_dir</span></div>
 
-<div class="viewcode-block" id="Maker.run"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+<div class="viewcode-block" id="Maker.run"><a class="viewcode-back" href="../../../sphinxext/make.html#default_profile.sphinxext.make.Maker.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">builder</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">AnyStr</span><span class="p">]]</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run sphinx-build with as many options given reasonable defaults as possible.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">builder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">builder</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;html&quot;</span><span class="p">]</span>  <span class="c1"># list required if no args provided as sphinx concatenates the builder with the other args</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">run_generic_build</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span></div>
@@ -586,7 +603,7 @@
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jun 16, 2020.
+      Last updated on Jul 18, 2020.
     </div>
   </body>
 </html>

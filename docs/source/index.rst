@@ -65,8 +65,7 @@ Installation
 
 This repository can be installed in the following manner.:
 
-.. ipython::
-   :verbatim:
+.. code-block:: bash
 
    python setup.py build
    pip install -U -e .

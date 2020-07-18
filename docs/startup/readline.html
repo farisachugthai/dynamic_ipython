@@ -110,12 +110,26 @@ list where you want the completer to be inserted.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">matchers</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span><span class="n">newcomp</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">_ip</span> <span class="o">=</span> <span class="n">get_ipython</span><span class="p">()</span>
+
+<span class="gp">In [2]: </span><span class="n">_ip</span><span class="o">.</span><span class="n">Completer</span><span class="o">.</span><span class="n">matchers</span>
+<span class="gh">Out[2]: </span><span class="go"></span>
+<span class="go">[&lt;bound method IPCompleter.file_matches of &lt;IPython.core.completer.IPCompleter object at 0x795a645b80&gt;&gt;,</span>
+<span class="go"> &lt;bound method IPCompleter.magic_matches of &lt;IPython.core.completer.IPCompleter object at 0x795a645b80&gt;&gt;,</span>
+<span class="go"> &lt;bound method IPCompleter.dict_key_matches of &lt;IPython.core.completer.IPCompleter object at 0x795a645b80&gt;&gt;]</span>
+</pre></div>
+</div>
 <p>Useful to see the <code class="docutils literal notranslate"><span class="pre">magic_matches</span></code>, <code class="docutils literal notranslate"><span class="pre">dict_key_matches</span></code>, <code class="docutils literal notranslate"><span class="pre">file_matches</span></code> and
 I think there’s supposed to be a python_matches or a keyword specific one.</p>
 <p>Interestingly, there’s also a method on the completer that returns a
 <code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.utils.strdispatchers.StrDispatch</span></code> class.</p>
 <p>If so, then that would possibly make it the only use I’ve seen in the repo of
 this. Still unsure of what this class is though.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="kn">from</span> <span class="nn">IPython.utils.strdispatch</span> <span class="kn">import</span> <span class="n">StrDispatch</span>
+
+<span class="gp">In [4]: </span><span class="n">what</span> <span class="o">=</span> <span class="n">StrDispatch</span><span class="p">()</span>
+</pre></div>
+</div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dis</span> <span class="o">=</span> <span class="n">StrDispatch</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dis</span><span class="o">.</span><span class="n">add_s</span><span class="p">(</span><span class="s1">&#39;hei&#39;</span><span class="p">,</span><span class="mi">34</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dis</span><span class="o">.</span><span class="n">add_s</span><span class="p">(</span><span class="s1">&#39;hei&#39;</span><span class="p">,</span><span class="mi">123</span><span class="p">,</span> <span class="n">priority</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
@@ -180,7 +194,7 @@ external editor with <kbd class="kbd docutils literal notranslate">k</kbd>.</p>
 it’s a little too easy to initialize this sucker with no state.</p>
 <dl class="py method">
 <dt id="default_profile.startup.readline_.ViExternalEditor.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">line</span><span class="p">:</span> <span class="n">~ AnyStr</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span><span class="p">:</span> <span class="n">AnyStr</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instantiate the editor <strong class="command">vi</strong>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -191,18 +205,18 @@ it’s a little too easy to initialize this sucker with no state.</p>
 
 <dl class="py method">
 <dt id="default_profile.startup.readline_.ViExternalEditor.run_editor">
-<code class="sig-name descname">run_editor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Union[~ AnyStr, os.PathLike, NoneType]</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.run_editor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.run_editor" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_editor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>AnyStr<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.8)">os.PathLike</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.run_editor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.run_editor" title="Permalink to this definition">¶</a></dt>
 <dd><p>It’s the goddamn ViExternalEditor default to Vim!</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="default_profile.startup.readline_.ViExternalEditor.run_command">
-<code class="sig-name descname">run_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">command</span><span class="p">:</span> <span class="n">~ AnyStr</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.run_command" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">run_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">command</span><span class="p">:</span> <span class="n">AnyStr</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.run_command" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="default_profile.startup.readline_.ViExternalEditor.async_run_command">
-<em class="property">async </em><code class="sig-name descname">async_run_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">command</span><span class="p">:</span> <span class="n">~ AnyStr</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.async_run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.async_run_command" title="Permalink to this definition">¶</a></dt>
+<em class="property">async </em><code class="sig-name descname">async_run_command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">command</span><span class="p">:</span> <span class="n">AnyStr</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#ViExternalEditor.async_run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.ViExternalEditor.async_run_command" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -222,12 +236,12 @@ for auto-completion. The <em>complete</em> method for an instance is designed
 to be registered with <a class="reference external" href="https://docs.python.org/3/library/readline.html#module-readline" title="(in Python v3.8)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">readline</span></code></a> as the source of completions.</p>
 <dl class="py method">
 <dt id="default_profile.startup.readline_.SimpleCompleter.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">options</span><span class="p">:</span> <span class="n">Iterable</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#SimpleCompleter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.SimpleCompleter.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">options</span><span class="p">:</span> <span class="n">Iterable</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#SimpleCompleter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.SimpleCompleter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt id="default_profile.startup.readline_.SimpleCompleter.complete">
-<code class="sig-name descname">complete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">self</span></em>, <em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#SimpleCompleter.complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.SimpleCompleter.complete" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">complete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em>, <em class="sig-param"><span class="n">state</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#SimpleCompleter.complete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.SimpleCompleter.complete" title="Permalink to this definition">¶</a></dt>
 <dd><p>Complete a user’s input.</p>
 <p>The arguments are a text string to complete and a state value,
 indicating how many times the function has been called with the
@@ -260,7 +274,7 @@ one at a time on subsequent calls.</p>
 </pre></div>
 </div>
 <p>Check what the API is to add a completer to ipython.
-I think it’s <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.15.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>`.set_custom_completer`.</p>
+I think it’s <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.InteractiveShell" title="(in IPython v7.16.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveShell</span></code></a>`.set_custom_completer`.</p>
 </div>
 </dd></dl>
 
@@ -301,7 +315,7 @@ as parameters.</p>
 
 <dl class="py function">
 <dt id="default_profile.startup.readline_.setup_historyfile">
-<code class="sig-name descname">setup_historyfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Union[~ AnyStr, os.PathLike, NoneType]</span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#setup_historyfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.setup_historyfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">setup_historyfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Optional<span class="p">[</span>Union<span class="p">[</span>AnyStr<span class="p">, </span><a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.8)">os.PathLike</a><span class="p">]</span><span class="p">]</span></span> <span class="o">=</span> <span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#setup_historyfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.setup_historyfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a history file to readline.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -312,10 +326,10 @@ as parameters.</p>
 
 <dl class="py function">
 <dt id="default_profile.startup.readline_.last_input">
-<code class="sig-name descname">last_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; ~AnyStr<a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#last_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.last_input" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">last_input</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; AnyStr<a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/startup/readline_.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/startup/readline_.html#last_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.startup.readline_.last_input" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the user’s last input.</p>
 <p>Utilizes the <em>raw_cell</em> attribute found on an
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.ExecutionInfo" title="(in IPython v7.15.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.ExecutionInfo</span></code></a> instance.</p>
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.interactiveshell.html#IPython.core.interactiveshell.ExecutionInfo" title="(in IPython v7.16.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.interactiveshell.ExecutionInfo</span></code></a> instance.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -334,7 +348,7 @@ as parameters.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jun 16, 2020.
+      Last updated on Jul 16, 2020.
     </div>
   </body>
 </html>

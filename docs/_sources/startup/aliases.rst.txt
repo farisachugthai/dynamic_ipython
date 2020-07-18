@@ -2,8 +2,6 @@
 System Aliases
 ==============
 
-.. highlight:: ipython
-
 .. currentmodule:: default_profile.startup.system_aliases
 
 To date there are well over 100 aliases manually added to the shell.
@@ -17,7 +15,6 @@ to a :command:`bash` system shell, and Windows will have :command:`dosbatch` or
 
 Overview
 --------
-
 This module utilizes ``_ip``, the global |ip|
 instance, and fills the ``user_ns`` with aliases that are available
 in a typical system shell.
@@ -41,7 +38,6 @@ and if present, that value is used.
 
 Attributes
 ----------
-
 ip : |ip|
     A global object representing the active IPython session.
     Contains varying packages as well as the current global namespace.
@@ -52,7 +48,6 @@ ip : |ip|
 
 Parameters
 ----------
-
 :kbd:`%l` : Command-line argument.
    The remainder of the user's input. Commonly referred to in the Jupyter
    documentation as the remaining 'cell'.
@@ -65,15 +60,13 @@ Parameters
 
 Variable Expansion in Aliases
 ==============================
-
 .. magic:: alias
 
 .. magic:: unalias
 
 From the official IPython documentation.
 
-.. ipython::
-   :verbatim:
+.. parsed-literal::
 
    In [2]: %alias bracket echo "Input in brackets: <%l>"
    In [3]: bracket hello world
@@ -82,14 +75,11 @@ From the official IPython documentation.
 Note that we quote when in the configuration file but when running `%alias`
 interactively the syntax.
 
-.. ipython::
-   :verbatim:
-
-   %alias alias_name cmd
+``%alias alias_name cmd``
 
 Doesn't require quoting.
 
-Aliases expand Python variables just like system calls using :kbd:`!` 
+Aliases expand Python variables just like system calls using :kbd:`!`
 or :kbd:`!!` do: all expressions prefixed with :kbd:`$` get expanded.
 For details of the semantic rules, see :pep:`215` as this is the library used
 by IPython for variable expansion.
@@ -108,7 +98,6 @@ in typical POSIX shells.
 
 Linux Aliases
 -------------
-
 Aliases that have either:
 
 - Only been tested on Linux
@@ -132,7 +121,6 @@ for Linux.
 
 Whitespace in Aliases
 ----------------------
-
 In order to make new subcommands in a way similar to how git allows one to come
 up with aliases, I first tried using whitespace in the alias.:
 
@@ -150,7 +138,6 @@ result, would split the alias in the middle of the command.
 
 API Docs
 --------
-
 .. function:: validate_alias(alias)
    :noindex:
 
@@ -204,7 +191,7 @@ API Docs
       Unless otherwise noted every alias uses :kbd:`%l` to allow the user to specify
       any relevant options or flags on the command line as necessary.
 
-      :returns user_aliases : A list of tuples
+      :returns user_aliases: A list of tuples
          The format of IPython aliases got taken it's logical conclusion
          and probably pushed a little further than that.
 

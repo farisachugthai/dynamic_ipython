@@ -13,7 +13,19 @@ import sys
 from datetime import datetime
 from importlib import import_module
 from pathlib import Path
-from typing import Any, Dict, IO, Iterable, Iterator, List, Set, Tuple, AnyStr, Union, TYPE_CHECKING
+from typing import (
+    Any,
+    Dict,
+    IO,
+    Iterable,
+    Iterator,
+    List,
+    Set,
+    Tuple,
+    AnyStr,
+    Union,
+    TYPE_CHECKING,
+)
 
 from IPython.lib.lexers import IPyLexer, IPython3Lexer, IPythonTracebackLexer
 
@@ -43,16 +55,19 @@ import sphinx
 from sphinx import addnodes
 from sphinx.application import Sphinx
 from sphinx.builders.html import StandaloneHTMLBuilder
+from sphinx.cmd.build import build_main
 from sphinx.config import Config
 from sphinx.environment import BuildEnvironment, CONFIG_OK, CONFIG_CHANGED_REASON
 from sphinx.environment.adapters.asset import ImageAdapter
 from sphinx.errors import SphinxError
+
 # from sphinx.errors import SphinxError, ExtensionError
 
 # Yo this line is awesome
 from sphinx.events import EventManager, core_events
 from sphinx.ext.autodoc import cut_lines
 from sphinx.ext.autosummary.generate import setup_documenters
+
 # from sphinx.extension import Extension
 
 from sphinx.jinja2glue import SphinxFileSystemLoader, BuiltinTemplateLoader
@@ -70,6 +85,7 @@ from sphinx.util.docfields import GroupedField
 from sphinx.util.tags import Tags
 from sphinx.util.template import ReSTRenderer
 from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
+
 # this is used alongside multiprocessing.connection.Connection
 # from sphinx.util.parallel import ParallelTasks
 from sphinx.util.parallel import (
@@ -79,6 +95,7 @@ from sphinx.util.parallel import (
     parallel_available,
 )
 from sphinx.util.tags import Tags
+
 # side effect: registers roles and directives
 from sphinx import roles  # noqa
 from sphinx import directives  # noqa
@@ -86,7 +103,6 @@ from sphinx import directives  # noqa
 if TYPE_CHECKING:
     from jinja2.environment import TRIM_BLOCKS, LSTRIP_BLOCKS  # noqa
     from sphinx.domains.rst import ReSTDomain  # noqa
-# }}}
 
 try:
     from default_profile import __version__
@@ -96,6 +112,10 @@ except ImportError:
     dist = importlib_metadata.Distribution().from_name("dynamic_ipython")
     # well this was unintuitive
     __version__ = importlib_metadata.version(dist._path.stem)
+
+from default_profile.sphinxext.make import Maker
+
+# }}}
 
 # Logging: {{{
 mp_logger = multiprocessing.get_logger()
@@ -167,11 +187,9 @@ def instantiate_jinja_loader():
         return loader
 
 
-
 def create_bytecode_cache():
-    return FileSystemBytecodeCache(
-        os.environ.get("TMP") + "jinja_cache", "%s.cache"
-    )
+    return FileSystemBytecodeCache(os.environ.get("TMP") + "jinja_cache", "%s.cache")
+
 
 def create_jinja_env():
     """Use jinja to set up the Sphinx environment."""
@@ -218,9 +236,8 @@ lexer = get_lexer(env)
 # ctx = jinja_templates.new_context()
 # context you can work with for contextfunctions
 
-# }}}
 
-def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+def datetimeformat(value, format="%H:%M / %d-%m-%Y"):
     """
     You can register it on the template environment by updating the
     :attr:`~Environment.filters` dict on the environment.
@@ -228,7 +245,7 @@ def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
     return value.strftime(format)
 
 
-env.filters['datetimeformat'] = datetimeformat
+env.filters["datetimeformat"] = datetimeformat
 
 
 @jinja2.contextfunction
@@ -237,17 +254,21 @@ def get_exported_names(context):
     return sorted(context.exported_vars)
 
 
-_paragraph_re = re.compile(r'(?:\r\n|\r(?!\n)|\n){2,}')
+_paragraph_re = re.compile(r"(?:\r\n|\r(?!\n)|\n){2,}")
+
 
 @evalcontextfilter
 def nl2br(eval_ctx, value):
-    result = u'\n\n'.join(u'<p>%s</p>' % p.replace('\n', Markup('<br>\n'))
-                            for p in _paragraph_re.split(escape(value)))
+    result = "\n\n".join(
+        "<p>%s</p>" % p.replace("\n", Markup("<br>\n"))
+        for p in _paragraph_re.split(escape(value))
+    )
     if eval_ctx.autoescape:
         result = Markup(result)
     return result
 
 
+# }}}
 
 # -- Project information: {{{
 # --------------------------------------------
@@ -302,9 +323,10 @@ extensions = [
     "default_profile.sphinxext.magics",
     "matplotlib.sphinxext.plot_directive",
     "matplotlib.sphinxext.mathmpl",
-    # "flake8_rst.sphinxext.custom_roles",
+    "flake8_rst.sphinxext.custom_roles",
     "numpydoc.numpydoc",
-    # "recommonmark",
+    "recommonmark",
+    "IPython.sphinxext.ipython_directive",
 ]
 
 
@@ -485,7 +507,7 @@ html_show_copyright = False
 html_last_updated_fmt = "%b %d, %Y"
 # }}}
 
-# -- Options for HTMLHelp output ------------------------------------
+# -- Options for HTMLHelp output {{{ ------------------------------------
 
 html_baseurl = "https://farisachugthai.github.io/dynamic-ipython"
 
@@ -500,29 +522,6 @@ html_secnumber_suffix = " "
 # Output file base name for HTML help builder.
 htmlhelp_basename = "dynamic_ipython"
 
-# -- Options for LaTeX output ------------------------------------------------
-
-# latex_elements = {
-# The paper size ('letterpaper' or 'a4paper').
-#
-# 'papersize': 'letterpaper',
-
-# The font size ('10pt', '11pt' or '12pt').
-#
-# 'pointsize': '10pt',
-
-# Additional stuff for the LaTeX preamble.
-#
-# 'preamble': '',
-
-# Latex figure (float) alignment
-#
-# 'figure_align': 'htbp',
-# }
-
-# Grouping the document tree into LaTeX files. List of tuples
-# (source start file, target name, title,
-#  author, documentclass [howto, manual, or own class]).
 
 # -- Options for manual page output ------------------------------------------
 
@@ -532,28 +531,6 @@ manpages_url = "https://linux.die.net/man/"
 
 man_show_urls = True
 
-# -- Options for Texinfo output ----------------------------------------------
-
-# Grouping the document tree into Texinfo files. List of tuples
-# (source start file, target name, title, author,
-#  dir menu entry, description, category)
-
-# -- Options for Epub output ----------------------------------------
-
-# Bibliographic Dublin Core info.
-
-# The unique identifier of the text. This can be a ISBN number
-# or the project homepage.
-#
-# epub_identifier = ''
-
-# A unique identification for the text.
-#
-# epub_uid = ''
-
-# A list of files that should not be packed into the epub file.
-# epub_exclude_files = ['search.html']
-
 # -- Options for text output -------------------------------------------------
 
 text_newlines = "native"
@@ -562,7 +539,9 @@ text_add_secnumbers = False
 
 text_secnumber_suffix = ""
 
-# -- Extension configuration -------------------------------------------------
+# }}}
+
+# -- Extension configuration: {{{ -------------------------------------------------
 
 # -- Options for intersphinx extension ---------------------------------------
 
@@ -585,7 +564,7 @@ intersphinx_mapping = {
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
 
-# -- Viewcode ----------------------------------------------------------------
+# -- Viewcode: {{{ ----------------------------------------------------------------
 """Viewcode:
 
 Apr 28, 2019: RemovedInSphinx30Warning:
@@ -620,6 +599,8 @@ viewcode-follow-imported(app, modname, attribute)
 """
 
 viewcode_follow_imported_members = False
+
+# }}}
 
 # -- IPython directive -------------------------------------------------------
 
@@ -768,7 +749,9 @@ def figure_out_why_autosummary_never_works():
     sphinx.util.parallel.ParallelTasks([generate_autosummary_docs(i) for i in part])
 
 
-# -- Setup -------------------------------------------------------------------
+# }}}
+
+# -- Setup: {{{ -------------------------------------------------------------------
 
 
 sphinx.locale.setlocale(locale.LC_ALL, "")
@@ -863,3 +846,10 @@ def setup(app):
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }
+
+# }}}
+
+maker = Maker(".", BUILD_DIR, "html")
+
+
+# Vim: set fdm=marker:
