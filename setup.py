@@ -42,7 +42,10 @@ except ImportError:
     try:
         import importlib_metadata
 
-        our_dist = importlib_metadata.distribution("dynamic_ipython")
+        try:
+            our_dist = importlib_metadata.distribution("dynamic_ipython")
+        except importlib_metadata.PackageNotFoundError:
+            pass
     except ImportError:
         importlib_metadata = None
 except importlib_metadata.PackageNotFoundError:
