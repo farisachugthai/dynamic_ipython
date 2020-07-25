@@ -33,7 +33,7 @@ from logging import BufferingFormatter, Filter, StreamHandler, getLogger
 from pathlib import Path
 from pdb import Pdb, Restart
 from textwrap import dedent
-from typing import Any, AnyStr, Union
+from typing import Any, AnyStr, IO, Optional, Union
 
 import pygments
 from IPython.core.getipython import get_ipython
@@ -118,7 +118,7 @@ psource = nsmagics.psource
 # History: Set up separately {{{
 
 
-def save_history(hist_path=None):
+def save_history(hist_path: Optional[IO] = None):
     if not hasattr(locals, "readline"):
         return
     if not hasattr(readline, "append_history_file"):
@@ -393,15 +393,16 @@ class MyPdb(pdb.Pdb):
 
     def do_p(self, *args, sep=' ', end='\n', file=sys.stdout, flush=False):
         """Correctly emulate the print signature and allow for no args."""
-        if len(args)==0:
+        if len(args) == 0:
             print(sep=sep, end=end, file=file, flush=flush)
         else:
             return super().do_p(*args)
 
     def do_pp(self, *args, stream=None, indent=1, width=80, depth=None, compact=False, sort_dicts=True):
         """Correctly emulate the pprint.pprint signature and allow for no args."""
-        if len(args)==0:
-            pprint.pprint(stream=stream, indent=indent, width=width, depth=depth, compact=compact, sort_dicts=sort_dicts)
+        if len(args) == 0:
+            pprint.pprint(stream=stream, indent=indent, width=width,
+                          depth=depth, compact=compact, sort_dicts=sort_dicts)
         else:
             return super().do_pp(*args)
 

@@ -61,6 +61,40 @@ def set_numpy_printoptions(**kwargs):
         np.set_printoptions(**kwargs)
 
 
+class make_array:
+    def __init__(self, n):
+        """
+        Make Array:
+        The function takes a positive integer and builds an empty array
+        of size n x n.
+
+        Parameters
+        -----------
+        n : dimension
+            Size of the array must be an integer and positive.
+
+
+        Attributes
+        ----------
+        array : numpy.ndarray
+            NumPy array with size n X n
+
+        """
+        if type(n) != int:
+            raise TypeError(
+                "Please input an integer."
+                "The size of the array has to be a positive integer."
+            )
+
+        if n <= 0:
+            raise ValueError(
+                "Please provide a positive integer for the size of the array."
+                "It cannot be negative or zero."
+            )
+
+        self.array = np.empty([n, n])
+
+
 if __name__ == "__main__":
     numpy_mod = numpy_setup()
     if numpy_mod is True:

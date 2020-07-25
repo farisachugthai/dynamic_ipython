@@ -137,7 +137,7 @@ def find_exec_dir() -> Union[AnyStr, os.PathLike]:
 
 def safe_run_path(
     fileobj: Union[AnyStr, os.PathLike], logger: Optional[logging.Logger] = None,
-) -> Union[str, os.PathLike[Any]]:
+) -> Union[str, os.PathLike]:
     """Run a file with runpy.run_path and try to catch everything."""
     if logger is None:
         logger = logging.getLogger(name=__name__)

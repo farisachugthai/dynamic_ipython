@@ -94,3 +94,20 @@ class PathValidator:
 
     def __call__(self):
         return self.path
+
+class ListDir:
+    # def __init__(self):
+
+    @property
+    def cwd(self):
+        return Path.cwd()
+
+    @cwd.setter
+    def chdir(self, path):
+        os.chdir(path)
+
+    def __repr__(self):
+        return self.cwd.__fspath__()
+
+if __name__ == "__main__":
+    l = ListDir()

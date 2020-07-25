@@ -213,6 +213,7 @@ class PagerMagics(Magics):
 if __name__ == "__main__":
     # made it a method but as a syntax reminder
     # get_ipython().register_magic_function(c)
-    get_ipython().register_magics(PagerMagics())
+    if get_ipython() is not None:
+        get_ipython().register_magics(PagerMagics())
 
     # inspector = IPython.core.oinspect.Inspector()

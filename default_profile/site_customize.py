@@ -31,7 +31,7 @@ Pyximport you can import it in a regular Python module like this::
     import pyximport; pyximport.install()
 
 """
-import cgitb
+# import cgitb
 import contextlib
 import gc
 import inspect
@@ -46,10 +46,12 @@ import sys
 import threading
 import traceback
 import types
+
 from inspect import findsource, getmodule, getsource, getsourcefile, getsourcelines
 from linecache import cache
 from pathlib import Path
 from pydoc import pager, safeimport
+from pprint import pp  # noqa F401
 from typing import Optional, AnyStr, Any, Union, IO, Iterable
 
 logging.basicConfig(level=logging.WARNING)
@@ -360,20 +362,87 @@ def pf(obj):
             os.environ.pop("LESS", None)
 
 
-def ps(obj):
-    return pyg_highlight(getsourcelines(obj), outfile=sys.stdout)
+def ps(obj=None):
+    """Pretty print the source for an object.
+
+    Parameters
+    ----------
+    obj : object, optional
+        Any valid python object. Has been tested with `os.PathLike` objects
+        and modules.
+
+    See Also
+    --------
+    `numpy.info`
+
+    """
+    if obj is None:
+        obj = ps
+    try:
+        path_obj = Path(obj)
+    except TypeError:  # module or something
+        return pyg_highlight(getsourcelines(obj), outfile=sys.stdout)
+    else:
+        # probably gonna set off the ResourceWarning. asyncio?
+        if path_obj.exists():
+            fobj = open(obj).read()
+            return pyg_highlight(fobj, outfile=sys.stdout)
+        else:
+            raise FileNotFoundError
 
 
-def pp(obj):
+def p(obj=None):
+    """Pretty print an object.
+
+    Parameters
+    ----------
+    obj : object, optional
+        Any valid python object.
+
+    See Also
+    --------
+    `numpy.info`
+
+    """
+    if obj is None:
+        obj = pp.__doc__
     pyg_highlight(obj, outfile=sys.stdout)
 
 
-def pd():
-    return pyg_highlight(dir())
+def pd(obj=None):
+    """Pretty print the dir for an object.
+
+    Parameters
+    ----------
+    obj : object, optional
+        any valid python object.
+
+    See Also
+    --------
+    `numpy.info`
+
+    """
+    if obj is None:
+        obj = globals()
+    return pprint.pprint(obj)
 
 
-def pv():
-    return pyg_highlight(vars())
+def pv(obj=None):
+    """Pretty print the vars for an object.
+
+    Parameters
+    ----------
+    obj : object, optional
+        any valid python object.
+
+    See Also
+    --------
+    `numpy.info`
+
+    """
+    if obj is None:
+        obj = globals()
+    return pprint.pprint(vars(obj))
 
 
 @contextlib.contextmanager
@@ -396,11 +465,10 @@ def rerun_startup():
         print(e)
 
 
-if __name__ == "__main__":
-    if sys.stdout.isatty():
-        sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
-        sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
-        rerun_startup()
-        install_jedi()
-        cgitb.enable(format="text")
-        sys.excepthook = excepthook_
+if sys.stdout.isatty():
+    sys.ps1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
+    sys.ps2 = "\001\033[1;31m\002... \001\033[1;37m\002"
+    rerun_startup()
+    install_jedi()
+    # cgitb.enable(format="text")
+    sys.excepthook = excepthook_
