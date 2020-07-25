@@ -18,15 +18,15 @@ import platform
 from pathlib import Path
 from shutil import rmtree
 
-import distutils
-from distutils.core import setup_keywords   # noqa
-from distutils.errors import DistutilsArgError, DistutilsError
-
 import setuptools
 from setuptools import setup, find_packages, Command
 from setuptools.command.easy_install import chmod, current_umask, find_distributions
 from setuptools.dist import Distribution
 from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
+import distutils
+from distutils.core import setup_keywords   # noqa
+from distutils.errors import DistutilsArgError, DistutilsError
+
 
 import pkg_resources
 # from packaging.utils import canonicalize_version
@@ -139,7 +139,7 @@ NAME = "dynamic_ipython"
 AUTHOR = "Faris Chugthai"
 EMAIL = "farischugthai@gmail.com"
 DESCRIPTION = "An IPython configuration system."
-LICENSE = "LICENSE"
+LICENSE = "MIT"
 KEYWORDS = ["ipython", "configuration", "ipython_extensions", "jupyter", "frameworks"]
 URL = "https://github.com/farisachugthai/dynamic_ipython"
 REQUIRES_PYTHON = ">=3.6.0"
@@ -352,7 +352,7 @@ setup_args = dict(
         # If any package contains *.txt or *.rst files, include them:
         "": ["*.txt", "*.rst"],
     },
-    license_files=LICENSE,
+    # license_files=LICENSE,
     classifiers=[
         # Trove classifiers
         # Full list: https://pypi.python.org/pypi?%3Aaction=list_classifiers
