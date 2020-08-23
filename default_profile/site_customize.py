@@ -108,7 +108,10 @@ def install_jedi():
         jedi.settings.auto_import_modules = ["readline", "pygments", "ast"]
 
 
-def pyg_highlight(*param: Any, outfile: Optional[IO] = None):
+# don't use python3 only syntax on a startup script. we have to keep this pretty universal
+# ugh this is gonna be a pain
+# def pyg_highlight(*param: Any, outfile: Optional[IO] = None):
+def pyg_highlight(*param, outfile=None):
     """Run a string through the pygments highlighter."""
     if pygments is None:
         pprint.pprint(*param)
