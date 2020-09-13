@@ -34,28 +34,26 @@ Pyximport you can import it in a regular Python module like this::
 # import cgitb
 import contextlib
 import gc
-import inspect
-import linecache
+
+try:
+    import _io as io
+except ImportError:
+    import io
 import logging
 import os
 import pprint
 import re
-import shutil
 import site
 import sys
-import threading
 import traceback
-import types
 
 from inspect import findsource, getmodule, getsource, getsourcefile, getsourcelines
-from linecache import cache
 from pathlib import Path
-from pydoc import pager, safeimport
+from pydoc import pager  # , safeimport
 from pprint import pp  # noqa F401
-from typing import Optional, AnyStr, Any, Union, IO, Iterable
+from typing import Any, Iterable, Optional, Union
 
 logging.basicConfig(level=logging.WARNING)
-logger = logging.getLogger(name=__name__)
 
 try:
     import pygments
@@ -92,7 +90,6 @@ else:
 site.enablerlcompleter()
 site.ENABLE_USER_SITE = True
 site.check_enableusersite()
-ENV = os.environ.copy()
 PS1 = "\001\033[0;32m\002>>> \001\033[1;37m\002"
 PS2 = "\001\033[1;31m\002... \001\033[1;37m\002"
 
@@ -104,11 +101,11 @@ def install_jedi():
         jedi = None
     else:
         from jedi.api import replstartup
-    if jedi is not None:
+
         jedi.settings.auto_import_modules = ["readline", "pygments", "ast"]
 
 
-def pyg_highlight(*param: Any, outfile: Optional[IO] = None):
+def pyg_highlight(*param: Any, outfile: Optional[io.TextIOWrapper] = None):
     """Run a string through the pygments highlighter."""
     if pygments is None:
         pprint.pprint(*param)
@@ -118,7 +115,7 @@ def pyg_highlight(*param: Any, outfile: Optional[IO] = None):
     return pygments.format(pygments.lex(str(*param), lexer), formatter, outfile)
 
 
-def _complete(text: AnyStr, state: Any) -> AnyStr:
+def _complete(text: str, state: Any) -> Optional[str]:
     old_complete = readline.get_completer()
     if not text:
         # Insert four spaces for indentation
@@ -130,7 +127,7 @@ def _complete(text: AnyStr, state: Any) -> AnyStr:
 def _pythonrc_enable_readline():
     """Enable readline, tab completion, and history"""
     readline.set_history_length(-1)
-    readline.parse_and_bind('"Tab":complete')
+    readline.parse_and_bind('"Tab":_complete')
     readline.parse_and_bind('"\\C-Space":menu-complete')
     readline.parse_and_bind('"\\C-a":beginning-of-line')
     readline.parse_and_bind('"\\C-b":backward-char')
@@ -142,9 +139,10 @@ def _pythonrc_enable_readline():
     readline.parse_and_bind('"\\C-k":kill-whole-line')
     readline.parse_and_bind('"\\C-l":clear-screen')
     readline.parse_and_bind('"\\C-m":accept-line')
-    inputrc = os.environ.get("INPUTRC") if "INPUTRC" in ENV else None
+    inputrc = os.environ.get("INPUTRC") if "INPUTRC" in os.environ.keys() else None
     if inputrc is None:
-        inputrc = os.path.exists(os.path.join(os.environ.get("HOME"), "", ".inputrc"))
+        if os.environ.get("HOME") is not None:
+            inputrc = os.path.join(os.environ.get("HOME"), "", ".inputrc")
     if inputrc:
         if hasattr(readline, "read_init_file"):
             readline.read_init_file(inputrc)
@@ -152,7 +150,8 @@ def _pythonrc_enable_readline():
         readline.set_completer(rlcompleter.Completer.complete)
 
 
-def write_history(history_path: Union[Optional[os.PathLike], AnyStr] = None):
+# def write_history(history_path: Union[Optional[os.PathLike], AnyStr] = None):
+def write_history(history_path: str = None):
     """If readline was correctly imported, append to the history_path.
 
     .. currentmodule:: readline
@@ -190,7 +189,7 @@ def write_history(history_path: Union[Optional[os.PathLike], AnyStr] = None):
     )
     length = readline.get_current_history_length()
     readline.append_history_file(length, history_path)
-    logger.info("Written history to %s" % history_path)
+    logging.info("Written history to %s" % history_path)
 
 
 def _pythonrc_enable_history():
@@ -200,7 +199,7 @@ def _pythonrc_enable_history():
     history_path = Path("~/.python_history").expanduser()
     if not history_path.exists():
         try:
-            hist_path.touch()
+            history_path.touch()
         except PermissionError:
             raise
         except OSError:
@@ -215,14 +214,6 @@ def pphighlight(o: Any, *a, **kw):
     except UnicodeError:
         sys.stdout.write(s)
         sys.stdout.write("\n")
-
-
-def get_height() -> os.terminal_size:
-    return shutil.get_terminal_size()
-
-
-def get_width() -> AnyStr:
-    return shutil.get_terminal_size()[1]
 
 
 def excepthook_(etype, value, tb):
@@ -241,26 +232,6 @@ def excepthook_(etype, value, tb):
     finally:
         sys.exc_info = (None, None, None)
         gc.collect()
-
-
-def format_callable(value):
-    """Use either inspect.getfullargspec or getargpspec to format a callable."""
-    if hasattr(inspect, "getfullargspec"):
-        getargspec = inspect.getfullargspec
-    else:
-        getargspec = inspect.getargspec
-
-    reprstr = repr(value)
-
-    if inspect.isfunction(value):
-        parts = reprstr.split(" ")
-        parts[1] += getargspec(*getargspec(value))
-        reprstr = " ".join(parts)
-    elif inspect.ismethod(value):
-        parts = reprstr[:-1].split(" ")
-        parts[2] += inspect.formatargspec(*getargspec(value))
-        reprstr = " ".join(parts) + ">"
-    return reprstr
 
 
 def pprinthook(value: Optional[Any] = None, *args, **kwargs):
@@ -296,23 +267,6 @@ def pprinthook(value: Optional[Any] = None, *args, **kwargs):
             sys.stdout.write("\n" + str(pydoc.getdoc(value)) + "\n")
             return
         print(x, **kwargs)
-
-
-def get_help_types():
-    help_types = [
-        types.BuiltinFunctionType,
-        types.BuiltinMethodType,
-        types.FunctionType,
-        types.MethodType,
-        types.ModuleType,
-        type,
-        # method_descriptor
-        type(list.remove),
-    ]
-    if hasattr(types, "UnboundMethodType"):
-        help_types.append(types.UnboundMethodType)
-    help_types = tuple(help_types)
-    return help_types
 
 
 def pf(obj):
@@ -362,7 +316,7 @@ def pf(obj):
             os.environ.pop("LESS", None)
 
 
-def ps(obj=None):
+def ps(obj: Optional[Union[str, os.PathLike]] = None) -> str:
     """Pretty print the source for an object.
 
     Parameters
@@ -385,7 +339,8 @@ def ps(obj=None):
     else:
         # probably gonna set off the ResourceWarning. asyncio?
         if path_obj.exists():
-            fobj = open(obj).read()
+            with open(obj) as f:
+                fobj = open(f).read()
             return pyg_highlight(fobj, outfile=sys.stdout)
         else:
             raise FileNotFoundError
@@ -446,13 +401,13 @@ def pv(obj=None):
 
 
 @contextlib.contextmanager
-def as_cwd(new_dir, *args, **kwargs):
+def as_cwd(new_dir):
     old_cwd = Path.cwd()
     try:
         os.chdir(new_dir)
         yield
     finally:
-        os.chdir(old_dir)
+        os.chdir(old_cwd)
 
 
 def rerun_startup():
@@ -471,4 +426,4 @@ if sys.stdout.isatty():
     rerun_startup()
     install_jedi()
     # cgitb.enable(format="text")
-    sys.excepthook = excepthook_
+    # sys.excepthook = excepthook_

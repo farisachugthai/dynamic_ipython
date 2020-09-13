@@ -269,6 +269,10 @@ def tempdir():
     >>> os.path.exists(tmpdir)
     False
 
+    Bugs
+    ----
+    Doesn't work as a decorator.
+
     """
     d = mkdtemp()
     yield d
