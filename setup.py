@@ -18,14 +18,14 @@ import platform
 from pathlib import Path
 from shutil import rmtree
 
-import setuptools
+# import setuptools
 from setuptools import setup, find_packages, Command
 from setuptools.command.easy_install import chmod, current_umask, find_distributions
-from setuptools.dist import Distribution
+# from setuptools.dist import Distribution
 from setuptools.msvc import PlatformInfo, RegistryInfo, SystemInfo, EnvironmentInfo
-import distutils
-from distutils.core import setup_keywords   # noqa
-from distutils.errors import DistutilsArgError, DistutilsError
+# import distutils
+# from distutils.core import setup_keywords   # noqa
+# from distutils.errors import DistutilsArgError, DistutilsError
 
 
 import pkg_resources
@@ -52,8 +52,10 @@ except ImportError:
             pass
     except ImportError:
         importlib_metadata = None
-except importlib_metadata.PackageNotFoundError:
-    pass
+
+# lol cmon self we can't use an exception from the package we didn't import
+# except importlib_metadata.PackageNotFoundError:
+#     pass
 
 # DON'T GET RID OF THIS. This took a while to debug and honestly it was an accident.
 # Incorrectly installing the package will leave the package partially installed
@@ -187,8 +189,19 @@ if platform.platform().startswith("Win"):
 if sys.version_info < (3, 7):
     REQUIRED.append("importlib-metadata")
 
+tests_require = [
+        "pytest",
+        # not sure if these are required any more
+        # "testpath", "nose",
+        "matplotlib",
+    ]
+
 EXTRAS = {
-    "develop": ["pipenv", "pandas", "matplotlib"],
+    "develop": [
+        "pipenv",
+        "pandas",
+        "wheel",
+    ] + tests_require,
     "docs": [
         "sphinx>=2.2",
         "matplotlib>=3.0.0",
@@ -196,15 +209,12 @@ EXTRAS = {
         "flake8-rst",
         "recommonmark",
     ],
-    "test": ["pytest", "testpath", "nose", "matplotlib"],
+    "test": tests_require,
 }
 
-
-# setuptools.Command:
-
+# setuptools.Command: {{{
 other_cmdclass = {}
 
-# setuptools.Command: {{{
 try:
     from flake8.main.setuptools_command import Flake8
     other_cmdclass = {"flake8": Flake8}
@@ -398,14 +408,7 @@ except ImportError:
 else:
     setup_args[ext_modules]=mypycify(['default_profile/startup/ptoolkit.py'], )
 
-if len(sys.argv) > 1:
-    try:
-        setup(**setup_args)
-    except DistutilsArgError:
-        dist.print_commands()
 
-    except DistutilsError:
-        raise
-
+setup(**setup_args)
 
 # Vim: set fdls=0:

@@ -444,10 +444,7 @@ keep_warnings = False
 rst_prolog = """
 .. |ip| replace:: :class:`~IPython.core.interactiveshell.InteractiveShell`
 """
-# }}}
 
-# -- Options for HTML output: {{{
-# ----------------------------------------
 # If true, keep warnings as "system message" paragraphs in the built documents.
 
 trim_doctest_flags = True

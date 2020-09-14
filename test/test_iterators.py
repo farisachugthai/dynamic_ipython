@@ -1,5 +1,4 @@
-# Test iterators.
-
+"""Test iterators."""
 import collections.abc
 import logging
 from operator import countOf, indexOf
@@ -7,18 +6,10 @@ import pickle
 import sys
 import unittest
 
-try:
-    from test.support import (
-        TESTFN,
-        unlink,
-    )
-except ImportError:
-    from os import unlink
-    from tempfile import NamedTemporaryFile
+from os import unlink
+from tempfile import NamedTemporaryFile
 
-    TESTFN = NamedTemporaryFile().name
-
-logging.basicConfig()
+logging.basicConfig(level=logging.INFO)
 
 # Test result of triple loop (too big to inline)
 TRIPLETS = [
@@ -134,7 +125,6 @@ class NoIterClass:
 
 
 class TestCase(unittest.TestCase):
-
     # Helper to check that an iterator returns a given sequence
     def check_iterator(self, it, seq, pickle=True):
         if pickle:
@@ -1069,7 +1059,14 @@ def test_main():
 
 
 if __name__ == "__main__":
-    if run_unittest is None:
-        unittest.skip("Test suite not set up for iterators.")
-    else:
-        test_main()
+    TEST = NamedTemporaryFile()
+    TESTFN = TEST.name
+
+    try:
+        if run_unittest is None:
+            unittest.skip("Test suite not set up for iterators.")
+        else:
+            test_main()
+
+    finally:
+        TEST.close()

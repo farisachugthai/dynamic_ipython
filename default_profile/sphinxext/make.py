@@ -10,30 +10,33 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any, AnyStr, Callable, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, AnyStr, Dict, List, Optional, Union
 
-import jinja2
+# import jinja2
 import sphinx
 from docutils import nodes
 from docutils.core import publish_doctree
 from jinja2.environment import Environment
 from jinja2.exceptions import TemplateError
 from jinja2.ext import autoescape, do, with_
-from jinja2.lexer import get_lexer
+
+# from jinja2.lexer import get_lexer
 
 # 'FileSystemBytecodeCache': < class 'jinja2.bccache.FileSystemBytecodeCache' >,
 from jinja2.loaders import FileSystemLoader
-from jinja2.nodes import EvalContext
-from jinja2.runtime import Context
-from pygments.lexers.markup import MarkdownLexer, RstLexer
+
+# from jinja2.nodes import EvalContext
+# from jinja2.runtime import Context
+# from pygments.lexers.markup import MarkdownLexer, RstLexer
 from pygments.lexers.python import (
     NumPyLexer,
     PythonConsoleLexer,
     PythonLexer,
     PythonTracebackLexer,
 )
-from pygments.lexers.shell import BashLexer
-from pygments.lexers.textedit import VimLexer
+
+# from pygments.lexers.shell import BashLexer
+# from pygments.lexers.textedit import VimLexer
 
 # side effect: registers roles and directives
 from sphinx import directives  # noqa
@@ -43,42 +46,46 @@ from sphinx.application import Sphinx
 
 # theme_factory = HTMLThemeFactory(self.app)
 # Then make this
-from sphinx.builders.html import StandaloneHTMLBuilder
+# from sphinx.builders.html import StandaloneHTMLBuilder
 
 # from sphinx.cmd.build import build_main
 # from sphinx.cmd.build import handle_exception
 from sphinx.cmd.make_mode import Make
 from sphinx.config import Config
-from sphinx.environment import CONFIG_CHANGED_REASON, CONFIG_OK, BuildEnvironment
-from sphinx.environment.adapters.asset import ImageAdapter
+
+# from sphinx.environment import CONFIG_CHANGED_REASON, CONFIG_OK, BuildEnvironment
+# from sphinx.environment.adapters.asset import ImageAdapter
 
 # This could be super useful
 # from sphinx.environment.adapters.toctree import TocTree
 from sphinx.errors import ApplicationError, ConfigError
 
 # , ExtensionError
-from sphinx.events import EventManager, core_events
-from sphinx.io import SphinxStandaloneReader, read_doc
-from sphinx.jinja2glue import BuiltinTemplateLoader, SphinxFileSystemLoader
-from sphinx.locale import __
+# from sphinx.events import EventManager, core_events
+# from sphinx.io import SphinxStandaloneReader, read_doc
+# from sphinx.jinja2glue import BuiltinTemplateLoader, SphinxFileSystemLoader
+# from sphinx.locale import __
 from sphinx.parsers import RSTParser
-from sphinx.util import import_object, progress_message, rst, status_iterator
-from sphinx.util.build_phase import BuildPhase
-from sphinx.util.console import bold  # type: ignore
-from sphinx.util.docfields import GroupedField
+
+# from sphinx.util import import_object, progress_message, rst, status_iterator
+# from sphinx.util.build_phase import BuildPhase
+# from sphinx.util.console import bold  # type: ignore
+# from sphinx.util.docfields import GroupedField
 
 # from sphinx.util.console import (  # type: ignore
 #   colorize, color_terminal
 # )
 from sphinx.util.docutils import docutils_namespace, patch_docutils, sphinx_domains
-from sphinx.util.i18n import CatalogInfo, CatalogRepository, docname_to_domain
+
+# from sphinx.util.i18n import CatalogInfo, CatalogRepository, docname_to_domain
 
 # 'CatalogInfo': < class 'sphinx.util.i18n.CatalogInfo' >,
 # 'CatalogRepository': < class 'sphinx.util.i18n.CatalogRepository' >,
 # this is good to be aware of
 # from sphinx.util.inspect import getdoc
 from sphinx.util.logging import getLogger
-from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
+
+# from sphinx.util.osutil import SEP, ensuredir, relative_uri, relpath
 
 # this is used alongside multiprocessing.connection.Connection
 # from sphinx.util.parallel import ParallelTasks
@@ -89,7 +96,8 @@ from sphinx.util.parallel import (
     parallel_available,
 )
 from sphinx.util.tags import Tags
-from sphinx.util.template import ReSTRenderer
+
+# from sphinx.util.template import ReSTRenderer
 
 try:
     from importlib import metadata
@@ -448,7 +456,7 @@ def generate_sphinx_app(
         return 2
 
 
-def get_jinja_loader(template_path: os.PathLike) -> jinja2.loaders.FileSystemLoader:
+def get_jinja_loader(template_path: Union[str, os.PathLike]) -> FileSystemLoader:
     if template_path is None:
         template_path = "_templates"
     elif isinstance(template_path, Path):
@@ -460,7 +468,7 @@ def get_jinja_loader(template_path: os.PathLike) -> jinja2.loaders.FileSystemLoa
     return loader
 
 
-def setup_jinja(path_to_template: os.PathLike) -> jinja2.environment.Environment:
+def setup_jinja(path_to_template: Union[str, os.PathLike]) -> Environment:
     """Use jinja to set up the Sphinx environment."""
     TRIM_BLOCKS = True
     LSTRIP_BLOCKS = True
@@ -488,17 +496,24 @@ class Maker(Make):
         self.source_dir = source_dir
         self.build_dir = build_dir
 
-    def run(self, builder: Union[Optional[List[AnyStr]], Optional[AnyStr]] =None, *args, **kwargs):
+    def run(
+        self,
+        builder: Union[Optional[List[AnyStr]], Optional[AnyStr]] = None,
+        *args,
+        **kwargs,
+    ):
         """Run sphinx-build with as many options given reasonable defaults as possible."""
         if builder is None:
-            builder = ["html"]  # list required if no args provided as sphinx concatenates the builder with the other args
+            builder = [
+                "html"
+            ]  # list required if no args provided as sphinx concatenates the builder with the other args
         super().run_generic_build(builder, *args, **kwargs)
 
     def __repr__(self):
         return self.__class__.__name__
 
 
-def create_sphinx_config(confdir: os.PathLike) -> Config:
+def create_sphinx_config(confdir: os.PathLike):
     """Create a sphinx.config.Config object which isn't utilized currently.
 
     Simply here as a thorough method to check for syntax errors.
@@ -526,7 +541,7 @@ def main(repo_root: os.PathLike, argv=None):
     sphinx.locale.setlocale(locale.LC_ALL, "")
     sphinx.locale.init_console(os.path.join(package_dir, "locale"), "sphinx")
 
-    config = create_sphinx_config(conf_path)
+    # config = create_sphinx_config(conf_path)
 
     template_path = doc_root.joinpath("source/_templates")
     env = setup_jinja(template_path)
