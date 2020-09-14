@@ -64,14 +64,6 @@ Variable Expansion in Aliases
 
 .. magic:: unalias
 
-From the official IPython documentation.
-
-.. parsed-literal::
-
-   In [2]: %alias bracket echo "Input in brackets: <%l>"
-   In [3]: bracket hello world
-   Input in brackets: <hello world>
-
 Note that we quote when in the configuration file but when running `%alias`
 interactively the syntax.
 
@@ -122,7 +114,7 @@ for Linux.
 Whitespace in Aliases
 ----------------------
 In order to make new subcommands in a way similar to how git allows one to come
-up with aliases, I first tried using whitespace in the alias.:
+up with aliases, I first tried using whitespace in the alias.
 
     ('git last', 'git log -1 HEAD %l')
 

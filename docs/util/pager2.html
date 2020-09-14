@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pager2 module &#8212; Dynamic IPython</title>
     
     <link rel="stylesheet" href="../_static/scrolls.css" type="text/css" />
@@ -63,7 +63,7 @@
 <h1><a class="reference internal" href="#module-default_profile.util.pager2" title="default_profile.util.pager2: Rewrite how IPython utilizes the pager on Windows."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pager2</span></code></a> module<a class="headerlink" href="#pager2-module" title="Permalink to this headline">¶</a></h1>
 <p>Rewrite the module that creates the <code class="xref py py-obj docutils literal notranslate"><span class="pre">%pycat</span></code> magic.</p>
 <p>In it’s current implementation, the pager gives Windows a dumb terminal and
-never checks for whether <strong class="command">less</strong> is on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.3.0)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> or
+never checks for whether <strong class="command">less</strong> is on the <span class="target" id="index-0"></span><a class="reference external" href="https://matplotlib.org/faq/environment_variables_faq.html#envvar-PATH" title="(in Matplotlib v3.3.1)"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code></a> or
 if the user has a pager they would like to implement!</p>
 <div class="section" id="revisions">
 <h2>Revisions<a class="headerlink" href="#revisions" title="Permalink to this headline">¶</a></h2>
@@ -108,8 +108,8 @@ KeyboardInterrupt
 <p>Outside of the stupid traceback, that command worked perfectly for me.</p>
 <p>I have <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> set on Windows {which I realize isn’t typical},
 however we should re-use this implementation entirely and cut
-<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.16.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
-<p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.16.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
+<a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.page.html#IPython.core.page.page" title="(in IPython v7.18.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.page.page</span></code></a> out.</p>
+<p>Also worth noting <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.payloadpage.html#IPython.core.payloadpage.page" title="(in IPython v7.18.1)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IPython.core.payloadpage.page</span></code></a>.:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pydoc</span><span class="o">.</span><span class="n">pipepager</span><span class="p">(</span><span class="n">inspect</span><span class="o">.</span><span class="n">getdoc</span><span class="p">(</span><span class="n">arg</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PAGER&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
@@ -158,8 +158,8 @@ what I’ve been trying to do.</p>
 
 <dl class="py class">
 <dt id="default_profile.util.pager2.PagerMagics">
-<em class="property">class </em><code class="sig-name descname">PagerMagics</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/pager2.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/pager2.html#PagerMagics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.PagerMagics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.16.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p>
+<em class="property">class </em><code class="sig-name descname">PagerMagics</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference external" href="https://github.com/farisachugthai/dynamic_ipython/default_profile/util/pager2.py"><span class="viewcode-link">[source]</span></a><a class="reference internal" href="../_modules/default_profile/util/pager2.html#PagerMagics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#default_profile.util.pager2.PagerMagics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://ipython.readthedocs.io/en/stable/api/generated/IPython.core.magic.html#IPython.core.magic.Magics" title="(in IPython v7.18.1)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPython.core.magic.Magics</span></code></a></p>
 <p>A pager if you’re outside of IPython.</p>
 <dl class="py attribute">
 <dt id="default_profile.util.pager2.PagerMagics.shell">
@@ -248,7 +248,7 @@ can display the magics through the attribute …magics.</p>
     </div>
 
     <div class="footer" role="contentinfo">
-      Last updated on Jul 24, 2020.
+      Last updated on Sep 14, 2020.
     </div>
   </body>
 </html>

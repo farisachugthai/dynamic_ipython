@@ -62,7 +62,7 @@ from sphinx.errors import ApplicationError, ConfigError
 
 # , ExtensionError
 # from sphinx.events import EventManager, core_events
-# from sphinx.io import SphinxStandaloneReader, read_doc
+from sphinx.io import SphinxStandaloneReader # , read_doc
 # from sphinx.jinja2glue import BuiltinTemplateLoader, SphinxFileSystemLoader
 # from sphinx.locale import __
 from sphinx.parsers import RSTParser
@@ -181,8 +181,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
     parser.add_argument(
         "-l",
         "--log",
-        default=sys.stdout,
-        type=argparse.FileType("w"),
+        action="store_false",
         help="Where to write log records to. Defaults to stdout.",
     )
 
@@ -199,9 +198,7 @@ def _parse_arguments() -> argparse.ArgumentParser:
     parser.add_argument(
         "-v",
         "--verbose",
-        nargs="?",
-        const=True,
-        default=False,
+        action="store_false",
         help="Enable verbose logging and increase level to `debug`.",
     )
 
@@ -537,7 +534,7 @@ def main(repo_root: os.PathLike, argv=None):
     user_parser = _parse_arguments()
     user_args = user_parser.parse_args(argv)
     doc_root = Path(repo_root).joinpath("docs")
-    conf_path = doc_root.joinpath("source")
+    # conf_path = doc_root.joinpath("source")
     sphinx.locale.setlocale(locale.LC_ALL, "")
     sphinx.locale.init_console(os.path.join(package_dir, "locale"), "sphinx")
 
