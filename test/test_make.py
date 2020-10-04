@@ -1,5 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from default_profile.sphinxext.make import (
+    generate_sphinx_app,
+    get_git_root,
+    setup_jinja,
+)
+from default_profile.sphinxext import make
 from pathlib import Path
 
 # import jinja2
@@ -10,12 +16,6 @@ import pytest
 # Not a good idea to have the test suite dependant on sphinx being installed
 pytest.importorskip("sphinx")
 
-from default_profile.sphinxext import make
-from default_profile.sphinxext.make import (
-    generate_sphinx_app,
-    get_git_root,
-    setup_jinja,
-)
 
 # Globals:
 

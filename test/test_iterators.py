@@ -6,8 +6,17 @@ import pickle
 import sys
 import unittest
 
-from os import unlink
-from tempfile import NamedTemporaryFile
+try:
+    from test.support import (
+        TESTFN,
+        unlink,
+    )
+
+except ImportError:
+    from os import unlink
+    from tempfile import NamedTemporaryFile
+
+    TESTFN = NamedTemporaryFile().name
 
 logging.basicConfig(level=logging.INFO)
 
@@ -1058,15 +1067,8 @@ def test_main():
     run_unittest(TestCase)
 
 
-if __name__ == "__main__":
-    TEST = NamedTemporaryFile()
-    TESTFN = TEST.name
-
-    try:
-        if run_unittest is None:
-            unittest.skip("Test suite not set up for iterators.")
-        else:
-            test_main()
-
-    finally:
-        TEST.close()
+if "__name__" == "__main":
+    if run_unittest is None:
+        unittest.skip("Test suite not set up for iterators.")
+    else:
+        test_main()

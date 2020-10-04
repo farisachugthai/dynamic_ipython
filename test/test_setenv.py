@@ -1,5 +1,6 @@
 # content of test_setenv.py
 # From the pytest examples
+import default_profile
 import os
 import pytest
 
@@ -16,4 +17,3 @@ class TestDirectoryInit:
 
 
 # not from pytest examples
-import default_profile

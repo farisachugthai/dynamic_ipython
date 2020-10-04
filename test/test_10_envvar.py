@@ -21,8 +21,10 @@ def setup_module():
 
     print(dir())
 
+
 print('**************** Outside setup_module *********\n')
 print(dir())
+
 
 class TestPath(unittest.TestCase):
     """Need to do a few checks on pathlib before we start."""

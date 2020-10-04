@@ -5,6 +5,7 @@ import unittest
 
 class TokenTests(unittest.TestCase):
     """Tests tokenization. Start off with plain Python interpreter tests."""
+
     def test_backslash(self):
         # Backslash means line continuation:
         x = 1 + 1

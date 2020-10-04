@@ -39,7 +39,7 @@ class FixturesTest(unittest.TestCase):
         # with self.assertRaises(None):
         # Wait this isn't a context manager??? hold the fuck up.
         # with not self.assertRaises(Exception):
-            # get_ipython().run_line_magic('rehashx')
+        # get_ipython().run_line_magic('rehashx')
 
 
 def test_tempdir():
@@ -62,9 +62,9 @@ def test_in_tempdir(cwd):
 def test_given_directory(cwd):
     # Test InGivenDirectory
     with in_dir(cwd) as tmpdir:
-        assert tmpdir==abspath(cwd)
+        assert tmpdir == abspath(cwd)
     with in_dir(cwd) as tmpdir:
-        assert tmpdir==cwd
+        assert tmpdir == cwd
 
 
 if __name__ == "__main__":
