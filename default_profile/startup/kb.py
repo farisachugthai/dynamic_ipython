@@ -2,12 +2,11 @@
 # -*- coding: utf-8 -*-
 """Effectively me rewriting Prompt Toolkits keybindings handlers."""
 import logging
-import operator
+# import operator
 import reprlib
 import sys
-from collections.abc import MutableSequence
 from functools import total_ordering
-from typing import Callable, Optional, Dict, Any, Union, List, Generator
+from typing import Optional, Any, Generator
 
 from IPython.core.getipython import get_ipython
 from IPython.core.interactiveshell import InteractiveShell
@@ -16,7 +15,6 @@ from prompt_toolkit.cache import SimpleCache
 from prompt_toolkit.document import Document
 from prompt_toolkit.filters import ViInsertMode
 from prompt_toolkit.key_binding.defaults import load_key_bindings
-from prompt_toolkit.key_binding import merge_key_bindings
 from prompt_toolkit.key_binding.bindings.auto_suggest import load_auto_suggest_bindings
 from prompt_toolkit.key_binding.bindings.vi import (
     load_vi_bindings,
@@ -29,7 +27,7 @@ from prompt_toolkit.key_binding.key_bindings import (
 from prompt_toolkit.key_binding.key_processor import KeyPress, KeyPressEvent
 from prompt_toolkit.keys import Keys
 
-from default_profile.startup.ptoolkit import create_searching_keybindings, determine_which_pt_attribute
+from default_profile.startup.ptoolkit import determine_which_pt_attribute
 
 logging.basicConfig(level=logging.WARNING)
 
@@ -72,9 +70,10 @@ class BindingPP(Binding):
         return self.call(event)
 
 
-def convert_bindings(bindings: KeyBindingsBase):
-    # -> Generator[BindingPP]:
-    for b in get_ipython().pt_app.app.key_bindings.bindings:
+def convert_bindings(bindings: Optional[KeyBindingsBase] = None) -> Generator[BindingPP]:
+    if bindings is None:
+        bindings = get_ipython().pt_app.app.key_bindings.bindings
+    for b in bindings:
         yield BindingPP(b.keys, b.handler, filter=b.filter, eager=b.eager, is_global=b.is_global)
 
 
@@ -160,7 +159,7 @@ class KeyBindingsManager(KeyBindingsBase):
         self.kb.bindings = value
 
     @bindings.deleter
-    def bindings_setter(self):
+    def bindings_deleter(self):
         del self.kb.bindings
 
     # @bindings.setter
@@ -316,14 +315,14 @@ class KeyBindingsManager(KeyBindingsBase):
             if self.shell is not None:
                 if hasattr(self.shell, "pt_app"):
                     self._kb = self.shell.pt_app.app.key_bindings
-                elif hasattr(shell, "pt_cli"):
+                elif hasattr(self.shell, "pt_cli"):
                     self._kb = self.shell.pt_cli.application.key_bindings_registry
                 else:
                     self._kb = None
         else:
             if not isinstance(kb, "KeyBindingsBase"):
                 raise TypeError
-            self._kb = _kb
+            self._kb = kb
 
         # So this should cover both IPython and pt aps that don't have self.shell set!
         if self.kb is None:
@@ -391,7 +390,7 @@ def create_vi_insert_keybindings() -> ConditionalKeyBindings:
     return ConditionalKeyBindings(kb, filter=ViInsertMode())
 
 
-def create_kb() -> List[Binding]:
+def create_kb() -> Optional[KeyBindings]:
     # Honestly I'm wary to do this but let's go for it
     if get_ipython() is None:
         return

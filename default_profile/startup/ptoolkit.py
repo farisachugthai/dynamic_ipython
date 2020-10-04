@@ -27,7 +27,7 @@ to a container `HSplit` and a few other things possibly worth exploring.
 """
 import functools
 import sys
-from typing import Callable, AnyStr, Any, Union, Optional
+from typing import Callable, Union, Optional
 
 import jedi
 import prompt_toolkit
@@ -455,7 +455,7 @@ def create_searching_keybindings():
 
 
 class ConditionalCallable(ConditionalValidator):
-    def __init__(self, validator, **kwargs):
+    def __init__(self, validator: prompt_toolkit.validation.Validator, **kwargs):
         if kwargs:
             if "document" in kwargs:
                 self.document = kwargs.pop("document")
@@ -483,7 +483,7 @@ class ConditionalCallable(ConditionalValidator):
 
 def _conditional_validator(
     validator: prompt_toolkit.validation.Validator, document: Document
-) -> Callable:
+) -> prompt_toolkit.validation.Validator:
     return ConditionalCallable(validator, document=document, filter=ViInsertMode())
 
 

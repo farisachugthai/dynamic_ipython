@@ -8,13 +8,8 @@ we `merge_styles` to return the final lexer.
 # TODO
 # In [47]: _ip.pt_app.lexer.python_lexer.pygments_lexer
 # Out[47]: <pygments.lexers.PythonLexer with {'stripnl': False, 'stripall': False, 'ensurenl': False}
-import builtins
-import inspect
-import pprint
-import pydoc
-import shutil
-import sys
-import types
+
+from typing import Any, AnyStr, List, Optional
 
 from traitlets.config import LoggingConfigurable
 from traitlets.traitlets import Instance
@@ -36,7 +31,6 @@ from prompt_toolkit.layout.containers import (
 )
 from prompt_toolkit.layout.controls import FormattedTextControl
 from prompt_toolkit.lexers.pygments import PygmentsLexer
-from prompt_toolkit.lexers.base import DynamicLexer, SimpleLexer
 from prompt_toolkit.shortcuts.utils import print_container
 
 from prompt_toolkit.styles import style_from_pygments_cls, default_pygments_style
@@ -51,7 +45,7 @@ from IPython.core.interactiveshell import InteractiveShellABC
 from IPython.terminal.ptutils import IPythonPTLexer
 
 try:
-    from gruvbox.gruvbox import GruvboxStyle
+    from gruvbox import GruvboxStyle
 except ImportError:
     from pygments.styles.inkpot import InkPotStyle
     _style = InkPotStyle  # surprise!
@@ -66,18 +60,15 @@ def our_style():
             default_pygments_style(),
             #  Style.from_dict({'':''})
         ]
-    )  # TODO
-    return merge_styles(
-        [style_from_pygments_cls(_style), default_pygments_style(), ]
-    )  # TODO
+    )
 
 
-def get_lexer():
+def get_lexer() -> PygmentsLexer:
     wrapped_lexer = PygmentsLexer(PythonLexer)
     return wrapped_lexer
 
 
-def pygments_tokens():
+def pygments_tokens() -> PygmentsTokens:
     """A  list of Pygments style tokens. In case you need that."""
     return PygmentsTokens(_style.styles)
 
@@ -91,22 +82,22 @@ class IPythonConfigurableLexer(LoggingConfigurable):
 
     # from pygments.lexer.Lexer
     #: Name of the lexer
-    name = None
+    name: Optional[str] = None
 
     #: Shortcuts for the lexer
-    aliases = []
+    aliases: List[Any] = []
 
     #: File name globs
-    filenames = []
+    filenames: List[Any] = []
 
     #: Secondary file name globs
-    alias_filenames = []
+    alias_filenames: List[Any] = []
 
     #: MIME types
-    mimetypes = []
+    mimetypes: List[Any] = []
 
     #: Priority, should multiple lexers match and no content is provided
-    priority = 0
+    priority: int = 0
 
     def __init__(self, shell=None, original_lexer=None, **kwargs):
         super().__init__(**kwargs)
@@ -154,7 +145,7 @@ class MyPythonLexer(IPythonPTLexer):
 
     EXTRA_KEYWORDS = set("!")
 
-    def get_tokens_unprocessed(self, text):
+    def get_tokens_unprocessed(self, text: AnyStr):
         for index, token, value in PythonLexer.get_tokens_unprocessed(self, text):
             if token is Name and value in self.EXTRA_KEYWORDS:
                 yield index, Keyword.Pseudo, value
